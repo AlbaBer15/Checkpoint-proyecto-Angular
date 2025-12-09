@@ -1,0 +1,178 @@
+.titulo-pagina {
+  font-size: 2rem;
+  margin-bottom: 25px;
+  text-shadow: 0 0 8px var(--cyan);
+}
+
+/* Contenedor del campo */
+.campo {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+label {
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+/* Inputs futuristas */
+input,
+textarea {
+  padding: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  color: var(--text-light);
+  outline: none;
+  transition: 0.2s ease;
+}
+
+input:focus,
+textarea:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+}
+
+/* Errores */
+.error {
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  margin-left: 4px;
+}
+
+/* Botón */
+.btn-guardar {
+  padding: 12px 20px;
+  border-radius: var(--radius);
+  background: var(--cyan);
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  color: black;
+  transition: 0.25s ease;
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
+}
+
+.btn-guardar:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 0 18px rgba(0, 229, 255, 1);
+}
+
+.btn-guardar:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Alerta de éxito */
+.alerta-exito {
+  margin-top: 20px;
+  padding: 12px;
+  background: #12d67c;
+  color: black;
+  border-radius: var(--radius);
+  font-weight: 700;
+  text-align: center;
+  animation: aparecer 0.4s ease;
+  box-shadow: 0 0 12px #12d67c;
+}
+
+/* 🔥 AQUÍ FALTABA LA LLAVE */
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================== */
+/* ORÁCULO */
+/* ========================== */
+
+.separador {
+  margin: 24px 0;
+  border: 0;
+  border-top: 1px solid var(--card-border);
+}
+
+.oraculo-seccion {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.texto-oraculo {
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+
+.btn-oraculo {
+  padding: 10px 16px;
+  background: var(--purple);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 0 10px var(--cyan);
+  transition: 0.3s;
+}
+
+.btn-oraculo:hover {
+  background: var(--purple-dark);
+  box-shadow: 0 0 14px var(--cyan);
+}
+
+.preview-oraculo {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: var(--radius);
+  background: var(--card-bg);
+  border: 1px solid var(--cyan);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.preview-oraculo h3 {
+  margin-bottom: 6px;
+}
+
+.xp-badge {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 12px;
+  background: var(--xp-color);
+  color: black;
+  border-radius: var(--radius);
+  font-weight: bold;
+}
+
+.btn-usar {
+  margin-top: 12px;
+  padding: 8px 14px;
+  background: var(--cyan);
+  color: #000;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-usar:hover {
+  background: #00c8df;
+}
+
+/* Animación oráculo */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

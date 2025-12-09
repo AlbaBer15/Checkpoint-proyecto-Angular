@@ -1,0 +1,166 @@
+.tarjeta {
+  background: #222;
+  border: 1px solid #333;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 18px;
+  transition: 0.25s ease;
+  position: relative;
+}
+
+.tarjeta:hover {
+  border-color: #00e5ff;
+  box-shadow: 0 0 12px #00e5ff;
+}
+
+/* Título */
+.titulo-mision {
+  margin: 0 0 8px 0;
+  color: #00e5ff;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+/* Descripción */
+.descripcion {
+  margin: 0;
+  color: #dcdcdc;
+}
+
+/* Badges XP */
+.xp-badge {
+  background: #ffd447;
+  color: #000;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 0 10px rgba(255, 212, 71, 0.4);
+}
+
+.icono {
+  font-size: 1.1rem;
+} /* 💠 Botón estilo RPG */
+.btn-completar-gamer {
+  background: linear-gradient(90deg, #00ffa6, #00c4ff);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  color: #0a0a0a;
+  text-shadow: 0 0 5px #fff;
+  transition: 0.2s ease-in-out;
+  box-shadow: 0 0 10px #00eaff;
+}
+
+.btn-completar-gamer:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #00eaff;
+}
+
+/* 💠 Etiqueta de misión terminada */
+.tag-completada {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(0, 255, 150, 0.1);
+  border-left: 4px solid #00ff9d;
+  color: #00ffcc;
+  font-weight: bold;
+  border-radius: 6px;
+  text-shadow: 0 0 8px #00ffdd;
+}
+
+/* 💠 Estilo visual de tarjeta completada (opcional: tono apagado) */
+.tarjeta.completada {
+  opacity: 0.6;
+  filter: grayscale(20%);
+}
+/* CONTENEDOR DE BOTONES */
+.acciones {
+  display: flex;
+  gap: 15px;
+  margin-top: 12px;
+}
+
+/* BOTÓN COMPLETAR (ya lo tenías) */
+.btn-completar-gamer {
+  background: #00f0ff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #000;
+  box-shadow: 0 0 8px #00f0ff;
+  transition: 0.2s;
+}
+
+.btn-completar-gamer:hover {
+  box-shadow: 0 0 12px #00f0ff;
+  transform: translateY(-3px);
+}
+
+/* BOTÓN ELIMINAR TEMATIZADO */
+.btn-eliminar-gamer {
+  background: #ff3b3b;
+  border: 1px solid #ff7b7b;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 5px #000;
+  box-shadow: 0 0 8px rgba(255, 60, 60, 0.6);
+  transition: 0.2s;
+}
+
+.btn-eliminar-gamer:hover {
+  background: #ff1f1f;
+  box-shadow: 0 0 12px rgba(255, 50, 50, 1);
+  transform: translateY(-3px);
+}
+
+/* MÁS SEPARACIÓN VISUAL (anti-clics accidentales) */
+.btn-eliminar-gamer {
+  margin-left: auto;
+}
+.fila-superior {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.btn-favorito {
+  font-size: 1.4rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: 0.25s ease;
+  filter: grayscale(100%);
+}
+
+.btn-favorito:hover {
+  transform: scale(1.2);
+}
+
+.btn-favorito.activo {
+  filter: none;
+  text-shadow: 0 0 8px red;
+  transform: scale(1.2);
+}
+.fila-superior {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.lado-izquierdo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

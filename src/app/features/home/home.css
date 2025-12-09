@@ -1,0 +1,104 @@
+/* TÍTULOS */
+.titulo-home {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  text-shadow: 0 0 12px var(--cyan);
+}
+
+.subtitulo {
+  text-align: center;
+  margin-bottom: 35px;
+  font-size: 1.05rem;
+  color: var(--text-soft);
+}
+
+/* LAYOUT PRINCIPAL */
+.home-layout {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 40px;
+}
+
+/* TARJETAS PEQUEÑAS */
+.tarjetas-left {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.small-card {
+  background: var(--card-bg);
+  padding: 18px;
+  border-radius: var(--radius);
+  text-align: center;
+  border: 1px solid var(--card-border);
+  transition: 0.2s;
+}
+
+.small-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 12px var(--cyan);
+}
+
+.small-card.wide {
+  grid-column: span 2;
+}
+
+.icono {
+  font-size: 1.8rem;
+  margin-bottom: 5px;
+}
+
+.valor {
+  font-size: 2rem;
+  color: var(--cyan);
+  font-weight: bold;
+}
+
+/* PANEL DE NIVEL */
+.panel-nivel {
+  background: linear-gradient(135deg, rgba(0, 20, 40, 0.7), rgba(25, 0, 45, 0.7));
+  border: 2px solid #00eaff88;
+  border-radius: 18px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 0 20px #00eaff55;
+}
+
+.avatar {
+  font-size: 4rem;
+  margin-bottom: 10px;
+}
+
+.nivel-num {
+  font-size: 1.8rem;
+  color: var(--cyan);
+  text-shadow: 0 0 8px var(--cyan);
+}
+
+.nivel-titulo {
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+  color: #a8efff;
+}
+
+.barra-container {
+  background: #222;
+  height: 12px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.barra-progreso {
+  height: 100%;
+  background: linear-gradient(90deg, #00eaff, #a855f7);
+  transition: 0.3s;
+}
+
+.nivel-msg {
+  color: var(--text-soft);
+  font-size: 0.9rem;
+}

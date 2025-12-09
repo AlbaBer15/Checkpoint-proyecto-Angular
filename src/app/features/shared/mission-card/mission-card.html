@@ -1,0 +1,50 @@
+<!-- Tarjeta individual de misión -->
+<div class="tarjeta" [class.completada]="estado === 'completada'">
+
+  <!-- FILA SUPERIOR: Corazón + Título + XP -->
+  <div class="fila-superior">
+    
+    <!-- Bloque izquierdo: favorito + título -->
+    <div class="lado-izquierdo">
+      <!-- Botón favorito (cambia visualmente con ngClass) -->
+      <button class="btn-favorito"
+              [ngClass]="{ activo: favorito }"
+              (click)="toggleFavorito()">
+        ❤️
+      </button>
+
+      <h3 class="titulo-mision">{{ titulo }}</h3>
+    </div>
+
+    <!-- XP en la esquina derecha -->
+    <span class="xp-badge">⚡ {{ xp }} XP</span>
+  </div>
+
+  <!-- Descripción de la misión -->
+  <p class="descripcion">{{ descripcion }}</p>
+
+  <!-- Acciones disponibles -->
+  <div class="acciones">
+
+    <!-- Solo se muestra si la misión aún no está completada -->
+    <button class="btn-completar-gamer"
+            *ngIf="estado === 'pendiente'"
+            (click)="marcarComoCompletada()">
+      🎯 Completar misión
+    </button>
+
+    <!-- Botón eliminar -->
+    <button class="btn-eliminar-gamer"
+            (click)="eliminarMision()">
+      🗑️ Eliminar
+    </button>
+
+  </div>
+
+  <!-- Indicador visual de misión completada -->
+  <p *ngIf="estado === 'completada'" class="tag-completada">
+    🏆 Misión completada
+  </p>
+
+</div>
+<!-- Fin de la tarjeta de misión -->

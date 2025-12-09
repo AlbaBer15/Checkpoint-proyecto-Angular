@@ -1,59 +1,187 @@
-# Checkpoint
+# CheckPoint – Gestor de Misiones Gamificadas
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.7.
+CheckPoint es una aplicación web desarrollada en **Angular** que transforma acciones cotidianas en misiones RPG.  
+Incluye un sistema de XP, niveles, misiones favoritas, formulario para añadir misiones, un oráculo de misiones aleatorias todo ello, aplicado sobre una interfaz personalizada.
 
-## Development server
+Este proyecto forma parte del módulo  
+*Ampliación de Desarrollo de Interfaces – 2º DAM (IES Cañaveral, 2024/25)*.
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
-```
+# Índice
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+1. Descripción general  
+2. Tecnologías utilizadas  
+3. Funcionalidades principales  
+4. Requisitos previos  
+5. Instalación  
+6. Ejecución  
+7. Instrucciones de uso  
+8. Arquitectura del proyecto
+9. APIs utilizadas  
+10. Licencia  
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+# 1. Descripción general
 
-```bash
-ng generate component component-name
-```
+CheckPoint permite:
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- Crear misiones  
+- Listarlas con diseño RPG  
+- Completarlas y ganar XP  
+- Subir de nivel mediante un `LevelPipe` personalizado  
+- Marcar misiones como favoritas usando `ngClass`  
+- Eliminar misiones  
+- Generar misiones aleatorias gracias al **Oráculo**  
 
-```bash
-ng generate --help
-```
+La app es totalmente SPA gracias al routing de Angular.
 
-## Building
+---
 
-To build the project run:
+# 2. Tecnologías utilizadas
 
-```bash
-ng build
-```
+- **Angular 17+**  
+- **TypeScript**  
+- **RxJS**  
+- **HTML + CSS personalizado**  
+- **APIs externas:** DummyJSON + MyMemory Translation API  
+- **Angular Standalone Components**
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+# 3. Funcionalidades principales
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+-  *ngFor para mostrar las misiones  
+-  Formulario reactivo para añadir misiones  
+-  Validaciones de formulario  
+-  XP dinámico y cálculo de nivel  
+-  Pipe personalizado (`LevelPipe`)  
+-  Marcar misión como favorita (`ngClass`)  
+-  Eliminar misión  
+-  Completar misión  
+-  Creación de misión aleatoria  
+-  Routing completo (`/home`, `/missions`, `/add-mission`)  
 
-```bash
-ng test
-```
+---
 
-## Running end-to-end tests
+# 4. Requisitos previos
 
-For end-to-end (e2e) testing, run:
+Asegúrate de tener instalado:
 
-```bash
-ng e2e
-```
+- Node.js (mínimo 18).  
+- Angular CLI  
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+# 5. Instalación
 
-## Additional Resources
+1. Clonar el repositorio:
+   git clone https://github.com/usuario/proyecto.git
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+2. Instalar dependencias:
+   npm install
+
+# 6. Ejecución
+
+ Ejecutar la app:
+   ng serve
+
+Se abrirá automáticamente el navegador:
+   http://localhost:4200
+
+# 7. Instrucciones de uso
+
+### Home
+- Muestra el nivel actual del jugador mediante un `LevelPipe` personalizado.
+- El XP total aumenta conforme se completan misiones.
+- Incluye una barra de progreso y un mensaje dinámico según el nivel.
+
+![Vista Home](./screenshots/imagen1.png)
+---
+
+### Misiones disponibles
+ Cada misión aparece en una tarjeta visual.
+- Acciones disponibles:
+  - ❤️ Marcar como favorita (hecho con `ngClass`)
+  - Completar misión
+  - Eliminar misión
+- Muestra misiones activas (pendientes) y completadas diferenciadas.
+- Las completadas suman XP al jugador.
+
+![Vista listado junto sus misiones](./screenshots/imagen2.png)
+
+### Añadir misión
+- Formulario reactivo con validaciones:
+  - Título mínimo 3 caracteres
+  - Descripción mínima 5 caracteres
+  - XP entre 1 y 999
+- Botón para generar una misión con el **Oráculo**, usando API externa.
+- La misión generada se puede añadir directamente.
+
+![Vista para añadir misiones y Oráculo](./screenshots/imagen3.png)
+
+# 8. Arquitectura del proyecto
+La aplicación esta organizada siguiendo una estructura modular basada en **Standalone Components**, tal y como recomienda Angular.
+Cada parte del proyecto asume responsabilidades: 
+
+### * features/*
+Contiene las vistas principales de la aplicación.
+
+- *home/* → Muestra XP total, nivel, progreso y resumen del aventurero.
+- **missions/**
+  - **mission-list/** → Lista de misiones activas.
+  - **mission-add/** → Formulario para crear misiones + integración API (Oráculo).
+### **shared/**
+Componentes reutilizables utilizados en varias vistas.
+
+- **mission-card/**  
+  Tarjeta visual que representa una misión individual, con:
+  - XP  
+  - botón completar  
+  - botón eliminar  
+  - favorito (emoji con `ngClass`)  
+
+- **pipes/level-pipe.ts**  
+  Pipe personalizado que:
+  - calcula el nivel según XP,
+  - asigna un título al jugador,
+  - calcula el % de progreso hacia el siguiente nivel.
+
+---
+
+### ** services/**
+- **mission.service.ts**  
+  Contiene toda la lógica de negocio:
+  - añadir misiones  
+  - completar misiones  
+  - eliminar misiones  
+  - marcar favorito  
+  - consumir API externa  
+  - calcular XP total  
+
+---
+
+### ** app.routes.ts**
+Define el sistema de navegación SPA:
+- `/home`
+- `/misiones`
+- `/add`
+
+
+# 9. APIs utilizadas
+
+###  DummyJSON API  
+Se utiliza para obtener texto en inglés aleatorio para misiones del Oráculo.  
+https://dummyjson.com/todos/random
+
+### MyMemory Translation API  
+Permite traducir automáticamente la misión al español.  
+https://mymemory.translated.net/
+
+Ambas se combinan para generar misiones completamente adaptadas y en castellano.
+
+# 10. Licencia
+
+Proyecto de uso educativo.  
+
+
+

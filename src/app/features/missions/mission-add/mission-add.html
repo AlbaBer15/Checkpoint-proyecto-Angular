@@ -1,0 +1,78 @@
+<div class="container">
+  <h2 class="titulo-pagina">Añadir misión</h2>
+
+  <!-- Formulario reactivo (valida en tiempo real) -->
+  <form [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+
+    <!-- Campo: Título (mín. 3 caracteres) -->
+    <div class="campo">
+      <label for="titulo">Título</label>
+      <input id="titulo" type="text" formControlName="titulo" placeholder="Ej: Beber agua" />
+
+      <!-- Mensaje si el usuario toca el campo y no cumple validación -->
+      <p class="error"
+         *ngIf="formulario.get('titulo')?.touched && formulario.get('titulo')?.invalid">
+        El título debe tener al menos 3 caracteres.
+      </p>
+    </div>
+
+    <!-- Campo: Descripción (mín. 5 caracteres) -->
+    <div class="campo">
+      <label for="descripcion">Descripción</label>
+      <textarea id="descripcion" rows="3" formControlName="descripcion"
+                placeholder="Describe la misión..."></textarea>
+
+      <p class="error"
+         *ngIf="formulario.get('descripcion')?.touched && formulario.get('descripcion')?.invalid">
+        La descripción debe tener al menos 5 caracteres.
+      </p>
+    </div>
+
+    <!-- Campo: XP (rango permitido 1–999) -->
+    <div class="campo">
+      <label for="xp">XP</label>
+      <input id="xp" type="number" formControlName="xp" min="1" max="999" />
+
+      <p class="error"
+         *ngIf="formulario.get('xp')?.touched && formulario.get('xp')?.invalid">
+        Introduce un valor entre 1 y 999 XP.
+      </p>
+    </div>
+
+    <!-- Botón principal -->
+    <!-- Deshabilitado automáticamente si el formulario es inválido -->
+    <button type="submit" [disabled]="formulario.invalid" class="btn-guardar">
+      Añadir misión
+    </button>
+
+    <!-- Mensaje visual tras añadir una misión -->
+    <div class="alerta-exito" *ngIf="mostrarExito">
+      ✔ Misión añadida correctamente
+    </div>
+
+    <hr class="separador" />
+
+    <!-- Sección del Oráculo (API externa) -->
+    <div class="oraculo-seccion">
+      <p class="texto-oraculo">¿Necesitas ayuda del Oráculo?</p>
+
+      <!-- Botón que invoca una misión generada por API -->
+      <button type="button" class="btn-oraculo" (click)="invocarOraculo()">
+        🔮 Invocar misión aleatoria
+      </button>
+    </div>
+
+    <!-- Vista previa de la misión generada por la API -->
+    <div *ngIf="misionOraculo" class="preview-oraculo">
+      <h3>{{ misionOraculo.titulo }}</h3>
+      <p>{{ misionOraculo.descripcion }}</p>
+      <span class="xp-badge">⚡ {{ misionOraculo.xp }} XP</span>
+
+      <!-- Botón que pasa la misión generada al servicio -->
+      <button type="button" class="btn-usar" (click)="usarMisionDelOraculo()">
+        ⭐ Usar esta misión
+      </button>
+    </div>
+
+  </form>
+</div>
