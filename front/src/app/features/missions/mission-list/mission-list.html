@@ -1,18 +1,13 @@
 <h2 class="titulo-misiones">Registro de misiones</h2>
 
 <div class="container">
-  <!-- Renderizado dinámico con ngFor -->
   <app-mission-card
     *ngFor="let m of misiones"
-    [titulo]="m.titulo"
-    [descripcion]="m.descripcion"
-    [xp]="m.xp"
-    [estado]="m.estado"
-    [favorito]="m.favorito ?? false"
-    (completar)="completarMision(m.titulo)"
-    (eliminar)="eliminarMision(m.titulo)"
-    (marcarFavorito)="marcarFavorito(m)"
+    [mision]="m"
+    (completar)="completarMision($event)"
+    (eliminar)="eliminarMision($event)"
+    (marcarFavorito)="marcarFavorito($event)"
   >
-    <!-- Eventos enviados desde MissionCard -->
   </app-mission-card>
+    <!-- Eventos enviados desde MissionCard -->
 </div>

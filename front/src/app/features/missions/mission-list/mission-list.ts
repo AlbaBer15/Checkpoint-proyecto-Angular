@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { MissionCard } from '../../shared/mission-card/mission-card';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgFor } from '@angular/common';
+import { Subscription } from 'rxjs';
+
+import { MissionCard } from '../../shared/mission-card/mission-card';
 import { MissionService, Mision } from '../../../services/mission';
 
 @Component({
@@ -10,35 +12,39 @@ import { MissionService, Mision } from '../../../services/mission';
   styleUrl: './mission-list.css',
   imports: [MissionCard, NgFor],
 })
-export class MissionList implements OnInit {
+export class MissionList implements OnInit, OnDestroy {
 
-  /** Lista de misiones recibida desde el servicio */
   misiones: Mision[] = [];
+  private sub?: Subscription;
 
   constructor(private missionService: MissionService) {}
 
-  /**
-   * Nos suscribimos al stream de misiones.
-   * Cada cambio (añadir, eliminar, completar, favorito) actualiza automáticamente la vista.
-   */
   ngOnInit(): void {
-    this.missionService.misiones$.subscribe((lista) => {
+    // 1) pedir al backend
+    this.missionService.cargarMisiones();
+
+    // 2) escuchar cambios del BehaviorSubject (estado local)
+    this.sub = this.missionService.misiones$.subscribe(lista => {
       this.misiones = lista;
     });
   }
 
-  /** Marca una misión como completada */
-  completarMision(titulo: string) {
-    this.missionService.completarMision(titulo);
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
   }
 
-  /** Elimina una misión completamente del listado */
-  eliminarMision(titulo: string) {
-    this.missionService.eliminarMision(titulo);
+  completarMision(m: Mision) {
+    if (!m.id) return; // por si acaso
+    this.missionService.completarMision(m.id);
   }
 
-  /** Alterna el estado de favorito de una misión */
+  eliminarMision(m: Mision) {
+    if (!m.id) return;
+    this.missionService.eliminarMision(m.id);
+  }
+
   marcarFavorito(m: Mision) {
-    this.missionService.toggleFavorito(m.titulo);
+    if (!m.id) return;
+    this.missionService.toggleFavorito(m.id, m.favorito ?? false);
   }
 }

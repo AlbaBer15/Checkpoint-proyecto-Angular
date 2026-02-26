@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 
 /**
  * Modelo principal de una misión del sistema.
- * Cada misión representa una tarea gamificada que el usuario puede completar.
  */
 export interface Mision {
+  id?: number;
   titulo: string;
   descripcion: string;
   xp: number;
@@ -15,92 +15,45 @@ export interface Mision {
   favorito?: boolean;
 }
 
-/**
- * Servicio encargado de gestionar toda la lógica de misiones:
- * - Gestión interna mediante BehaviorSubject
- * - Alta, eliminación y actualización de estado
- * - Cálculo de XP total
- * - Integración con API externa (misión del Oráculo)
- * 
- * Este servicio actúa como "fuente de verdad" para toda la aplicación.
- */
 @Injectable({
   providedIn: 'root',
 })
 export class MissionService {
+  // ✅ URL de tu backend
+  private readonly apiUrl = 'http://localhost:8080/api/missions';
+
   constructor(private http: HttpClient) {}
 
   // ============================================================
-  //  LISTA REACTIVA DE MISIONES
+  //  LISTA REACTIVA DE MISIONES (FUENTE DE VERDAD = BACKEND)
   // ============================================================
 
-  /**
-   * BehaviorSubject que mantiene el estado actual de todas las misiones.
-   * Permite que los componentes se actualicen automáticamente al cambiar datos.
-   */
-  private readonly _misiones$ = new BehaviorSubject<Mision[]>([
-    {
-      titulo: 'Hidratarte como un campeón',
-      descripcion: 'Bebe un vaso de agua para mejorar tus stats de energía.',
-      xp: 5,
-      estado: 'pendiente',
-      favorito: false,
-    },
-    {
-      titulo: 'Mini misión: ordenar tu zona',
-      descripcion: 'Arregla tu escritorio para obtener claridad mental.',
-      xp: 10,
-      estado: 'pendiente',
-      favorito: false,
-    },
-    {
-      titulo: 'Revisión rápida de inventario',
-      descripcion: 'Revisa tu mochila y tira lo que no necesites.',
-      xp: 8,
-      estado: 'pendiente',
-      favorito: false,
-    },
-    {
-      titulo: 'Mensaje de alianza',
-      descripcion: 'Envía un WhatsApp amable a alguien que aprecias.',
-      xp: 6,
-      estado: 'pendiente',
-      favorito: false,
-    },
-    {
-      titulo: 'Estiramientos del guerrero',
-      descripcion: 'Haz 2 minutos de estiramientos para recuperar salud.',
-      xp: 12,
-      estado: 'pendiente',
-      favorito: false,
-    }
-  ]);
+  private readonly _misiones$ = new BehaviorSubject<Mision[]>([]);
+  misiones$ = this._misiones$.asObservable();
 
-  /** Devuelve todas las misiones como un observable para suscripción reactiva. */
-  get misiones$(): Observable<Mision[]> {
-    return this._misiones$.asObservable();
+  /** Carga misiones desde el backend y actualiza el estado local */
+  cargarMisiones(): void {
+    this.http.get<Mision[]>(this.apiUrl).subscribe((lista) => {
+      this._misiones$.next(lista);
+    });
   }
 
-  /** Versión para cálculos rápidos en componentes (ej. Home). */
+  /** Versión para cálculos rápidos en componentes */
   get misionesActuales(): Mision[] {
     return this._misiones$.value;
   }
 
-  /** Stream reactivo que solo emite misiones pendientes. */
+  /** Stream reactivo que solo emite misiones pendientes */
   get misionesActivas$(): Observable<Mision[]> {
     return this.misiones$.pipe(
-      map(lista => lista.filter(m => m.estado === 'pendiente'))
+      map((lista) => lista.filter((m) => m.estado === 'pendiente'))
     );
   }
 
   // ============================================================
-  //  ALTA DE MISIONES
+  //  CRUD contra BACKEND
   // ============================================================
 
-  /**
-   * Añade una nueva misión a la lista.
-   * @param datos Objeto parcial recibido desde el formulario.
-   */
   addMision(datos: Partial<Mision>): void {
     const nueva: Mision = {
       titulo: datos.titulo!,
@@ -110,49 +63,55 @@ export class MissionService {
       favorito: datos.favorito ?? false,
     };
 
-    this._misiones$.next([...this._misiones$.value, nueva]);
+    this.http.post<Mision>(this.apiUrl, nueva).subscribe(() => {
+      this.cargarMisiones();
+    });
+  }
+
+  completarMision(id: number): void {
+    // ✅ MVP: hacemos PATCH del estado (si tu backend aún no tiene PATCH, luego lo adaptamos)
+    this.http.patch(`${this.apiUrl}/${id}`, { estado: 'completada' }).subscribe(() => {
+      this.cargarMisiones();
+    });
+  }
+
+  eliminarMision(id: number): void {
+    this.http.delete(`${this.apiUrl}/${id}`).subscribe(() => {
+      this.cargarMisiones();
+    });
+  }
+
+  toggleFavorito(id: number, favoritoActual: boolean): void {
+    this.http.patch(`${this.apiUrl}/${id}`, { favorito: !favoritoActual }).subscribe(() => {
+      this.cargarMisiones();
+    });
   }
 
   // ============================================================
-  //  CÁLCULOS DE XP Y ESTADÍSTICAS
+  //  CÁLCULOS (se hacen sobre lo que haya en memoria)
   // ============================================================
 
-  /**
-   * Calcula la experiencia total del usuario.
-   * Solo cuenta misiones completadas.
-   */
   getTotalXP(): number {
     return this._misiones$.value
-      .filter(m => m.estado === 'completada')
+      .filter((m) => m.estado === 'completada')
       .reduce((acc, m) => acc + m.xp, 0);
   }
 
-  /** Devuelve cuántas misiones quedan por completar. */
   getNumeroMisionesActivas(): number {
-    return this._misiones$.value.filter(m => m.estado === 'pendiente').length;
+    return this._misiones$.value.filter((m) => m.estado === 'pendiente').length;
   }
 
   // ============================================================
-  //  API EXTERNA: MISIÓN DEL ORÁCULO (TRADUCE Y GENERA UNA MISIÓN)
+  //  ORÁCULO (lo dejamos igual, pero al final puedes guardarlo en BD)
   // ============================================================
 
-  /**
-   * Obtiene una misión aleatoria desde API externa, la traduce y la adapta
-   * al formato de la aplicación.
-   */
   obtenerMisionAleatoria(): Observable<Mision> {
     return this.http.get('https://dummyjson.com/todos/random').pipe(
-
-      // 1. extraemos la frase en inglés
       map((data: any) => data.todo),
-
-      // 2. llamamos a la API de traducción
       switchMap((fraseEnIngles: string) =>
         this.http.get(
           `https://api.mymemory.translated.net/get?q=${encodeURIComponent(fraseEnIngles)}&langpair=en|es`
         ).pipe(
-
-          // 3. construimos la misión final
           map((resp: any) => {
             const descripcionES = resp.responseData.translatedText;
 
@@ -173,46 +132,10 @@ export class MissionService {
               descripcion: descripcionES,
               xp,
               estado: 'pendiente',
+              favorito: false,
             } as Mision;
-
           })
         )
-      )
-    );
-  }
-
-  // ============================================================
-  //  OPERACIONES SOBRE MISIONES
-  // ============================================================
-
-  /**
-   * Marca una misión como completada.
-   * @param titulo Título de la misión a actualizar
-   */
-  completarMision(titulo: string): void {
-    this._misiones$.next(
-      this._misiones$.value.map(m =>
-        m.titulo === titulo ? { ...m, estado: 'completada' } : m
-      )
-    );
-  }
-
-  /**
-   * Elimina una misión por título.
-   */
-  eliminarMision(titulo: string): void {
-    this._misiones$.next(
-      this._misiones$.value.filter(m => m.titulo !== titulo)
-    );
-  }
-
-  /**
-   * Alterna el estado "favorito" de una misión.
-   */
-  toggleFavorito(titulo: string): void {
-    this._misiones$.next(
-      this._misiones$.value.map(m =>
-        m.titulo === titulo ? { ...m, favorito: !m.favorito } : m
       )
     );
   }

@@ -11,42 +11,23 @@ import { NgIf, CommonModule } from '@angular/common';
 })
 export class MissionCard {
 
-  /**
-   * Datos que recibe la tarjeta desde el componente padre (MissionList)
-   * Representan la información de una misión individual.
-   */
-  @Input() titulo!: string;
-  @Input() descripcion!: string;
-  @Input() xp!: number;
-  @Input() estado!: 'pendiente' | 'completada';
+  // ✅ ahora la tarjeta recibe la misión entera (incluye id)
+  @Input({ required: true }) mision!: Mision;
 
-  /**
-   * Propiedad visual para marcar misiones como favoritas.
-   */
-  @Input() favorito: boolean = false;
+  // ✅ eventos: emitimos el objeto (o id) al padre
+  @Output() completar = new EventEmitter<Mision>();
+  @Output() eliminar = new EventEmitter<Mision>();
+  @Output() marcarFavorito = new EventEmitter<Mision>();
 
-  /**
-   * Eventos emitidos hacia MissionList
-   * - completar: marca la misión como finalizada
-   * - eliminar: elimina la misión del listado
-   * - marcarFavorito: alterna el estado de favorito
-   */
-  @Output() completar = new EventEmitter<string>();
-  @Output() eliminar = new EventEmitter<string>();
-  @Output() marcarFavorito = new EventEmitter<void>();
-
-  /** Emitimos evento para completar la misión */
   marcarComoCompletada() {
-    this.completar.emit(this.titulo);
+    this.completar.emit(this.mision);
   }
 
-  /** Emitimos evento para eliminar la misión */
   eliminarMision() {
-    this.eliminar.emit(this.titulo);
+    this.eliminar.emit(this.mision);
   }
 
-  /** Emitimos evento para alternar el estado de favorito */
   toggleFavorito() {
-    this.marcarFavorito.emit();
+    this.marcarFavorito.emit(this.mision);
   }
 }

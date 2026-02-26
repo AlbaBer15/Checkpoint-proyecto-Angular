@@ -61,33 +61,34 @@ export class MissionAdd {
   usarMisionDelOraculo() {
     if (!this.misionOraculo) return;
 
-    this.missionService.addMision(this.misionOraculo);
-    this.mostrarExito = true;
+  this.missionService.addMision({
+    titulo: this.misionOraculo.titulo,
+    descripcion: this.misionOraculo.descripcion,
+    xp: this.misionOraculo.xp,
+    // no pases estado/favorito/id; que el backend o el service lo gestione
+  });
 
-    this.misionOraculo = undefined;
-    this.formulario.reset({ xp: 1 });
+  this.mostrarExito = true;
+  this.misionOraculo = undefined;
+  this.formulario.reset({ xp: 1 });
+  setTimeout(() => (this.mostrarExito = false), 2000);
+}
 
-    setTimeout(() => (this.mostrarExito = false), 2000);
-  }
+guardar() {
+  if (this.formulario.invalid) return;
 
-  /**
-   * Guarda una misión creada manualmente desde el formulario.
-   * El servicio añade el estado por defecto.
-   */
-  guardar() {
-    if (this.formulario.invalid) return;
+  const valores = this.formulario.value;
 
-    const valores = this.formulario.value;
+  this.missionService.addMision({
+    titulo: valores.titulo,
+    descripcion: valores.descripcion,
+    xp: valores.xp,
+  });
 
-    this.missionService.addMision({
-      titulo: valores.titulo,
-      descripcion: valores.descripcion,
-      xp: valores.xp,
-    });
+  this.mostrarExito = true;
+  this.formulario.reset({ xp: 1 });
+  setTimeout(() => (this.mostrarExito = false), 2000);
+}
 
-    this.mostrarExito = true;
 
-    this.formulario.reset({ xp: 1 });
-    setTimeout(() => (this.mostrarExito = false), 2000);
-  }
 }
