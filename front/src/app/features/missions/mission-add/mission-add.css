@@ -176,3 +176,15 @@ textarea:focus {
     transform: translateY(0);
   }
 }
+
+.alerta-error {
+  margin-top: 20px;
+  padding: 12px;
+  background: #ff6b6b;
+  color: white;
+  border-radius: var(--radius);
+  font-weight: 700;
+  text-align: center;
+  animation: aparecer 0.4s ease;
+  box-shadow: 0 0 12px #ff6b6b;
+}

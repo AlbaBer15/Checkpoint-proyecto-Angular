@@ -50,6 +50,10 @@
       ✔ Misión añadida correctamente
     </div>
 
+    <div class="alerta-error" *ngIf="mostrarError">
+      ❌ {{ mensajeError }}
+    </div>
+
     <hr class="separador" />
 
     <!-- Sección del Oráculo (API externa) -->

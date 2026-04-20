@@ -47,4 +47,14 @@ public class MissionController {
     public Mission patch(@PathVariable Long id, @RequestBody Map<String, Object> changes) {
         return missionService.patch(id, changes);
     }
+
+    @GetMapping("/stats/total-xp")
+    public Long getTotalXP() {
+        return missionService.getTotalXP();
+    }
+
+    @GetMapping("/stats/active-count")
+    public Long getActiveMissionsCount() {
+        return missionService.getActiveMissionsCount();
+    }
 }
