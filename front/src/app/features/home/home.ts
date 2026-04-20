@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MissionService } from '../../services/mission';
 import { LevelPipe } from '../shared/pipes/level-pipe';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -9,76 +11,98 @@ import { LevelPipe } from '../shared/pipes/level-pipe';
   styleUrl: './home.css',
   imports: [LevelPipe],
 })
-export class Home implements OnInit {
+export class Home implements OnInit, OnDestroy {
 
   // Valores mostrados en el dashboard
   totalXP = 0;
   totalMisiones = 0;
   mensajeEstado = '';
 
+  private destroy$ = new Subject<void>();
+
   constructor(private missionService: MissionService) {}
 
   ngOnInit() {
-    const pipe = new LevelPipe(); // Pipe usado aquí para evitar duplicar lógica en el componente
+    this.cargarEstadisticas();
 
-    // Función que recalcula estadísticas cuando cambian las misiones
-    const actualizarStats = () => {
+    // Si la lista de misiones cambia, recargar estadísticas
+    this.missionService.misiones$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.cargarEstadisticas());
+  }
 
-      // XP total basado solo en misiones completadas
-      this.totalXP = this.missionService.getTotalXP();
+  private cargarEstadisticas() {
+    //  BACKEND CALCULA XP TOTAL
+    this.missionService.getTotalXP$()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (xp) => {
+          this.totalXP = xp;
+          this.actualizarMensaje();
+        },
+        error: (err) => console.error('Error cargando XP total:', err),
+      });
 
-      // Cantidad de misiones aún no completadas
-      this.totalMisiones = this.missionService.getNumeroMisionesActivas();
+    //  BACKEND CALCULA MISIONES PENDIENTES
+    this.missionService.getActiveMissionsCount$()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (count) => {
+          this.totalMisiones = count;
+        },
+        error: (err) => console.error('Error cargando misiones activas:', err),
+      });
+  }
 
-      // Obtener nivel actual usando el pipe
-      const { nivel } = pipe.transform(this.totalXP);
+  private actualizarMensaje() {
+    const pipe = new LevelPipe();
+    const { nivel } = pipe.transform(this.totalXP);
 
-      // Mensaje dinámico personalizado según nivel 
-      switch (nivel) {
-        case 1:
-          this.mensajeEstado = 'El viaje comienza... Cada paso te hace más fuerte. ';
-          break;
+    // Mensaje dinámico personalizado según nivel 
+    switch (nivel) {
+      case 1:
+        this.mensajeEstado = 'El viaje comienza... Cada paso te hace más fuerte. ';
+        break;
 
-        case 2:
-          this.mensajeEstado = 'Exploradora... Tu curiosidad es tu gran virtud.';
-          break;
+      case 2:
+        this.mensajeEstado = 'Exploradora... Tu curiosidad es tu gran virtud.';
+        break;
 
-        case 3:
-          this.mensajeEstado = 'Heroína... Estás dejando huella en el mundo. 🗡️';
-          break;
+      case 3:
+        this.mensajeEstado = 'Heroína... Estás dejando huella en el mundo. 🗡️';
+        break;
 
-        case 4:
-          this.mensajeEstado = 'Guardiana del camino… Tu presencia inspira a otros.';
-          break;
+      case 4:
+        this.mensajeEstado = 'Guardiana del camino… Tu presencia inspira a otros.';
+        break;
 
-        case 5:
-          this.mensajeEstado = 'Dominas cada desafío con valentía, aventurera.';
-          break;
+      case 5:
+        this.mensajeEstado = 'Dominas cada desafío con valentía, aventurera.';
+        break;
 
-        case 6:
-          this.mensajeEstado = 'Maestra del Camino… Tu sabiduría guía tu destino. 🔮';
-          break;
+      case 6:
+        this.mensajeEstado = 'Maestra del Camino… Tu sabiduría guía tu destino. 🔮';
+        break;
 
-        case 7:
-          this.mensajeEstado = 'Heroína Estelar… Brillas incluso en la oscuridad. ⭐';
-          break;
+      case 7:
+        this.mensajeEstado = 'Heroína Estelar… Brillas incluso en la oscuridad. ⭐';
+        break;
 
-        case 8:
-          this.mensajeEstado = 'Leyenda Errante… Tu nombre comienza a susurrarse en las tabernas. ⚔️';
-          break;
+      case 8:
+        this.mensajeEstado = 'Leyenda Errante… Tu nombre comienza a susurrarse en las tabernas. ⚔️';
+        break;
 
-        case 9:
-          this.mensajeEstado = '💫 Campeona Arcana… Tu poder trasciende este mundo. 🔥';
-          break;
+      case 9:
+        this.mensajeEstado = '💫 Campeona Arcana… Tu poder trasciende este mundo. 🔥';
+        break;
 
-        default: // Nivel 10+
-          this.mensajeEstado = '✨Tu historia ya es parte de las estrellas. 🌌';
-      }
-    };
+      default: // Nivel 10+
+        this.mensajeEstado = '✨Tu historia ya es parte de las estrellas. 🌌';
+    }
+  }
 
-    actualizarStats(); // Primera carga
-
-    // Escucha cambios en las misiones y actualiza el panel
-    this.missionService.misiones$.subscribe(() => actualizarStats());
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

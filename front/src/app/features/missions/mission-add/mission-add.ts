@@ -18,6 +18,10 @@ export class MissionAdd {
   /** Controla la visibilidad del mensaje de éxito */
   mostrarExito = false;
 
+  /**  Controla visibilidad del mensaje de error (del backend) */
+  mostrarError = false;
+  mensajeError = '';
+
   /** Misión generada desde la API externa (Oráculo) */
   misionOraculo?: Mision;
 
@@ -61,34 +65,58 @@ export class MissionAdd {
   usarMisionDelOraculo() {
     if (!this.misionOraculo) return;
 
-  this.missionService.addMision({
-    titulo: this.misionOraculo.titulo,
-    descripcion: this.misionOraculo.descripcion,
-    xp: this.misionOraculo.xp,
-    // no pases estado/favorito/id; que el backend o el service lo gestione
-  });
+    this.missionService
+      .addMision({
+        titulo: this.misionOraculo.titulo,
+        descripcion: this.misionOraculo.descripcion,
+        xp: this.misionOraculo.xp,
+        // no pases estado/favorito/id; que el backend o el service lo gestione
+      })
+      .subscribe({
+        next: () => {
+          this.mostrarExito = true;
+          this.misionOraculo = undefined;
+          this.formulario.reset({ xp: 1 });
+          this.mostrarError = false;
+          setTimeout(() => (this.mostrarExito = false), 2000);
+        },
+        error: (err) => {
+          // ✅ NUEVO: Capturar mensaje de error del backend
+          this.mensajeError = err?.error?.mensaje || 'Error al guardar la misión del oráculo';
+          this.mostrarError = true;
+          console.error('Error guardando misión de oráculo:', err);
+          setTimeout(() => (this.mostrarError = false), 5000);
+        },
+      });
+  }
 
-  this.mostrarExito = true;
-  this.misionOraculo = undefined;
-  this.formulario.reset({ xp: 1 });
-  setTimeout(() => (this.mostrarExito = false), 2000);
-}
+  guardar() {
+    if (this.formulario.invalid) return;
 
-guardar() {
-  if (this.formulario.invalid) return;
+    const valores = this.formulario.value;
 
-  const valores = this.formulario.value;
-
-  this.missionService.addMision({
-    titulo: valores.titulo,
-    descripcion: valores.descripcion,
-    xp: valores.xp,
-  });
-
-  this.mostrarExito = true;
-  this.formulario.reset({ xp: 1 });
-  setTimeout(() => (this.mostrarExito = false), 2000);
-}
+    this.missionService
+      .addMision({
+        titulo: valores.titulo,
+        descripcion: valores.descripcion,
+        xp: valores.xp,
+      })
+      .subscribe({
+        next: () => {
+          this.mostrarExito = true;
+          this.formulario.reset({ xp: 1 });
+          this.mostrarError = false;
+          setTimeout(() => (this.mostrarExito = false), 2000);
+        },
+        error: (err) => {
+          // ✅ NUEVO: Capturar mensaje de error del backend y mostrar en UI
+          this.mensajeError = err?.error?.mensaje || 'Error al guardar la misión';
+          this.mostrarError = true;
+          console.error('Error guardando misión:', err);
+          setTimeout(() => (this.mostrarError = false), 5000);
+        },
+      });
+  }
 
 
 }

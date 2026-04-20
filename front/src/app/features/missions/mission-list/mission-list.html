@@ -1,5 +1,10 @@
 <h2 class="titulo-misiones">Registro de misiones</h2>
 
+<!-- ✅ NUEVO: Mensaje de error -->
+<div class="alerta-error" *ngIf="mostrarError">
+  ❌ {{ mensajeError }}
+</div>
+
 <div class="container">
   <app-mission-card
     *ngFor="let m of misiones"

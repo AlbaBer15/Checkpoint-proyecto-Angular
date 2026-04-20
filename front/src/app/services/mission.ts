@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { map, switchMap, tap } from 'rxjs/operators';
 
 /**
  * Modelo principal de una misión del sistema.
@@ -24,6 +24,13 @@ export class MissionService {
 
   constructor(private http: HttpClient) {}
 
+  private handleError<T>(operacion: string) {
+    return (error: any): Observable<T> => {
+      console.error(`Error en ${operacion}:`, error);
+      return throwError(() => error);
+    };
+  }
+
   // ============================================================
   //  LISTA REACTIVA DE MISIONES (FUENTE DE VERDAD = BACKEND)
   // ============================================================
@@ -43,18 +50,45 @@ export class MissionService {
     return this._misiones$.value;
   }
 
-  /** Stream reactivo que solo emite misiones pendientes */
+  // ============================================================
+  //  ESTADÍSTICAS (ahora Observable, consultando backend)
+  // ============================================================
+
+  /**
+   * Obtiene el XP total de misiones completadas.
+   * ✅ Backend calcula, frontend solo muestra.
+   */
+  getTotalXP$(): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/stats/total-xp`).pipe(
+      catchError(this.handleError<number>('getTotalXP'))
+    );
+  }
+
+  /**
+   * Obtiene el número de misiones pendientes (activas).
+   * ✅ Backend calcula, frontend solo muestra.
+   */
+  getActiveMissionsCount$(): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/stats/active-count`).pipe(
+      catchError(this.handleError<number>('getActiveMissionsCount'))
+    );
+  }
+
+  // ============================================================
+  //  CÁLCULOS UI (se hacen sobre lo que haya en memoria local)
+  // ============================================================
+
+  /**
+   * Filtra localmente misiones pendientes desde el caché.
+   * Útil para UI que necesita datos ya cargados.
+   */
   get misionesActivas$(): Observable<Mision[]> {
     return this.misiones$.pipe(
       map((lista) => lista.filter((m) => m.estado === 'pendiente'))
     );
   }
 
-  // ============================================================
-  //  CRUD contra BACKEND
-  // ============================================================
-
-  addMision(datos: Partial<Mision>): void {
+  addMision(datos: Partial<Mision>): Observable<Mision> {
     const nueva: Mision = {
       titulo: datos.titulo!,
       descripcion: datos.descripcion!,
@@ -63,42 +97,31 @@ export class MissionService {
       favorito: datos.favorito ?? false,
     };
 
-    this.http.post<Mision>(this.apiUrl, nueva).subscribe(() => {
-      this.cargarMisiones();
-    });
+    return this.http.post<Mision>(this.apiUrl, nueva).pipe(
+      tap(() => this.cargarMisiones()),
+      catchError(this.handleError<Mision>('addMision'))
+    );
   }
 
-  completarMision(id: number): void {
-    // ✅ MVP: hacemos PATCH del estado (si tu backend aún no tiene PATCH, luego lo adaptamos)
-    this.http.patch(`${this.apiUrl}/${id}`, { estado: 'completada' }).subscribe(() => {
-      this.cargarMisiones();
-    });
+  completarMision(id: number): Observable<Mision> {
+    return this.http.patch<Mision>(`${this.apiUrl}/${id}`, { estado: 'completada' }).pipe(
+      tap(() => this.cargarMisiones()),
+      catchError(this.handleError<Mision>('completarMision'))
+    );
   }
 
-  eliminarMision(id: number): void {
-    this.http.delete(`${this.apiUrl}/${id}`).subscribe(() => {
-      this.cargarMisiones();
-    });
+  eliminarMision(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+      tap(() => this.cargarMisiones()),
+      catchError(this.handleError<void>('eliminarMision'))
+    );
   }
 
-  toggleFavorito(id: number, favoritoActual: boolean): void {
-    this.http.patch(`${this.apiUrl}/${id}`, { favorito: !favoritoActual }).subscribe(() => {
-      this.cargarMisiones();
-    });
-  }
-
-  // ============================================================
-  //  CÁLCULOS (se hacen sobre lo que haya en memoria)
-  // ============================================================
-
-  getTotalXP(): number {
-    return this._misiones$.value
-      .filter((m) => m.estado === 'completada')
-      .reduce((acc, m) => acc + m.xp, 0);
-  }
-
-  getNumeroMisionesActivas(): number {
-    return this._misiones$.value.filter((m) => m.estado === 'pendiente').length;
+  toggleFavorito(id: number, favoritoActual: boolean): Observable<Mision> {
+    return this.http.patch<Mision>(`${this.apiUrl}/${id}`, { favorito: !favoritoActual }).pipe(
+      tap(() => this.cargarMisiones()),
+      catchError(this.handleError<Mision>('toggleFavorito'))
+    );
   }
 
   // ============================================================
