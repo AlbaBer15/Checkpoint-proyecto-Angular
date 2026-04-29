@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
-import { Subscription, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { MissionCard } from '../../shared/mission-card/mission-card';
 import { MissionService, Mision } from '../../../services/mission';
 
@@ -19,18 +18,13 @@ export class MissionList implements OnInit, OnDestroy {
   
   mostrarError = false;
   mensajeError = '';
-
-  private sub?: Subscription;
   private destroy$ = new Subject<void>();
 
   constructor(private missionService: MissionService) {}
 
   ngOnInit(): void {
-    // 1) pedir al backend
     this.missionService.cargarMisiones();
-
-    // 2) escuchar cambios del BehaviorSubject (estado local)
-    this.sub = this.missionService.misiones$
+    this.missionService.misiones$
       .pipe(takeUntil(this.destroy$))
       .subscribe(lista => {
         this.misiones = lista;
@@ -38,7 +32,6 @@ export class MissionList implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sub?.unsubscribe();
     this.destroy$.next();
     this.destroy$.complete();
   }

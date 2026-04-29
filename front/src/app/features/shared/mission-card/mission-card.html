@@ -1,12 +1,8 @@
 <!-- Tarjeta individual de misión -->
 <div class="tarjeta" [class.completada]="mision.estado === 'completada'">
-
-  <!-- FILA SUPERIOR: Corazón + Título + XP -->
   <div class="fila-superior">
 
-    <!-- Bloque izquierdo: favorito + título -->
     <div class="lado-izquierdo">
-      <!-- Botón favorito -->
       <button class="btn-favorito"
               [ngClass]="{ activo: (mision.favorito ?? false) }"
               (click)="toggleFavorito()">
@@ -16,14 +12,11 @@
       <h3 class="titulo-mision">{{ mision.titulo }}</h3>
     </div>
 
-    <!-- XP en la esquina derecha -->
     <span class="xp-badge">⚡ {{ mision.xp }} XP</span>
   </div>
 
-  <!-- Descripción -->
   <p class="descripcion">{{ mision.descripcion }}</p>
 
-  <!-- Acciones -->
   <div class="acciones">
 
     <button class="btn-completar-gamer"
@@ -44,4 +37,3 @@
   </p>
 
 </div>
-<!-- Fin de la tarjeta de misión -->

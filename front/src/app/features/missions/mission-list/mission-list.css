@@ -1,40 +1,9 @@
-.tarjeta {
-  transition: 0.3s ease;
-}
-
-.tarjeta.completada {
-  opacity: 0.6;
-  filter: grayscale(0.7);
-  border: 1px solid var(--purple);
-  text-decoration: line-through;
-}
-
-.btn-completar {
-  margin-top: 10px;
-  padding: 8px 12px;
-  background: #12d67c;
-  border: none;
-  border-radius: var(--radius);
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.25s;
-}
-
-.btn-completar:hover {
-  background: #0bbf6a;
-}
-
-.estado-ok {
-  color: #12d67c;
-  font-weight: bold;
-  margin-top: 8px;
-}
 .titulo-misiones {
   font-size: 2.4rem;
   font-weight: 900;
   color: #00eaff;
   text-shadow: 0 0 5px #00eaff, 0 0 12px #00bcd4, 0 0 20px #0097a7;
-  font-family: 'Orbitron', sans-serif; /* Futurista */
+  font-family: 'Orbitron', sans-serif;
   letter-spacing: 2px;
   text-align: center;
   margin-bottom: 30px;
@@ -53,12 +22,13 @@
 }
 
 @keyframes aparecer {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.sin-misiones {
+  text-align: center;
+  color: var(--text-soft);
+  margin-top: 40px;
+  font-size: 1.1rem;
 }

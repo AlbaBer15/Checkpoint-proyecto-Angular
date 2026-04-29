@@ -1,7 +1,4 @@
-/* =============================================== */
 /* NAVBAR SUPERIOR */
-/* =============================================== */
-
 .topbar {
   background: linear-gradient(90deg, var(--purple-dark), var(--purple));
   padding: 12px 24px;
@@ -21,7 +18,6 @@
   text-shadow: 0 0 6px var(--cyan);
 }
 
-/* Eliminar iconos automáticos */
 .brand::before {
   content: '';
 }
@@ -49,9 +45,6 @@
   box-shadow: 0 0 12px var(--cyan);
 }
 
-/* =============================================== */
-/* TÍTULOS LOCALES */
-/* =============================================== */
 h2, h3, .brand {
   font-family: 'Orbitron', sans-serif;
 }

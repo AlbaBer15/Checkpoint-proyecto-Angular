@@ -1,14 +1,10 @@
 <div class="container">
 
-  <!-- Encabezado del panel -->
+  <!-- HARDCODEADO HABRA QUE CAMBIARLO NOMBRE PERFIL -->
   <h2 class="titulo-home">¡Bienvenida, Aventurera!</h2>
   <p class="subtitulo">Este es tu cuartel general. Aquí gestionas tu progreso y tus hazañas.</p>
 
   <div class="home-layout">
-
-    <!-- ======================================================== -->
-    <!-- TARJETAS IZQUIERDA: XP, misiones activas y estado global -->
-    <!-- ======================================================== -->
     <div class="tarjetas-left">
 
       <!-- XP acumulado -->
@@ -35,24 +31,16 @@
       </div>
 
     </div>
-
-    <!-- ======================================================== -->
     <!-- PANEL DE NIVEL: avatar, número de nivel y barra progreso -->
-    <!-- ======================================================== -->
     <div class="panel-nivel">
 
-      <!-- Avatar decorativo -->
       <div class="avatar">🧝‍♀️</div>
 
-      <!-- Nivel actual procesado por el pipe -->
       <h3 class="nivel-num">Nivel {{ (totalXP | level).nivel }}</h3>
 
-      <!-- Título asociado al nivel -->
       <p class="nivel-titulo">
         {{ (totalXP | level).titulo }}
       </p>
-
-      <!-- Barra de progreso del nivel -->
       <div class="barra-container">
         <!-- Se rellena con el porcentaje devuelto por el pipe -->
         <div class="barra-progreso" 
@@ -60,7 +48,6 @@
         </div>
       </div>
 
-      <!-- Mensaje contextual según progreso -->
       <p class="nivel-msg">
         {{
           (totalXP | level).progreso === 100

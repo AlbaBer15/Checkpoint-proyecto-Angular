@@ -16,6 +16,7 @@ public class MissionController {
     private final MissionService missionService;
 
     public MissionController(MissionService missionService) {
+
         this.missionService = missionService;
     }
 
@@ -33,6 +34,7 @@ public class MissionController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
+
         missionService.delete(id);
     }
 

@@ -17,3 +17,5 @@ export const routes: Routes = [
   },
   { path: '**', redirectTo: '' },
 ];
+// TODO: tengo que meter la ruta para profile sera algo asi:
+// { path: 'profile', loadComponent: () => import('./features/profile/profile').then((m) => m.Profile) },

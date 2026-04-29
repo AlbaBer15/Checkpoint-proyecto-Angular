@@ -4,7 +4,6 @@
   text-shadow: 0 0 8px var(--cyan);
 }
 
-/* Contenedor del campo */
 .campo {
   margin-bottom: 20px;
   display: flex;
@@ -17,7 +16,6 @@ label {
   color: var(--text-light);
 }
 
-/* Inputs futuristas */
 input,
 textarea {
   padding: 12px;
@@ -35,14 +33,12 @@ textarea:focus {
   box-shadow: 0 0 8px var(--cyan);
 }
 
-/* Errores */
 .error {
   color: #ff6b6b;
   font-size: 0.85rem;
   margin-left: 4px;
 }
 
-/* Botón */
 .btn-guardar {
   padding: 12px 20px;
   border-radius: var(--radius);
@@ -65,7 +61,6 @@ textarea:focus {
   cursor: not-allowed;
 }
 
-/* Alerta de éxito */
 .alerta-exito {
   margin-top: 20px;
   padding: 12px;
@@ -78,7 +73,6 @@ textarea:focus {
   box-shadow: 0 0 12px #12d67c;
 }
 
-/* 🔥 AQUÍ FALTABA LA LLAVE */
 @keyframes aparecer {
   from {
     opacity: 0;
@@ -89,10 +83,6 @@ textarea:focus {
     transform: translateY(0);
   }
 }
-
-/* ========================== */
-/* ORÁCULO */
-/* ========================== */
 
 .separador {
   margin: 24px 0;
@@ -165,7 +155,6 @@ textarea:focus {
   background: #00c8df;
 }
 
-/* Animación oráculo */
 @keyframes fadeIn {
   from {
     opacity: 0;

@@ -4,6 +4,10 @@
   ❌ {{ mensajeError }}
 </div>
 
+<p *ngIf="misiones.length === 0" class="sin-misiones">
+  No tienes misiones todavía. ¡Añade una nueva y empieza tu aventura!
+</p>
+
 <div class="container">
   <app-mission-card
     *ngFor="let m of misiones"
@@ -13,5 +17,4 @@
     (marcarFavorito)="marcarFavorito($event)"
   >
   </app-mission-card>
-    <!-- Eventos enviados desde MissionCard -->
 </div>

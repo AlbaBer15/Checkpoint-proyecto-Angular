@@ -10,17 +10,21 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: './home.html',
   styleUrl: './home.css',
   imports: [LevelPipe],
+  providers: [LevelPipe],
 })
+
 export class Home implements OnInit, OnDestroy {
 
-  // Valores mostrados en el dashboard
   totalXP = 0;
   totalMisiones = 0;
   mensajeEstado = '';
 
   private destroy$ = new Subject<void>();
 
-  constructor(private missionService: MissionService) {}
+constructor(
+  private missionService: MissionService,
+  private levelPipe: LevelPipe
+) {}
 
   ngOnInit() {
     this.cargarEstadisticas();
@@ -37,7 +41,8 @@ export class Home implements OnInit, OnDestroy {
       .subscribe({
         next: (xp) => {
           this.totalXP = xp;
-          this.actualizarMensaje();
+          const { nivel } = this.levelPipe.transform(xp);
+          this.actualizarMensaje(nivel);
         },
         error: (err) => console.error('Error cargando XP total:', err),
       });
@@ -52,51 +57,22 @@ export class Home implements OnInit, OnDestroy {
       });
   }
 
-  private actualizarMensaje() {
-    const pipe = new LevelPipe();
-    const { nivel } = pipe.transform(this.totalXP);
+  private readonly mensajes: Record<number, string> = {
+  1: 'El viaje comienza... Cada paso te hace más fuerte.',
+  2: 'Exploradora... Tu curiosidad es tu gran virtud.',
+  3: 'Heroína... Estás dejando huella en el mundo. 🗡️',
+  4: 'Guardiana del camino… Tu presencia inspira a otros.',
+  5: 'Dominas cada desafío con valentía, aventurera.',
+  6: 'Maestra del Camino… Tu sabiduría guía tu destino. 🔮',
+  7: 'Heroína Estelar… Brillas incluso en la oscuridad. ⭐',
+  8: 'Leyenda Errante… Tu nombre comienza a susurrarse. ⚔️',
+  9: '💫 Campeona Arcana… Tu poder trasciende este mundo. 🔥',
+};
 
-    switch (nivel) {
-      case 1:
-        this.mensajeEstado = 'El viaje comienza... Cada paso te hace más fuerte. ';
-        break;
-
-      case 2:
-        this.mensajeEstado = 'Exploradora... Tu curiosidad es tu gran virtud.';
-        break;
-
-      case 3:
-        this.mensajeEstado = 'Heroína... Estás dejando huella en el mundo. 🗡️';
-        break;
-
-      case 4:
-        this.mensajeEstado = 'Guardiana del camino… Tu presencia inspira a otros.';
-        break;
-
-      case 5:
-        this.mensajeEstado = 'Dominas cada desafío con valentía, aventurera.';
-        break;
-
-      case 6:
-        this.mensajeEstado = 'Maestra del Camino… Tu sabiduría guía tu destino. 🔮';
-        break;
-
-      case 7:
-        this.mensajeEstado = 'Heroína Estelar… Brillas incluso en la oscuridad. ⭐';
-        break;
-
-      case 8:
-        this.mensajeEstado = 'Leyenda Errante… Tu nombre comienza a susurrarse en las tabernas. ⚔️';
-        break;
-
-      case 9:
-        this.mensajeEstado = '💫 Campeona Arcana… Tu poder trasciende este mundo. 🔥';
-        break;
-
-      default: 
-        this.mensajeEstado = '✨Tu historia ya es parte de las estrellas. 🌌';
-    }
-  }
+private actualizarMensaje(nivel: number) {
+  this.mensajeEstado = this.mensajes[nivel]
+    ?? '✨ Tu historia ya es parte de las estrellas. 🌌';
+}
 
   ngOnDestroy() {
     this.destroy$.next();
