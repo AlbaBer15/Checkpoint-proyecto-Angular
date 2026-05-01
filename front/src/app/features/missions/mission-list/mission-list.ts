@@ -95,6 +95,13 @@ export class MissionList implements OnInit, OnDestroy {
       error: (err) => this.mostrarErrorMensaje(err, 'Error revirtiendo misión'),
     });
 }
+editarMision(evento: { id: number; datos: Partial<Mision> }) {
+  this.missionService.editarMision(evento.id, evento.datos)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      error: (err) => this.mostrarErrorMensaje(err, 'Error editando misión')
+    });
+}
 
   marcarFavorito(m: Mision) {
     if (!m.id) return;

@@ -46,6 +46,7 @@
       [animado]="misionesAnimado.has(m.id!)"
       (completar)="completarMision($event)"
       (revertir)="revertirMision($event)"
+      (editar)="editarMision($event)"
       (eliminar)="eliminarMision($event)"
       (marcarFavorito)="marcarFavorito($event)">
     </app-mission-card>

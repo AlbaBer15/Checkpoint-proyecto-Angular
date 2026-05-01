@@ -94,6 +94,14 @@ export class MissionService {
     catchError(this.handleError('revertirMision'))
   );
 }
+  editarMision(id: number, datos: Partial<Mision>): Observable<Mision> {
+    return this.http.patch<Mision>(
+      `${this.apiUrl}/${id}`,
+      datos).pipe(
+      tap(() => this.cargarMisiones()),
+      catchError(this.handleError('editarMision'))
+    );
+  }
 
   toggleFavorito(id: number, favoritoActual: boolean): Observable<Mision> {
     return this.http.patch<Mision>(
