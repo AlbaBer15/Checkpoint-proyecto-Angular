@@ -2,7 +2,6 @@
      [class.completada]="mision.estado === 'completada'"
      [class.animado]="animado">
 
-  <!-- ── MODO EDICIÓN ── -->
   <div *ngIf="editando" class="form-edicion">
 
     <div class="campo-edit">
@@ -19,15 +18,13 @@
       <label>XP</label>
       <input type="number" [(ngModel)]="xpEdit" min="1" max="999" />
     </div>
-
+    <p *ngIf="errorEdicion" class="error-edicion">{{ errorEdicion }}</p>
     <div class="acciones-edit">
       <button class="btn-guardar-edit" (click)="guardarEdicion()">💾 Guardar</button>
       <button class="btn-cancelar-edit" (click)="cancelarEdicion()">✖ Cancelar</button>
     </div>
 
   </div>
-
-  <!-- ── MODO VISTA ── -->
   <div *ngIf="!editando">
 
     <div class="fila-superior">
