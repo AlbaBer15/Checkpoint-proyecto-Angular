@@ -13,7 +13,6 @@
   box-shadow: 0 0 12px #00e5ff;
 }
 
-/* Título */
 .titulo-mision {
   margin: 0 0 8px 0;
   color: #00e5ff;
@@ -21,13 +20,11 @@
   font-weight: 700;
 }
 
-/* Descripción */
 .descripcion {
   margin: 0;
   color: #dcdcdc;
 }
 
-/* Badges XP */
 .xp-badge {
   background: #ffd447;
   color: #000;
@@ -42,27 +39,8 @@
 
 .icono {
   font-size: 1.1rem;
-} /* 💠 Botón estilo RPG */
-.btn-completar-gamer {
-  background: linear-gradient(90deg, #00ffa6, #00c4ff);
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 10px;
-  color: #0a0a0a;
-  text-shadow: 0 0 5px #fff;
-  transition: 0.2s ease-in-out;
-  box-shadow: 0 0 10px #00eaff;
 }
 
-.btn-completar-gamer:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px #00eaff;
-}
-
-/* 💠 Etiqueta de misión terminada */
 .tag-completada {
   margin-top: 10px;
   padding: 8px 12px;
@@ -74,19 +52,16 @@
   text-shadow: 0 0 8px #00ffdd;
 }
 
-/* 💠 Estilo visual de tarjeta completada (opcional: tono apagado) */
 .tarjeta.completada {
   opacity: 0.6;
   filter: grayscale(20%);
 }
-/* CONTENEDOR DE BOTONES */
 .acciones {
   display: flex;
   gap: 15px;
   margin-top: 12px;
 }
 
-/* BOTÓN COMPLETAR (ya lo tenías) */
 .btn-completar-gamer {
   background: #00f0ff;
   border: none;
@@ -104,7 +79,6 @@
   transform: translateY(-3px);
 }
 
-/* BOTÓN ELIMINAR TEMATIZADO */
 .btn-eliminar-gamer {
   background: #ff3b3b;
   border: 1px solid #ff7b7b;
@@ -123,16 +97,8 @@
   box-shadow: 0 0 12px rgba(255, 50, 50, 1);
   transform: translateY(-3px);
 }
-
-/* MÁS SEPARACIÓN VISUAL (anti-clics accidentales) */
 .btn-eliminar-gamer {
   margin-left: auto;
-}
-.fila-superior {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
 }
 
 .btn-favorito {
@@ -163,4 +129,48 @@
   display: flex;
   align-items: center;
   gap: 10px;
+}
+@keyframes completar {
+  0%   { 
+    transform: scale(1); 
+    box-shadow: none;
+    border-color: #333;
+  }
+  30%  { 
+    transform: scale(1.03); 
+    box-shadow: 0 0 30px #00ff9d, 0 0 60px #00ff9d;
+    border-color: #00ff9d;
+  }
+  60%  {
+    transform: scale(1.03);
+    box-shadow: 0 0 30px #00ff9d, 0 0 60px #00ff9d;
+    border-color: #00ff9d;
+  }
+  100% { 
+    transform: scale(1); 
+    box-shadow: none;
+    border-color: #333;
+  }
+}
+
+.tarjeta.animado {
+  animation: completar 1s ease;
+}
+
+.btn-revertir-gamer {
+  background: transparent;
+  border: 1px solid #00e5ff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #00e5ff;
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+  transition: 0.2s;
+}
+
+.btn-revertir-gamer:hover {
+  background: rgba(0, 229, 255, 0.1);
+  box-shadow: 0 0 14px rgba(0, 229, 255, 0.8);
+  transform: translateY(-3px);
 }

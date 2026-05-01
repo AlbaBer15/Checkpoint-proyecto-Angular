@@ -4,17 +4,25 @@
   ❌ {{ mensajeError }}
 </div>
 
-<p *ngIf="misiones.length === 0" class="sin-misiones">
-  No tienes misiones todavía. ¡Añade una nueva y empieza tu aventura!
-</p>
+<div *ngIf="cargando" class="loading-container">
+  <div class="loading-spinner">⚔️</div>
+  <p class="loading-texto">Cargando misiones...</p>
+</div>
 
-<div class="container">
-  <app-mission-card
-    *ngFor="let m of misiones"
-    [mision]="m"
-    (completar)="completarMision($event)"
-    (eliminar)="eliminarMision($event)"
-    (marcarFavorito)="marcarFavorito($event)"
-  >
-  </app-mission-card>
+<div *ngIf="!cargando">
+  <p *ngIf="misiones.length === 0" class="sin-misiones">
+    No tienes misiones todavía. ¡Añade una nueva!
+  </p>
+
+  <div class="container">
+    <app-mission-card
+      *ngFor="let m of misiones"
+      [mision]="m"
+      [animado]="misionesAnimado.has(m.id!)"
+      (completar)="completarMision($event)"
+      (revertir)="revertirMision($event)"
+      (eliminar)="eliminarMision($event)"
+      (marcarFavorito)="marcarFavorito($event)">
+    </app-mission-card>
+  </div>
 </div>

@@ -1,5 +1,6 @@
-<!-- Tarjeta individual de misión -->
-<div class="tarjeta" [class.completada]="mision.estado === 'completada'">
+<div class="tarjeta" 
+[class.completada]="mision.estado === 'completada'"
+[class.animado]="animado">
   <div class="fila-superior">
 
     <div class="lado-izquierdo">
@@ -24,6 +25,13 @@
             (click)="marcarComoCompletada()">
       🎯 Completar misión
     </button>
+
+    <button class="btn-revertir-gamer"
+          *ngIf="mision.estado === 'completada'"
+          (click)="revertirMision()">
+    🔄 Revertir
+    </button>
+
 
     <button class="btn-eliminar-gamer"
             (click)="eliminarMision()">

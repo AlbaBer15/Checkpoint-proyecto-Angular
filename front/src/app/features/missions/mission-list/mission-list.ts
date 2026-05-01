@@ -18,7 +18,9 @@ export class MissionList implements OnInit, OnDestroy {
   
   mostrarError = false;
   mensajeError = '';
+  cargando = true;
   private destroy$ = new Subject<void>();
+  misionesAnimado = new Set<number>(); 
 
   constructor(private missionService: MissionService) {}
 
@@ -28,6 +30,7 @@ export class MissionList implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(lista => {
         this.misiones = lista;
+        this.cargando = false;
       });
   }
 
@@ -37,22 +40,43 @@ export class MissionList implements OnInit, OnDestroy {
   }
 
   completarMision(m: Mision) {
-    if (!m.id) return;
-    this.missionService.completarMision(m.id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        error: (err) => this.mostrarErrorMensaje(err, 'Error completando misión'),
-      });
-  }
+  if (!m.id) return;
+
+  this.misionesAnimado.add(m.id);
+
+  this.missionService.completarMision(m.id)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      next: () => {
+        setTimeout(() => {
+          this.misionesAnimado.delete(m.id!);
+          this.missionService.cargarMisiones();
+        }, 1000);
+      },
+      error: (err) => {
+        this.misionesAnimado.delete(m.id!);
+        this.mostrarErrorMensaje(err, 'Error completando misión');
+      }
+    });
+}
 
   eliminarMision(m: Mision) {
     if (!m.id) return;
+    if (!confirm(`¿Eliminar la misión "${m.titulo}"?`)) return; 
     this.missionService.eliminarMision(m.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         error: (err) => this.mostrarErrorMensaje(err, 'Error eliminando misión'),
       });
   }
+  revertirMision(m: Mision) {
+  if (!m.id) return;
+  this.missionService.revertirMision(m.id)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      error: (err) => this.mostrarErrorMensaje(err, 'Error revirtiendo misión'),
+    });
+}
 
   marcarFavorito(m: Mision) {
     if (!m.id) return;

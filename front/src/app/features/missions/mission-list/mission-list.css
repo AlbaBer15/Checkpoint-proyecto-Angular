@@ -32,3 +32,25 @@
   margin-top: 40px;
   font-size: 1.1rem;
 }
+
+.loading-container {
+text-align: center;
+margin-top: 60px;
+}
+
+.loading-spinner {
+  font-size: 2.5rem;
+  animation: girar 1.5s linear infinite;
+  display: inline-block;
+}
+
+.loading-texto {
+  margin-top: 12px;
+  font-size: 1rem;
+  color: var(--text-soft);
+}
+
+@keyframes girar {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}

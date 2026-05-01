@@ -12,9 +12,11 @@ import { CommonModule } from '@angular/common';
 export class MissionCard {
 
   @Input({ required: true }) mision!: Mision;
+  @Input() animado = false;
   @Output() completar = new EventEmitter<Mision>();
   @Output() eliminar = new EventEmitter<Mision>();
   @Output() marcarFavorito = new EventEmitter<Mision>();
+  @Output() revertir = new EventEmitter<Mision>();
 
   marcarComoCompletada() {
     this.completar.emit(this.mision);
@@ -26,5 +28,9 @@ export class MissionCard {
 
   toggleFavorito() {
     this.marcarFavorito.emit(this.mision);
+  }
+
+  revertirMision() {
+    this.revertir.emit(this.mision);
   }
 }

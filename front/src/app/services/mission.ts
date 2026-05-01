@@ -74,7 +74,7 @@ export class MissionService {
       `${this.apiUrl}/${id}`,
       { estado: MISSION_ESTADOS.COMPLETADA }
     ).pipe(
-      tap(() => this.cargarMisiones()),
+
       catchError(this.handleError('completarMision'))
     );
   }
@@ -85,6 +85,15 @@ export class MissionService {
       catchError(this.handleError('eliminarMision'))
     );
   }
+  revertirMision(id: number): Observable<Mision> {
+    return this.http.patch<Mision>(
+    `${this.apiUrl}/${id}`,
+    { estado: MISSION_ESTADOS.PENDIENTE }
+  ).pipe(
+    tap(() => this.cargarMisiones()),
+    catchError(this.handleError('revertirMision'))
+  );
+}
 
   toggleFavorito(id: number, favoritoActual: boolean): Observable<Mision> {
     return this.http.patch<Mision>(
