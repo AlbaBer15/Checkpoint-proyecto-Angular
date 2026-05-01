@@ -17,7 +17,7 @@ export class MissionList implements OnInit, OnDestroy {
   filtro: 'todas' | 'pendientes' | 'completadas' | 'favoritas' = 'todas';
   orden: 'ninguno' | 'xp-desc' | 'xp-asc' | 'favoritas' | 'estado' = 'ninguno';
 
-get misionesFiltradas(): Mision[] {
+  get misionesFiltradas(): Mision[] {
   let lista = [...this.misiones];
 
   switch (this.filtro) {

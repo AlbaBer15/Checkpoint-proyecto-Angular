@@ -1,5 +1,30 @@
 <h2 class="titulo-misiones">Registro de misiones</h2>
 
+<div class="controles">
+
+  <div class="grupo-control">
+    <span class="label-control">Filtrar:</span>
+    <div class="btn-grupo">
+      <button [class.activo]="filtro === 'todas'"      (click)="filtro = 'todas'">      Todas</button>
+      <button [class.activo]="filtro === 'pendientes'" (click)="filtro = 'pendientes'"> ⏳ Pendientes</button>
+      <button [class.activo]="filtro === 'completadas'"(click)="filtro = 'completadas'">🏆 Completadas</button>
+      <button [class.activo]="filtro === 'favoritas'"  (click)="filtro = 'favoritas'">  ❤️ Favoritas</button>
+    </div>
+  </div>
+
+  <div class="grupo-control">
+    <span class="label-control">Ordenar:</span>
+    <div class="btn-grupo">
+      <button [class.activo]="orden === 'ninguno'"   (click)="orden = 'ninguno'">   Por defecto</button>
+      <button [class.activo]="orden === 'xp-desc'"   (click)="orden = 'xp-desc'">   ⚡ Mayor XP</button>
+      <button [class.activo]="orden === 'xp-asc'"    (click)="orden = 'xp-asc'">    ⚡ Menor XP</button>
+      <button [class.activo]="orden === 'favoritas'" (click)="orden = 'favoritas'"> ❤️ Favoritas primero</button>
+      <button [class.activo]="orden === 'estado'"    (click)="orden = 'estado'">     Por estado</button>
+    </div>
+  </div>
+
+</div>
+
 <div class="alerta-error" *ngIf="mostrarError">
   ❌ {{ mensajeError }}
 </div>
@@ -16,7 +41,7 @@
 
   <div class="container">
     <app-mission-card
-      *ngFor="let m of misiones"
+      *ngFor="let m of misionesFiltradas"
       [mision]="m"
       [animado]="misionesAnimado.has(m.id!)"
       (completar)="completarMision($event)"
