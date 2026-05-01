@@ -13,9 +13,27 @@ import { MissionService, Mision } from '../../../services/mission';
   imports: [MissionCard, NgFor, NgIf],
 })
 export class MissionList implements OnInit, OnDestroy {
-
   misiones: Mision[] = [];
-  
+  filtro: 'todas' | 'pendientes' | 'completadas' | 'favoritas' = 'todas';
+  orden: 'ninguno' | 'xp-desc' | 'xp-asc' | 'favoritas' | 'estado' = 'ninguno';
+
+get misionesFiltradas(): Mision[] {
+  let lista = [...this.misiones];
+
+  switch (this.filtro) {
+    case 'pendientes':  lista = lista.filter(m => m.estado === 'pendiente'); break;
+    case 'completadas': lista = lista.filter(m => m.estado === 'completada'); break;
+    case 'favoritas':   lista = lista.filter(m => m.favorito); break;
+  }
+
+  switch (this.orden) {
+    case 'xp-desc':   lista.sort((a, b) => b.xp - a.xp); break;
+    case 'xp-asc':    lista.sort((a, b) => a.xp - b.xp); break;
+    case 'favoritas': lista.sort((a, b) => (b.favorito ? 1 : 0) - (a.favorito ? 1 : 0)); break;
+    case 'estado':    lista.sort((a, b) => a.estado.localeCompare(b.estado)); break;
+  }
+  return lista;
+}
   mostrarError = false;
   mensajeError = '';
   cargando = true;
