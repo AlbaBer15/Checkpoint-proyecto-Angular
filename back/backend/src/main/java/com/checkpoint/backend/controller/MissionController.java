@@ -59,4 +59,9 @@ public class MissionController {
     public Long getActiveMissionsCount() {
         return missionService.getActiveMissionsCount();
     }
+
+    @GetMapping("/{id}")
+    public Mission getById(@PathVariable Long id) {
+        return missionService.findById(id);
+    }
 }

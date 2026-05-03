@@ -2,6 +2,7 @@ package com.checkpoint.backend.service;
 
 import com.checkpoint.backend.constants.CheckpointConstants;
 import com.checkpoint.backend.entity.Mission;
+import com.checkpoint.backend.exception.ResourceNotFoundException;
 import com.checkpoint.backend.repository.MissionRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -43,14 +44,21 @@ public class MissionService {
 
     public void delete(Long id) {
         if (!missionRepository.existsById(id)) {
-            throw new IllegalArgumentException("No existe la misión con id " + id);
+            throw new ResourceNotFoundException("No existe la misión con id " + id);
         }
         missionRepository.deleteById(id);
     }
 
+    public Mission findById(Long id) {
+        return missionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "No existe la misión con id " + id
+                ));
+    }
+
     public Mission patch(Long id, Map<String, Object> changes) {
         Mission mission = missionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No existe la misión con id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("No existe la misión con id " + id));
 
         validarCambios(changes);
 
@@ -82,18 +90,11 @@ public class MissionService {
     }
 
     public Long getTotalXP() {
-        return missionRepository.findAll()
-                .stream()
-                .filter(m -> CheckpointConstants.ESTADO_COMPLETADA.equals(m.getEstado()))
-                .mapToLong(Mission::getXp)
-                .sum();
+        return missionRepository.sumXpByEstado(CheckpointConstants.ESTADO_COMPLETADA);
     }
 
     public Long getActiveMissionsCount() {
-        return missionRepository.findAll()
-                .stream()
-                .filter(m -> CheckpointConstants.ESTADO_PENDIENTE.equals(m.getEstado()))
-                .count();
+        return missionRepository.countByEstado(CheckpointConstants.ESTADO_PENDIENTE);
     }
     
     private void normalizarYValidar(Mission m) {
