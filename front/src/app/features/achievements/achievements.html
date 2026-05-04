@@ -1,0 +1,41 @@
+<div class="container">
+
+  <h2 class="titulo-achievements">🏅 Logros</h2>
+  <p class="subtitulo">Desbloquea hazañas completando misiones y acumulando XP</p>
+
+  <div class="resumen-row">
+    <div class="small-card">
+      <div class="icono">⚡</div>
+      <h3>XP Total</h3>
+      <p class="valor">{{ totalXp }}</p>
+      <span class="descripcion">Experiencia acumulada</span>
+    </div>
+    <div class="small-card">
+      <div class="icono">🏆</div>
+      <h3>Misiones completadas</h3>
+      <p class="valor">{{ completedCount }}</p>
+      <span class="descripcion">Hazañas superadas</span>
+    </div>
+    <div class="small-card">
+      <div class="icono">🎖️</div>
+      <h3>Logros desbloqueados</h3>
+      <p class="valor">{{ desbloqueadosCount }}</p>
+      <span class="descripcion">De {{ achievements.length }} posibles</span>
+    </div>
+  </div>
+
+  <div class="grid-logros">
+    <div
+      class="card-logro"
+      *ngFor="let logro of achievements"
+      [class.unlocked]="logro.unlocked">
+      <div class="logro-icono">{{ logro.icon }}</div>
+      <h3 class="logro-title">{{ logro.title }}</h3>
+      <p class="logro-desc">{{ logro.description }}</p>
+      <span class="badge-logro">
+        {{ logro.unlocked ? '✔ Desbloqueado' : '🔒 Bloqueado' }}
+      </span>
+    </div>
+  </div>
+
+</div>

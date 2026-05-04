@@ -15,6 +15,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/missions/mission-add/mission-add').then((m) => m.MissionAdd),
   },
+  {
+    path: 'achievements',
+    loadComponent: () =>
+      import('./features/achievements/achievements').then((m) => m.Achievements),
+  },
   { path: '**', redirectTo: '' },
 ];
 // TODO: tengo que meter la ruta para profile sera algo asi:
