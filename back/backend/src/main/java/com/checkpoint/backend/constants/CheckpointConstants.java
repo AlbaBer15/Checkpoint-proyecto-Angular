@@ -1,6 +1,6 @@
 package com.checkpoint.backend.constants;
 
-public class CheckpointConstants {
+public final class CheckpointConstants {
 
     private CheckpointConstants() {}
 

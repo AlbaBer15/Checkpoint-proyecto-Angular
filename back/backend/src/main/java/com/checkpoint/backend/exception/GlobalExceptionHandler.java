@@ -11,22 +11,29 @@ import org.slf4j.LoggerFactory;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+// Si hay varios ExceptionHandler Spring los ve en orden. El generico el ultimo porque es el que recoge cualquier error (te lo modifico x eso)
+    // + Logger y campos ordenaos
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(404, e.getMessage()));
+    }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleValidationError(IllegalArgumentException e) {
         return ResponseEntity.badRequest()
                 .body(new ErrorResponse(400, e.getMessage()));
     }
-    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericError(Exception e) {
-        log.error("Error interno del servidor", e); //
+        log.error("Error interno del servidor", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse(500, "Error interno del servidor"));
     }
 
- 
     public static class ErrorResponse {
         public int codigo;
         public String mensaje;
@@ -38,11 +45,5 @@ public class GlobalExceptionHandler {
 
         public int getCodigo() { return codigo; }
         public String getMensaje() { return mensaje; }
-    }
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse(404, e.getMessage()));
     }
 }
