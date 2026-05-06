@@ -31,4 +31,11 @@ public class Mission {
     @Column(nullable = false)
     private Boolean favorito = false;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = true)
+    private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "profile_id", nullable = true)
+    private Profile profile;
 }
