@@ -8,6 +8,7 @@ import com.checkpoint.backend.repository.AchievementRepository;
 import com.checkpoint.backend.repository.ProfileAchievementRepository;
 import com.checkpoint.backend.repository.ProfileRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service

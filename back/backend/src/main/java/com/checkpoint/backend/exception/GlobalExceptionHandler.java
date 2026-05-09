@@ -8,10 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-
 @ControllerAdvice
 public class GlobalExceptionHandler {
-// Si hay varios ExceptionHandler Spring los ve en orden. El generico el ultimo porque es el que recoge cualquier error (te lo modifico x eso)
+    // Si hay varios ExceptionHandler Spring los ve en orden. El generico el ultimo porque es el que recoge cualquier error (te lo modifico x eso)
     // + Logger y campos ordenaos
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
@@ -43,7 +42,12 @@ public class GlobalExceptionHandler {
             this.mensaje = mensaje;
         }
 
-        public int getCodigo() { return codigo; }
-        public String getMensaje() { return mensaje; }
+        public int getCodigo() {
+            return codigo;
+        }
+
+        public String getMensaje() {
+            return mensaje;
+        }
     }
 }

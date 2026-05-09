@@ -5,6 +5,7 @@ import com.checkpoint.backend.entity.Profile;
 import com.checkpoint.backend.exception.ResourceNotFoundException;
 import com.checkpoint.backend.repository.ProfileRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service

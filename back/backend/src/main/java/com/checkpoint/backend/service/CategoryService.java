@@ -4,6 +4,7 @@ import com.checkpoint.backend.entity.Category;
 import com.checkpoint.backend.exception.ResourceNotFoundException;
 import com.checkpoint.backend.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service

@@ -5,6 +5,7 @@ import com.checkpoint.backend.entity.Mission;
 import com.checkpoint.backend.exception.ResourceNotFoundException;
 import com.checkpoint.backend.repository.MissionRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -96,7 +97,7 @@ public class MissionService {
     public Long getActiveMissionsCount() {
         return missionRepository.countByEstado(CheckpointConstants.ESTADO_PENDIENTE);
     }
-    
+
     private void normalizarYValidar(Mission m) {
         if (m == null) {
             throw new IllegalArgumentException("La misión no puede ser null.");
