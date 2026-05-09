@@ -19,7 +19,6 @@ interface Achievement {
   styleUrls: ['./achievements.css'],
 })
 export class Achievements implements OnInit, OnDestroy {
-
   achievements: Achievement[] = [];
   totalXp = 0;
   completedCount = 0;
@@ -32,12 +31,12 @@ export class Achievements implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.missionService.cargarMisiones();
 
-    this.missionService.misiones$.pipe(takeUntil(this.destroy$)).subscribe(misiones => {
-      const completadas = misiones.filter(m => m.estado === 'completada');
+    this.missionService.misiones$.pipe(takeUntil(this.destroy$)).subscribe((misiones) => {
+      const completadas = misiones.filter((m) => m.estado === 'completada');
       this.totalXp = completadas.reduce((sum, m) => sum + m.xp, 0);
       this.completedCount = completadas.length;
       this.achievements = this.calcularLogros();
-      this.desbloqueadosCount = this.achievements.filter(l => l.unlocked).length;
+      this.desbloqueadosCount = this.achievements.filter((l) => l.unlocked).length;
     });
   }
 
@@ -52,20 +51,20 @@ export class Achievements implements OnInit, OnDestroy {
         title: 'Primera misión',
         description: 'Completa al menos 1 misión',
         icon: '⚔️',
-        unlocked: this.completedCount >= 1
+        unlocked: this.completedCount >= 1,
       },
       {
         title: '100 XP',
         description: 'Acumula 100 puntos de experiencia',
         icon: '⭐',
-        unlocked: this.totalXp >= 100
+        unlocked: this.totalXp >= 100,
       },
       {
         title: 'Veterano',
         description: 'Completa 5 misiones',
         icon: '🏆',
-        unlocked: this.completedCount >= 5
-      }
+        unlocked: this.completedCount >= 5,
+      },
     ];
   }
 }

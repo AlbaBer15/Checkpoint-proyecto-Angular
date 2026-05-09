@@ -1,5 +1,4 @@
 <div class="container">
-
   <h2 class="titulo-achievements">🏅 Logros</h2>
   <p class="subtitulo">Desbloquea hazañas completando misiones y acumulando XP</p>
 
@@ -25,10 +24,7 @@
   </div>
 
   <div class="grid-logros">
-    <div
-      class="card-logro"
-      *ngFor="let logro of achievements"
-      [class.unlocked]="logro.unlocked">
+    <div class="card-logro" *ngFor="let logro of achievements" [class.unlocked]="logro.unlocked">
       <div class="logro-icono">{{ logro.icon }}</div>
       <h3 class="logro-title">{{ logro.title }}</h3>
       <p class="logro-desc">{{ logro.description }}</p>
@@ -37,5 +33,4 @@
       </span>
     </div>
   </div>
-
 </div>

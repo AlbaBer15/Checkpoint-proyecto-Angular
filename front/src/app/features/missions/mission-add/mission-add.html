@@ -3,26 +3,33 @@
 
   <!-- Formulario reactivo (valida en tiempo real) -->
   <form [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
-
     <!-- Validaciones -->
     <div class="campo">
       <label for="titulo">Título</label>
       <input id="titulo" type="text" formControlName="titulo" placeholder="Ej: Beber agua" />
 
       <!-- Mensaje si el usuario toca el campo y no cumple validación -->
-      <p class="error"
-         *ngIf="formulario.get('titulo')?.touched && formulario.get('titulo')?.invalid">
+      <p
+        class="error"
+        *ngIf="formulario.get('titulo')?.touched && formulario.get('titulo')?.invalid"
+      >
         El título debe tener al menos 3 caracteres.
       </p>
     </div>
 
-    <div class="campo"> 
+    <div class="campo">
       <label for="descripcion">Descripción</label>
-      <textarea id="descripcion" rows="3" formControlName="descripcion"
-                placeholder="Describe la misión..."></textarea>
+      <textarea
+        id="descripcion"
+        rows="3"
+        formControlName="descripcion"
+        placeholder="Describe la misión..."
+      ></textarea>
 
-      <p class="error"
-         *ngIf="formulario.get('descripcion')?.touched && formulario.get('descripcion')?.invalid">
+      <p
+        class="error"
+        *ngIf="formulario.get('descripcion')?.touched && formulario.get('descripcion')?.invalid"
+      >
         La descripción debe tener al menos 5 caracteres.
       </p>
     </div>
@@ -31,23 +38,16 @@
       <label for="xp">XP</label>
       <input id="xp" type="number" formControlName="xp" min="1" max="999" />
 
-      <p class="error"
-         *ngIf="formulario.get('xp')?.touched && formulario.get('xp')?.invalid">
+      <p class="error" *ngIf="formulario.get('xp')?.touched && formulario.get('xp')?.invalid">
         Introduce un valor entre 1 y 999 XP.
       </p>
     </div>
 
-    <button type="submit" [disabled]="formulario.invalid" class="btn-guardar">
-      Añadir misión
-    </button>
+    <button type="submit" [disabled]="formulario.invalid" class="btn-guardar">Añadir misión</button>
 
-    <div class="alerta-exito" *ngIf="mostrarExito">
-      ✔ Misión añadida correctamente
-    </div>
+    <div class="alerta-exito" *ngIf="mostrarExito">✔ Misión añadida correctamente</div>
 
-    <div class="alerta-error" *ngIf="mostrarError">
-      ❌ {{ mensajeError }}
-    </div>
+    <div class="alerta-error" *ngIf="mostrarError">❌ {{ mensajeError }}</div>
 
     <hr class="separador" />
 
@@ -67,6 +67,5 @@
         ⭐ Usar esta misión
       </button>
     </div>
-
   </form>
 </div>

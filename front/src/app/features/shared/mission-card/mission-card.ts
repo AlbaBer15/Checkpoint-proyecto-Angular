@@ -11,7 +11,6 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, FormsModule],
 })
 export class MissionCard {
-
   @Input({ required: true }) mision!: Mision;
   @Input() animado = false;
 
@@ -39,32 +38,32 @@ export class MissionCard {
   }
 
   guardarEdicion() {
-  if (!this.mision.id) return;
-  
-  if (!this.tituloEdit.trim() || this.tituloEdit.trim().length < 3) {
-    this.errorEdicion = 'El título debe tener al menos 3 caracteres.';
-    return;
-  }
-  if (!this.descripcionEdit.trim() || this.descripcionEdit.trim().length < 5) {
-    this.errorEdicion = 'La descripción debe tener al menos 5 caracteres.';
-    return;
-  }
-  if (this.xpEdit < 1 || this.xpEdit > 999) {
-    this.errorEdicion = 'El XP debe estar entre 1 y 999.';
-    return;
-  }
+    if (!this.mision.id) return;
 
-  this.errorEdicion = '';
-  this.editar.emit({
-    id: this.mision.id,
-    datos: {
-      titulo: this.tituloEdit.trim(),
-      descripcion: this.descripcionEdit.trim(),
-      xp: this.xpEdit,
+    if (!this.tituloEdit.trim() || this.tituloEdit.trim().length < 3) {
+      this.errorEdicion = 'El título debe tener al menos 3 caracteres.';
+      return;
     }
-  });
-  this.editando = false;
-}
+    if (!this.descripcionEdit.trim() || this.descripcionEdit.trim().length < 5) {
+      this.errorEdicion = 'La descripción debe tener al menos 5 caracteres.';
+      return;
+    }
+    if (this.xpEdit < 1 || this.xpEdit > 999) {
+      this.errorEdicion = 'El XP debe estar entre 1 y 999.';
+      return;
+    }
+
+    this.errorEdicion = '';
+    this.editar.emit({
+      id: this.mision.id,
+      datos: {
+        titulo: this.tituloEdit.trim(),
+        descripcion: this.descripcionEdit.trim(),
+        xp: this.xpEdit,
+      },
+    });
+    this.editando = false;
+  }
 
   marcarComoCompletada() {
     this.completar.emit(this.mision);

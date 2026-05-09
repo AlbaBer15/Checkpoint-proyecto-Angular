@@ -8,7 +8,8 @@
 
     <a routerLink="/missions" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       Misiones
-      <span class="badge" *ngIf="misionesPendientes > 0">{{ misionesPendientes }}</span> <!-- Contador de misiones pendientes -->
+      <span class="badge" *ngIf="misionesPendientes > 0">{{ misionesPendientes }}</span>
+      <!-- Contador de misiones pendientes -->
     </a>
 
     <a
@@ -18,10 +19,13 @@
     >
       Añadir misión
     </a>
-    <a routerLink="/achievements" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <a
+      routerLink="/achievements"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
       Logros
     </a>
-    
   </nav>
 </header>
 

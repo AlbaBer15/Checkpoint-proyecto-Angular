@@ -45,7 +45,9 @@
   box-shadow: 0 0 12px var(--cyan);
 }
 
-h2, h3, .brand {
+h2,
+h3,
+.brand {
   font-family: 'Orbitron', sans-serif;
 }
 .badge {
@@ -64,7 +66,13 @@ h2, h3, .brand {
   animation: pulsar 1.5s infinite;
 }
 @keyframes pulsar {
-  0%   { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.6); }
-  70%  { box-shadow: 0 0 0 6px rgba(255, 71, 87, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(255, 71, 87, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);
+  }
 }

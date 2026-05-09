@@ -131,23 +131,27 @@
   gap: 10px;
 }
 @keyframes completar {
-  0%   { 
-    transform: scale(1); 
+  0% {
+    transform: scale(1);
     box-shadow: none;
     border-color: #333;
   }
-  30%  { 
-    transform: scale(1.03); 
-    box-shadow: 0 0 30px #00ff9d, 0 0 60px #00ff9d;
-    border-color: #00ff9d;
-  }
-  60%  {
+  30% {
     transform: scale(1.03);
-    box-shadow: 0 0 30px #00ff9d, 0 0 60px #00ff9d;
+    box-shadow:
+      0 0 30px #00ff9d,
+      0 0 60px #00ff9d;
     border-color: #00ff9d;
   }
-  100% { 
-    transform: scale(1); 
+  60% {
+    transform: scale(1.03);
+    box-shadow:
+      0 0 30px #00ff9d,
+      0 0 60px #00ff9d;
+    border-color: #00ff9d;
+  }
+  100% {
+    transform: scale(1);
     box-shadow: none;
     border-color: #333;
   }

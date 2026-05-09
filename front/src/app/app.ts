@@ -11,13 +11,12 @@ import { MissionService } from './services/mission';
   styleUrl: './app.css',
 })
 export class App implements OnInit {
-
   misionesPendientes = 0;
 
   constructor(private missionService: MissionService) {}
 
   ngOnInit() {
-    this.missionService.misionesActivas$.subscribe(lista => {
+    this.missionService.misionesActivas$.subscribe((lista) => {
       this.misionesPendientes = lista.length;
     });
   }

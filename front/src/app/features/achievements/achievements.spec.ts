@@ -8,9 +8,8 @@ describe('Achievements', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Achievements]
-    })
-    .compileComponents();
+      imports: [Achievements],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Achievements);
     component = fixture.componentInstance;

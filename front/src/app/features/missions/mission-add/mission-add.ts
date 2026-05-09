@@ -11,7 +11,6 @@ import { NgIf } from '@angular/common';
   imports: [ReactiveFormsModule, NgIf],
 })
 export class MissionAdd {
-
   formulario: FormGroup;
   mostrarExito = false;
 
@@ -19,8 +18,10 @@ export class MissionAdd {
   mensajeError = '';
   misionOraculo?: Mision;
 
-  constructor(private fb: FormBuilder, private missionService: MissionService) {
-    
+  constructor(
+    private fb: FormBuilder,
+    private missionService: MissionService,
+  ) {
     this.formulario = this.fb.group({
       titulo: ['', [Validators.required, Validators.minLength(3)]],
       descripcion: ['', [Validators.required, Validators.minLength(5)]],
@@ -55,38 +56,42 @@ export class MissionAdd {
    *  Añade la misión generada por el Oráculo directamente al servicio.
    * Limpia la vista previa y muestra mensaje de éxito.
    */
- guardar() {
+  guardar() {
     if (this.formulario.invalid) return;
     const valores = this.formulario.value;
 
-    this.missionService.addMision({
-      titulo: valores.titulo,
-      descripcion: valores.descripcion,
-      xp: valores.xp,
-    }).subscribe({
-      next: () => {
-        this.formulario.reset({ xp: 1 });
-        this.mostrarExitoTemporal();
-      },
-      error: (err) => this.mostrarErrorMensaje(err, 'Error al guardar la misión'),
-    });
+    this.missionService
+      .addMision({
+        titulo: valores.titulo,
+        descripcion: valores.descripcion,
+        xp: valores.xp,
+      })
+      .subscribe({
+        next: () => {
+          this.formulario.reset({ xp: 1 });
+          this.mostrarExitoTemporal();
+        },
+        error: (err) => this.mostrarErrorMensaje(err, 'Error al guardar la misión'),
+      });
   }
 
   usarMisionDelOraculo() {
     if (!this.misionOraculo) return;
 
-    this.missionService.addMision({
-      titulo: this.misionOraculo.titulo,
-      descripcion: this.misionOraculo.descripcion,
-      xp: this.misionOraculo.xp,
-    }).subscribe({
-      next: () => {
-        this.misionOraculo = undefined;
-        this.formulario.reset({ xp: 1 });
-        this.mostrarExitoTemporal();
-      },
-      error: (err) => this.mostrarErrorMensaje(err, 'Error al guardar la misión del oráculo'),
-    });
+    this.missionService
+      .addMision({
+        titulo: this.misionOraculo.titulo,
+        descripcion: this.misionOraculo.descripcion,
+        xp: this.misionOraculo.xp,
+      })
+      .subscribe({
+        next: () => {
+          this.misionOraculo = undefined;
+          this.formulario.reset({ xp: 1 });
+          this.mostrarExitoTemporal();
+        },
+        error: (err) => this.mostrarErrorMensaje(err, 'Error al guardar la misión del oráculo'),
+      });
   }
   private mostrarExitoTemporal() {
     this.mostrarExito = true;
@@ -100,5 +105,4 @@ export class MissionAdd {
     console.error(accion + ':', err);
     setTimeout(() => (this.mostrarError = false), 5000);
   }
-
-} 
+}

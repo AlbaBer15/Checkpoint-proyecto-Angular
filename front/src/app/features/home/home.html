@@ -4,16 +4,23 @@
 
     <div class="campo-perfil">
       <label>Nombre</label>
-      <input type="text" [(ngModel)]="perfilEdit.nombre" maxlength="30" placeholder="Tu nombre..." />
+      <input
+        type="text"
+        [(ngModel)]="perfilEdit.nombre"
+        maxlength="30"
+        placeholder="Tu nombre..."
+      />
     </div>
 
     <div class="campo-perfil">
       <label>Avatar</label>
       <div class="avatar-selector">
-        <button *ngFor="let av of avatares"
-                class="btn-avatar"
-                [class.seleccionado]="perfilEdit.avatar === av"
-                (click)="perfilEdit.avatar = av">
+        <button
+          *ngFor="let av of avatares"
+          class="btn-avatar"
+          [class.seleccionado]="perfilEdit.avatar === av"
+          (click)="perfilEdit.avatar = av"
+        >
           {{ av }}
         </button>
       </div>
@@ -22,14 +29,18 @@
     <div class="campo-perfil">
       <label>Género</label>
       <div class="genero-selector">
-        <button class="btn-genero"
-                [class.activo]="perfilEdit.genero === 'FEMENINO'"
-                (click)="perfilEdit.genero = 'FEMENINO'">
+        <button
+          class="btn-genero"
+          [class.activo]="perfilEdit.genero === 'FEMENINO'"
+          (click)="perfilEdit.genero = 'FEMENINO'"
+        >
           ♀ Femenino
         </button>
-        <button class="btn-genero"
-                [class.activo]="perfilEdit.genero === 'MASCULINO'"
-                (click)="perfilEdit.genero = 'MASCULINO'">
+        <button
+          class="btn-genero"
+          [class.activo]="perfilEdit.genero === 'MASCULINO'"
+          (click)="perfilEdit.genero = 'MASCULINO'"
+        >
           ♂ Masculino
         </button>
       </div>
@@ -42,66 +53,63 @@
   </div>
 
   <div *ngIf="!editandoPerfil">
-  <div class="cabecera-home">
-  <h2 class="titulo-home">{{ saludoPersonalizado }}</h2>
-  <button class="btn-editar-perfil" (click)="activarEdicionPerfil()">
-  ✏️ <span class="texto-editar">Editar perfil</span>
-</button>
-</div>
-  <p class="subtitulo">Este es tu cuartel general. Aquí gestionas tu progreso y tus hazañas.</p>
-
-  <div class="home-layout">
-    <div class="tarjetas-left">
-
-      <!-- XP -->
-      <div class="small-card">
-        <div class="icono">⚡</div>
-        <h3>XP Total</h3>
-        <p class="valor">{{ totalXP }}</p>
-        <span class="descripcion">Experiencia acumulada</span>
-      </div>
-
-      <!-- Misiones pendientes -->
-      <div class="small-card">
-        <div class="icono">🎯</div>
-        <h3>Misiones activas</h3>
-        <p class="valor">{{ totalMisiones }}</p>
-        <span class="descripcion">Tareas pendientes</span>
-      </div>
-
-      <!-- Mensaje dinámico según nivel -->
-      <div class="small-card wide">
-        <div class="icono">💬</div>
-        <h3>{{ tituloEstado }}</h3>
-        <p class="mensaje">{{ mensajeEstado }}</p>
-      </div>
-
+    <div class="cabecera-home">
+      <h2 class="titulo-home">{{ saludoPersonalizado }}</h2>
+      <button class="btn-editar-perfil" (click)="activarEdicionPerfil()">
+        ✏️ <span class="texto-editar">Editar perfil</span>
+      </button>
     </div>
-    <!-- PANEL DE NIVEL: avatar, número de nivel y barra progreso -->
-    <div class="panel-nivel">
+    <p class="subtitulo">Este es tu cuartel general. Aquí gestionas tu progreso y tus hazañas.</p>
 
-      <div class="avatar">{{ perfil.avatar }}</div>
+    <div class="home-layout">
+      <div class="tarjetas-left">
+        <!-- XP -->
+        <div class="small-card">
+          <div class="icono">⚡</div>
+          <h3>XP Total</h3>
+          <p class="valor">{{ totalXP }}</p>
+          <span class="descripcion">Experiencia acumulada</span>
+        </div>
 
-      <h3 class="nivel-num">Nivel {{ (totalXP | level: perfil.genero).nivel }}</h3>
-      <p class="nivel-titulo">
-        {{ (totalXP | level: perfil.genero).titulo }}
-      </p>
-      <div class="barra-container">
-        <!-- Se rellena con el porcentaje devuelto por el pipe -->
-        <div class="barra-progreso" 
-             [style.width.%]="(totalXP | level: perfil.genero).progreso">
+        <!-- Misiones pendientes -->
+        <div class="small-card">
+          <div class="icono">🎯</div>
+          <h3>Misiones activas</h3>
+          <p class="valor">{{ totalMisiones }}</p>
+          <span class="descripcion">Tareas pendientes</span>
+        </div>
+
+        <!-- Mensaje dinámico según nivel -->
+        <div class="small-card wide">
+          <div class="icono">💬</div>
+          <h3>{{ tituloEstado }}</h3>
+          <p class="mensaje">{{ mensajeEstado }}</p>
         </div>
       </div>
+      <!-- PANEL DE NIVEL: avatar, número de nivel y barra progreso -->
+      <div class="panel-nivel">
+        <div class="avatar">{{ perfil.avatar }}</div>
 
-      <p class="nivel-msg">
-        {{
-          (totalXP | level: perfil.genero).progreso === 100
-            ? '¡Has alcanzado tu máximo potencial en este nivel!'
-            : 'Tu viaje continúa… cada misión completada te fortalece.'
-        }}
-      </p>
+        <h3 class="nivel-num">Nivel {{ (totalXP | level: perfil.genero).nivel }}</h3>
+        <p class="nivel-titulo">
+          {{ (totalXP | level: perfil.genero).titulo }}
+        </p>
+        <div class="barra-container">
+          <!-- Se rellena con el porcentaje devuelto por el pipe -->
+          <div
+            class="barra-progreso"
+            [style.width.%]="(totalXP | level: perfil.genero).progreso"
+          ></div>
+        </div>
 
+        <p class="nivel-msg">
+          {{
+            (totalXP | level: perfil.genero).progreso === 100
+              ? '¡Has alcanzado tu máximo potencial en este nivel!'
+              : 'Tu viaje continúa… cada misión completada te fortalece.'
+          }}
+        </p>
+      </div>
     </div>
-  </div>
   </div>
 </div>

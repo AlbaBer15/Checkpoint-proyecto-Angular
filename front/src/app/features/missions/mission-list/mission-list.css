@@ -2,7 +2,10 @@
   font-size: 2.4rem;
   font-weight: 900;
   color: #00eaff;
-  text-shadow: 0 0 5px #00eaff, 0 0 12px #00bcd4, 0 0 20px #0097a7;
+  text-shadow:
+    0 0 5px #00eaff,
+    0 0 12px #00bcd4,
+    0 0 20px #0097a7;
   font-family: 'Orbitron', sans-serif;
   letter-spacing: 2px;
   text-align: center;
@@ -22,8 +25,14 @@
 }
 
 @keyframes aparecer {
-  from { opacity: 0; transform: translateY(-10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .sin-misiones {
@@ -34,8 +43,8 @@
 }
 
 .loading-container {
-text-align: center;
-margin-top: 60px;
+  text-align: center;
+  margin-top: 60px;
 }
 
 .loading-spinner {
@@ -51,8 +60,12 @@ margin-top: 60px;
 }
 
 @keyframes girar {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .controles {

@@ -1,9 +1,5 @@
-<div class="tarjeta"
-     [class.completada]="mision.estado === 'completada'"
-     [class.animado]="animado">
-
+<div class="tarjeta" [class.completada]="mision.estado === 'completada'" [class.animado]="animado">
   <div *ngIf="editando" class="form-edicion">
-
     <div class="campo-edit">
       <label>Título</label>
       <input type="text" [(ngModel)]="tituloEdit" maxlength="120" />
@@ -23,15 +19,17 @@
       <button class="btn-guardar-edit" (click)="guardarEdicion()">💾 Guardar</button>
       <button class="btn-cancelar-edit" (click)="cancelarEdicion()">✖ Cancelar</button>
     </div>
-
   </div>
   <div *ngIf="!editando">
-
     <div class="fila-superior">
       <div class="lado-izquierdo">
-        <button class="btn-favorito"
-                [ngClass]="{ activo: (mision.favorito ?? false) }"
-                (click)="toggleFavorito()">❤️</button>
+        <button
+          class="btn-favorito"
+          [ngClass]="{ activo: mision.favorito ?? false }"
+          (click)="toggleFavorito()"
+        >
+          ❤️
+        </button>
         <h3 class="titulo-mision">{{ mision.titulo }}</h3>
       </div>
       <span class="xp-badge">⚡ {{ mision.xp }} XP</span>
@@ -40,30 +38,27 @@
     <p class="descripcion">{{ mision.descripcion }}</p>
 
     <div class="acciones">
-      <button class="btn-completar-gamer"
-              *ngIf="mision.estado === 'pendiente'"
-              (click)="marcarComoCompletada()">
+      <button
+        class="btn-completar-gamer"
+        *ngIf="mision.estado === 'pendiente'"
+        (click)="marcarComoCompletada()"
+      >
         🎯 Completar misión
       </button>
 
-      <button class="btn-revertir-gamer"
-              *ngIf="mision.estado === 'completada'"
-              (click)="revertirMision()">
+      <button
+        class="btn-revertir-gamer"
+        *ngIf="mision.estado === 'completada'"
+        (click)="revertirMision()"
+      >
         🔄 Revertir
       </button>
 
-      <button class="btn-editar-gamer" (click)="activarEdicion()">
-        ✏️ Editar
-      </button>
+      <button class="btn-editar-gamer" (click)="activarEdicion()">✏️ Editar</button>
 
-      <button class="btn-eliminar-gamer" (click)="eliminarMision()">
-        🗑️ Eliminar
-      </button>
+      <button class="btn-eliminar-gamer" (click)="eliminarMision()">🗑️ Eliminar</button>
     </div>
 
-    <p *ngIf="mision.estado === 'completada'" class="tag-completada">
-      🏆 Misión completada
-    </p>
-
+    <p *ngIf="mision.estado === 'completada'" class="tag-completada">🏆 Misión completada</p>
   </div>
 </div>
