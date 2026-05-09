@@ -31,10 +31,7 @@ public class AchievementService {
         return achievementRepository.findAll();
     }
 
-    public Achievement create(Achievement achievement) {
-        if (achievement.getTitulo() == null || achievement.getTitulo().isBlank()) {
-            throw new IllegalArgumentException("El título del logro es obligatorio.");
-        }
+    public Achievement create(Achievement achievement) { // he puesto validacion en anotaciones para tener ambas opciones
         achievement.setTitulo(achievement.getTitulo().trim());
         return achievementRepository.save(achievement);
     }

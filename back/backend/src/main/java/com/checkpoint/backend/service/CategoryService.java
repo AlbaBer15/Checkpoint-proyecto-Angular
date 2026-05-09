@@ -26,9 +26,7 @@ public class CategoryService {
     }
 
     public Category create(Category category) {
-        if (category.getNombre() == null || category.getNombre().isBlank()) {
-            throw new IllegalArgumentException("El nombre de la categoría es obligatorio.");
-        }
+        validarCategoria(category);
         category.setNombre(category.getNombre().trim());
         return categoryRepository.save(category);
     }
@@ -38,5 +36,14 @@ public class CategoryService {
             throw new ResourceNotFoundException("No existe la categoría con id " + id);
         }
         categoryRepository.deleteById(id);
+    }
+
+    private void validarCategoria(Category category) {
+        if (category.getNombre() == null || category.getNombre().isBlank())
+            throw new IllegalArgumentException("El nombre de la categoría es obligatorio.");
+        if (category.getNombre().trim().length() < 3)
+            throw new IllegalArgumentException("El nombre debe tener al menos 3 caracteres.");
+        if (category.getNombre().trim().length() > 40)
+            throw new IllegalArgumentException("El nombre no puede exceder 40 caracteres.");
     }
 }

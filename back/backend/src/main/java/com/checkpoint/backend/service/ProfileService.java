@@ -27,28 +27,25 @@ public class ProfileService {
     }
 
     public Profile create(Profile profile) {
-        if (profile.getNombre() == null || profile.getNombre().isBlank()) {
-            throw new IllegalArgumentException("El nombre del perfil es obligatorio.");
-        }
+        validarNombrePerfil(profile.getNombre());
         profile.setNombre(profile.getNombre().trim());
-
         if (profile.getGenero() == null) {
             profile.setGenero(Genero.FEMENINO);
         }
-
         return profileRepository.save(profile);
     }
 
     public Profile update(Long id, Profile datos) {
         Profile profile = findById(id);
-        if (datos.getNombre() != null && !datos.getNombre().isBlank()) {
+        if (datos.getNombre() != null) {
+            validarNombrePerfil(datos.getNombre());
             profile.setNombre(datos.getNombre().trim());
-        }
-        if (datos.getGenero() != null) {
-            profile.setGenero(datos.getGenero());
         }
         if (datos.getAvatar() != null) {
             profile.setAvatar(datos.getAvatar());
+        }
+        if (datos.getGenero() != null) {
+            profile.setGenero(datos.getGenero());
         }
         if (datos.getNivelMax() != null) {
             profile.setNivelMax(datos.getNivelMax());
@@ -61,5 +58,14 @@ public class ProfileService {
             throw new ResourceNotFoundException("No existe el perfil con id " + id);
         }
         profileRepository.deleteById(id);
+    }
+
+    private void validarNombrePerfil(String nombre) {
+        if (nombre == null || nombre.isBlank())
+            throw new IllegalArgumentException("El nombre es obligatorio.");
+        if (nombre.trim().length() < 2)
+            throw new IllegalArgumentException("El nombre debe tener al menos 2 caracteres.");
+        if (nombre.trim().length() > 25)
+            throw new IllegalArgumentException("El nombre no puede exceder 25 caracteres.");
     }
 }

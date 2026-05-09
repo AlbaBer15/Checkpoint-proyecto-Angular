@@ -1,23 +1,39 @@
 package com.checkpoint.backend.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
     // Si hay varios ExceptionHandler Spring los ve en orden. El generico el ultimo porque es el que recoge cualquier error (te lo modifico x eso)
     // + Logger y campos ordenaos
+    //404 - recurso no encontrado | 400 - validación | 500 - error interno
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(404, e.getMessage()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    // captura los errores de anotaciones como NotBlank o Size
+    public ResponseEntity<ErrorResponse> handleValidationErrors(MethodArgumentNotValidException e) {
+        // captura excepciones
+        String mensaje = e.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(err -> err.getDefaultMessage())
+                .findFirst()
+                .orElse("Error de validación.");
+        return ResponseEntity.badRequest()
+                .body(new ErrorResponse(400, mensaje));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

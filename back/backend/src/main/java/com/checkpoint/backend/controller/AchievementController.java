@@ -3,6 +3,7 @@ package com.checkpoint.backend.controller;
 import com.checkpoint.backend.entity.Achievement;
 import com.checkpoint.backend.entity.ProfileAchievement;
 import com.checkpoint.backend.service.AchievementService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,7 @@ public class AchievementController {
     }
 
     @PostMapping
+    @Valid
     @ResponseStatus(HttpStatus.CREATED)
     public Achievement create(@RequestBody Achievement achievement) {
         return achievementService.create(achievement);
