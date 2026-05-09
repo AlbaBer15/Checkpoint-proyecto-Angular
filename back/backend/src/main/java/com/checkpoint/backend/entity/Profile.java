@@ -20,6 +20,10 @@ public class Profile {
     @Column(nullable = false, length = 60)
     private String nombre;
 
+    @Column(length = 20)
+    @Enumerated(EnumType.STRING)
+    private Genero genero = Genero.FEMENINO;
+
     @Column(length = 40)
     private String avatar;
 

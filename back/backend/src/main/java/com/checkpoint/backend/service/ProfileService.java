@@ -1,5 +1,6 @@
 package com.checkpoint.backend.service;
 
+import com.checkpoint.backend.entity.Genero;
 import com.checkpoint.backend.entity.Profile;
 import com.checkpoint.backend.exception.ResourceNotFoundException;
 import com.checkpoint.backend.repository.ProfileRepository;
@@ -29,6 +30,11 @@ public class ProfileService {
             throw new IllegalArgumentException("El nombre del perfil es obligatorio.");
         }
         profile.setNombre(profile.getNombre().trim());
+
+        if (profile.getGenero() == null) {
+            profile.setGenero(Genero.FEMENINO);
+        }
+
         return profileRepository.save(profile);
     }
 
@@ -36,6 +42,9 @@ public class ProfileService {
         Profile profile = findById(id);
         if (datos.getNombre() != null && !datos.getNombre().isBlank()) {
             profile.setNombre(datos.getNombre().trim());
+        }
+        if (datos.getGenero() != null) {
+            profile.setGenero(datos.getGenero());
         }
         if (datos.getAvatar() != null) {
             profile.setAvatar(datos.getAvatar());

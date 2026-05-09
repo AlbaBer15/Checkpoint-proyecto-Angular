@@ -98,3 +98,173 @@
   color: var(--text-soft);
   font-size: 0.9rem;
 }
+/* ─── CABECERA CON BOTÓN EDITAR ─────────────────────────── */
+.cabecera-home {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.btn-editar-perfil {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: 0.2s;
+}
+
+.btn-editar-perfil:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* ─── FORMULARIO DE PERFIL ──────────────────────────────── */
+.form-perfil {
+  max-width: 500px;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 30px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+}
+
+.campo-perfil {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.campo-perfil label {
+  font-weight: 600;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+}
+
+.campo-perfil input {
+  background: #1a1a2e;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  color: var(--text-light);
+  padding: 10px 14px;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.2s;
+}
+
+.campo-perfil input:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 6px var(--cyan);
+}
+
+/* ─── SELECTOR DE AVATAR ────────────────────────────────── */
+.avatar-selector {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-avatar {
+  font-size: 1.8rem;
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  padding: 6px;
+  transition: 0.2s;
+}
+
+.btn-avatar:hover {
+  border-color: var(--card-border);
+}
+
+.btn-avatar.seleccionado {
+  border-color: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+}
+
+/* ─── SELECTOR DE GÉNERO ────────────────────────────────── */
+.genero-selector {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-genero {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  color: var(--text-soft);
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.btn-genero.activo {
+  background: var(--cyan);
+  border-color: var(--cyan);
+  color: #000;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+}
+
+.acciones-perfil {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-guardar-perfil {
+  flex: 1;
+  background: var(--cyan);
+  border: none;
+  padding: 10px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: bold;
+  color: #000;
+  transition: 0.2s;
+}
+
+.btn-guardar-perfil:hover {
+  box-shadow: 0 0 10px var(--cyan);
+}
+
+.btn-cancelar-perfil {
+  flex: 1;
+  background: transparent;
+  border: 1px solid #555;
+  padding: 10px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  color: var(--text-soft);
+  transition: 0.2s;
+}
+
+.btn-cancelar-perfil:hover {
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+}
+.btn-editar-perfil {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  color: var(--text-soft);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 5px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.2s;
+}
+
+.btn-editar-perfil:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
