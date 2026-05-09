@@ -23,6 +23,7 @@ export class Achievements implements OnInit, OnDestroy {
   totalXp = 0;
   completedCount = 0;
   desbloqueadosCount = 0;
+  favoritasCount = 0;
 
   private destroy$ = new Subject<void>();
 
@@ -35,6 +36,7 @@ export class Achievements implements OnInit, OnDestroy {
       const completadas = misiones.filter((m) => m.estado === 'completada');
       this.totalXp = completadas.reduce((sum, m) => sum + m.xp, 0);
       this.completedCount = completadas.length;
+      this.favoritasCount = misiones.filter((m) => m.favorito).length;
       this.achievements = this.calcularLogros();
       this.desbloqueadosCount = this.achievements.filter((l) => l.unlocked).length;
     });
@@ -48,22 +50,52 @@ export class Achievements implements OnInit, OnDestroy {
   private calcularLogros(): Achievement[] {
     return [
       {
-        title: 'Primera misión',
-        description: 'Completa al menos 1 misión',
+        title: 'Primera Misión',
+        description: 'Completa tu primera misión',
         icon: '⚔️',
         unlocked: this.completedCount >= 1,
       },
       {
-        title: '100 XP',
-        description: 'Acumula 100 puntos de experiencia',
-        icon: '⭐',
+        title: 'Explorador',
+        description: 'Acumula 100 XP',
+        icon: '🌍',
         unlocked: this.totalXp >= 100,
       },
       {
-        title: 'Veterano',
+        title: 'Racha de Fuego',
         description: 'Completa 5 misiones',
-        icon: '🏆',
+        icon: '🔥',
         unlocked: this.completedCount >= 5,
+      },
+      {
+        title: 'Coleccionista',
+        description: 'Ten 3 misiones favoritas',
+        icon: '❤️',
+        unlocked: this.favoritasCount >= 3,
+      },
+      {
+        title: 'Veterano',
+        description: 'Acumula 500 XP',
+        icon: '⚔️',
+        unlocked: this.totalXp >= 500,
+      },
+      {
+        title: 'Leyenda',
+        description: 'Completa 10 misiones',
+        icon: '👑',
+        unlocked: this.completedCount >= 10,
+      },
+      {
+        title: 'Maestro',
+        description: 'Acumula 1000 XP',
+        icon: '🌟',
+        unlocked: this.totalXp >= 1000,
+      },
+      {
+        title: 'Imparable',
+        description: 'Completa 20 misiones',
+        icon: '💫',
+        unlocked: this.completedCount >= 20,
       },
     ];
   }
