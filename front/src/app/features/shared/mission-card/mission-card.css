@@ -277,3 +277,15 @@
   font-size: 0.85rem;
   margin: 0;
 }
+
+.badge-categoria {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--text-soft);
+}

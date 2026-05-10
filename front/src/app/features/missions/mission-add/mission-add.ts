@@ -1,26 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MissionService, Mision } from '../../../services/mission';
-import { NgIf } from '@angular/common';
+import { NgIf, NgFor } from '@angular/common';
+import { CategoryService, Category } from '../../../services/category';
 
 @Component({
   selector: 'app-mission-add',
   standalone: true,
   templateUrl: './mission-add.html',
   styleUrl: './mission-add.css',
-  imports: [ReactiveFormsModule, NgIf],
+  imports: [ReactiveFormsModule, NgIf, NgFor],
 })
-export class MissionAdd {
+export class MissionAdd implements OnInit {
   formulario: FormGroup;
   mostrarExito = false;
 
   mostrarError = false;
   mensajeError = '';
   misionOraculo?: Mision;
+  categorias: Category[] = [];
+  categoriaSeleccionada?: number;
 
   constructor(
     private fb: FormBuilder,
     private missionService: MissionService,
+    private categoryService: CategoryService,
   ) {
     this.formulario = this.fb.group({
       titulo: ['', [Validators.required, Validators.minLength(3)]],
@@ -28,6 +32,10 @@ export class MissionAdd {
       xp: [1, [Validators.required, Validators.min(1), Validators.max(999)]],
     });
   }
+
+  ngOnInit() {
+  this.categoryService.getAll().subscribe(cats => this.categorias = cats);
+}
 
   /**
    * Solicita una misión aleatoria al servicio.
@@ -65,6 +73,7 @@ export class MissionAdd {
         titulo: valores.titulo,
         descripcion: valores.descripcion,
         xp: valores.xp,
+        category: this.categoriaSeleccionada ? { id: this.categoriaSeleccionada, nombre: '', icono: '', color: '' } : undefined,
       })
       .subscribe({
         next: () => {
@@ -83,6 +92,7 @@ export class MissionAdd {
         titulo: this.misionOraculo.titulo,
         descripcion: this.misionOraculo.descripcion,
         xp: this.misionOraculo.xp,
+        category: this.categoriaSeleccionada ? { id: this.categoriaSeleccionada, nombre: '', icono: '', color: '' } : undefined,
       })
       .subscribe({
         next: () => {

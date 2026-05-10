@@ -42,6 +42,28 @@
         Introduce un valor entre 1 y 999 XP.
       </p>
     </div>
+    <div class="campo">
+      <label>Categoría <span class="opcional">(opcional)</span></label>
+      <div class="categoria-selector">
+        <button
+          type="button"
+          class="btn-categoria"
+          [class.seleccionada]="categoriaSeleccionada === undefined"
+          (click)="categoriaSeleccionada = undefined">
+          Sin categoría
+        </button>
+        <button
+          type="button"
+          class="btn-categoria"
+          *ngFor="let cat of categorias"
+          [class.seleccionada]="categoriaSeleccionada === cat.id"
+          [style.borderColor]="categoriaSeleccionada === cat.id ? cat.color : ''"
+          [style.boxShadow]="categoriaSeleccionada === cat.id ? '0 0 8px ' + cat.color : ''"
+          (click)="categoriaSeleccionada = cat.id">
+          {{ cat.icono }} {{ cat.nombre }}
+        </button>
+      </div>
+    </div>
 
     <button type="submit" [disabled]="formulario.invalid" class="btn-guardar">Añadir misión</button>
 

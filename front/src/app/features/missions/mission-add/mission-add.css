@@ -177,3 +177,36 @@ textarea:focus {
   animation: aparecer 0.4s ease;
   box-shadow: 0 0 12px #ff6b6b;
 }
+.opcional {
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--text-soft);
+}
+
+.categoria-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.btn-categoria {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--text-soft);
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: var(--transition);
+}
+
+.btn-categoria:hover {
+  border-color: var(--cyan);
+  color: var(--text-light);
+}
+
+.btn-categoria.seleccionada {
+  background: rgba(0, 229, 255, 0.1);
+  color: var(--text-light);
+  font-weight: 600;
+}

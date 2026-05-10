@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MissionCard } from '../../shared/mission-card/mission-card';
 import { MissionService, Mision } from '../../../services/mission';
+import { CategoryService, Category } from '../../../services/category';
 
 @Component({
   selector: 'app-mission-list',
@@ -16,6 +17,8 @@ export class MissionList implements OnInit, OnDestroy {
   misiones: Mision[] = [];
   filtro: 'todas' | 'pendientes' | 'completadas' | 'favoritas' = 'todas';
   orden: 'ninguno' | 'xp-desc' | 'xp-asc' | 'favoritas' | 'estado' = 'ninguno';
+  categorias: Category[] = [];
+  filtroCategoria?: number;
 
   get misionesFiltradas(): Mision[] {
     let lista = [...this.misiones];
@@ -46,6 +49,11 @@ export class MissionList implements OnInit, OnDestroy {
         lista.sort((a, b) => a.estado.localeCompare(b.estado));
         break;
     }
+
+    if (this.filtroCategoria !== undefined) {
+      lista = lista.filter(m => m.category?.id === this.filtroCategoria);
+    }
+
     return lista;
   }
   mostrarError = false;
@@ -54,7 +62,10 @@ export class MissionList implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   misionesAnimado = new Set<number>();
 
-  constructor(private missionService: MissionService) {}
+  constructor(
+    private missionService: MissionService,
+    private categoryService: CategoryService,
+  ) {}
 
   ngOnInit(): void {
     this.missionService.cargarMisiones();
@@ -62,6 +73,10 @@ export class MissionList implements OnInit, OnDestroy {
       this.misiones = lista;
       this.cargando = false;
     });
+
+    this.categoryService.getAll().subscribe(cats => {
+      this.categorias = cats;
+   });
   }
 
   ngOnDestroy(): void {

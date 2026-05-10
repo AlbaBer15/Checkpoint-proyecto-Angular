@@ -29,6 +29,26 @@
       <button [class.activo]="orden === 'estado'" (click)="orden = 'estado'">Por estado</button>
     </div>
   </div>
+    <div class="grupo-control">
+    <span class="label-control">Categoría:</span>
+    <div class="btn-grupo">
+      <button [class.activo]="filtroCategoria === undefined" (click)="filtroCategoria = undefined">
+        Todas
+      </button>
+      <button
+        *ngFor="let cat of categorias"
+        [class.activo]="filtroCategoria === cat.id"
+        [style.borderColor]="filtroCategoria === cat.id ? cat.color : ''"
+        [style.color]="filtroCategoria === cat.id ? cat.color : ''"
+        [style.boxShadow]="filtroCategoria === cat.id ? '0 0 8px ' + cat.color : ''"
+        [style.background]="filtroCategoria === cat.id ? cat.color + '22' : ''"
+        (click)="filtroCategoria = cat.id">
+        {{ cat.icono }} {{ cat.nombre }}
+      </button>
+
+    </div>
+  </div>
+
 </div>
 
 <div class="alerta-error" *ngIf="mostrarError">❌ {{ mensajeError }}</div>

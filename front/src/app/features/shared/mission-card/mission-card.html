@@ -36,6 +36,9 @@
     </div>
 
     <p class="descripcion">{{ mision.descripcion }}</p>
+    <span *ngIf="mision.category" class="badge-categoria">
+      {{ mision.category.icono }} {{ mision.category.nombre }}
+    </span>
 
     <div class="acciones">
       <button

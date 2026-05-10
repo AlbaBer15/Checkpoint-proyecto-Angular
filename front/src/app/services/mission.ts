@@ -11,6 +11,7 @@ export interface Mision {
   xp: number;
   estado: 'pendiente' | 'completada';
   favorito?: boolean;
+  category?: { id: number; nombre: string; icono: string; color: string };
 }
 
 @Injectable({
@@ -54,12 +55,13 @@ export class MissionService {
   }
 
   addMision(datos: Partial<Mision>): Observable<Mision> {
-    const nueva: Mision = {
+    const nueva: any = {
       titulo: datos.titulo!,
       descripcion: datos.descripcion!,
       xp: datos.xp!,
       estado: datos.estado ?? MISSION_ESTADOS.PENDIENTE,
       favorito: datos.favorito ?? false,
+      ...(datos.category ? { category: { id: datos.category.id } } : {}),
     };
     return this.http.post<Mision>(this.apiUrl, nueva).pipe(
       tap(() => this.cargarMisiones()),
