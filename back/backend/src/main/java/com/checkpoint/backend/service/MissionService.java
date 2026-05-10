@@ -3,6 +3,7 @@ package com.checkpoint.backend.service;
 import com.checkpoint.backend.constants.CheckpointConstants;
 import com.checkpoint.backend.entity.Mission;
 import com.checkpoint.backend.exception.ResourceNotFoundException;
+import com.checkpoint.backend.repository.CategoryRepository;
 import com.checkpoint.backend.repository.MissionRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,11 @@ public class MissionService {
     );
 
     private final MissionRepository missionRepository;
+    private final CategoryRepository categoryRepository;
 
-    public MissionService(MissionRepository missionRepository) {
+    public MissionService(MissionRepository missionRepository, CategoryRepository categoryRepository) {
         this.missionRepository = missionRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     // ─── CRUD ────────────────────────────────────────────────────────────────
@@ -39,7 +42,10 @@ public class MissionService {
         if (mission.getEstado() == null || mission.getEstado().isBlank()) {
             mission.setEstado(CheckpointConstants.ESTADO_PENDIENTE);
         }
-
+        if (mission.getCategory() != null && mission.getCategory().getId() != null) {
+            categoryRepository.findById(mission.getCategory().getId())
+                    .ifPresent(mission::setCategory);
+        }
         return missionRepository.save(mission);
     }
 
