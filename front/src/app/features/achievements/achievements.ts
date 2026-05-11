@@ -3,8 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MissionService } from '../../services/mission';
-// Te cambio Subscription por Subject porque lo quite del resto para dejar solo el takeUntil en el componente de misiones y asi usamos lo mismo en todo el proyecto
-interface Achievement {
+import { AchievementService, AchievementApi } from '../../services/achievement';
+
+interface AchievementVM {
+  id: number;
   title: string;
   description: string;
   icon: string;
@@ -19,84 +21,90 @@ interface Achievement {
   styleUrls: ['./achievements.css'],
 })
 export class Achievements implements OnInit, OnDestroy {
-  achievements: Achievement[] = [];
+  achievements: AchievementVM[] = [];
   totalXp = 0;
   completedCount = 0;
-  desbloqueadosCount = 0;
   favoritasCount = 0;
+  desbloqueadosCount = 0;
 
+  private catalogoApi: AchievementApi[] = [];
+  private desbloqueadosIds = new Set<number>();
   private destroy$ = new Subject<void>();
 
-  constructor(private missionService: MissionService) {}
+  constructor(
+    private missionService: MissionService,
+    private achievementService: AchievementService,
+  ) {}
 
   ngOnInit(): void {
     this.missionService.cargarMisiones();
+    this.cargarCatalogo();
 
-    this.missionService.misiones$.pipe(takeUntil(this.destroy$)).subscribe((misiones) => {
-      const completadas = misiones.filter((m) => m.estado === 'completada');
+    this.missionService.misiones$.pipe(takeUntil(this.destroy$)).subscribe(misiones => {
+      const completadas = misiones.filter(m => m.estado === 'completada');
       this.totalXp = completadas.reduce((sum, m) => sum + m.xp, 0);
       this.completedCount = completadas.length;
-      this.favoritasCount = misiones.filter((m) => m.favorito).length;
-      this.achievements = this.calcularLogros();
-      this.desbloqueadosCount = this.achievements.filter((l) => l.unlocked).length;
+      this.favoritasCount = misiones.filter(m => m.favorito).length;
+      this.calcularYDesbloquear();
     });
+  }
+
+  private cargarCatalogo() {
+    const profileId = Number(localStorage.getItem('checkpoint_profile_id'));
+
+    this.achievementService.getCatalogo().subscribe(catalogo => {
+      this.catalogoApi = catalogo;
+
+      if (profileId) {
+        this.achievementService.getDesbloqueados(profileId).subscribe(desbloqueados => {
+          this.desbloqueadosIds = new Set(desbloqueados.map((d: any) => d.achievement.id));
+          this.calcularYDesbloquear();
+        });
+      } else {
+        this.calcularYDesbloquear();
+      }
+    });
+  }
+
+  private calcularYDesbloquear() {
+    const profileId = Number(localStorage.getItem('checkpoint_profile_id'));
+
+    this.achievements = this.catalogoApi.map(logro => {
+      const unlocked = this.cumpleCondicion(logro);
+
+      if (unlocked && profileId && !this.desbloqueadosIds.has(logro.id)) {
+        this.desbloqueadosIds.add(logro.id);
+        this.achievementService.unlock(profileId, logro.id).subscribe();
+      }
+
+      return {
+        id: logro.id,
+        title: logro.titulo,
+        description: logro.descripcion,
+        icon: logro.icono,
+        unlocked,
+      };
+    });
+
+    this.desbloqueadosCount = this.achievements.filter(a => a.unlocked).length;
+  }
+
+  private cumpleCondicion(logro: AchievementApi): boolean {
+    switch (logro.titulo) {
+      case 'Primera Misión':  return this.completedCount >= 1;
+      case 'Explorador':      return this.totalXp >= 100;
+      case 'Racha de Fuego':  return this.completedCount >= 5;
+      case 'Coleccionista':   return this.favoritasCount >= 3;
+      case 'Veterano':        return this.totalXp >= 500;
+      case 'Leyenda':         return this.completedCount >= 10;
+      case 'Maestro':         return this.totalXp >= 1000;
+      case 'Imparable':       return this.completedCount >= 20;
+      default:                return false;
+    }
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  private calcularLogros(): Achievement[] {
-    return [
-      {
-        title: 'Primera Misión',
-        description: 'Completa tu primera misión',
-        icon: '⚔️',
-        unlocked: this.completedCount >= 1,
-      },
-      {
-        title: 'Explorador',
-        description: 'Acumula 100 XP',
-        icon: '🌍',
-        unlocked: this.totalXp >= 100,
-      },
-      {
-        title: 'Racha de Fuego',
-        description: 'Completa 5 misiones',
-        icon: '🔥',
-        unlocked: this.completedCount >= 5,
-      },
-      {
-        title: 'Coleccionista',
-        description: 'Ten 3 misiones favoritas',
-        icon: '❤️',
-        unlocked: this.favoritasCount >= 3,
-      },
-      {
-        title: 'Veterano',
-        description: 'Acumula 500 XP',
-        icon: '⚔️',
-        unlocked: this.totalXp >= 500,
-      },
-      {
-        title: 'Leyenda',
-        description: 'Completa 10 misiones',
-        icon: '👑',
-        unlocked: this.completedCount >= 10,
-      },
-      {
-        title: 'Maestro',
-        description: 'Acumula 1000 XP',
-        icon: '🌟',
-        unlocked: this.totalXp >= 1000,
-      },
-      {
-        title: 'Imparable',
-        description: 'Completa 20 misiones',
-        icon: '💫',
-        unlocked: this.completedCount >= 20,
-      },
-    ];
   }
 }
