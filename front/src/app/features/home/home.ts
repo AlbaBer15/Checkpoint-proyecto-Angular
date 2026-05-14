@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MissionService } from '../../services/mission';
-import { ProfileService } from '../../services/profile.service';
+import { ProfileService, Profile } from '../../services/profile.service';
 import { LevelPipe } from '../shared/pipes/level-pipe';
 import { Subject } from 'rxjs';
 import { skip, takeUntil } from 'rxjs/operators';
 import { FormsModule } from '@angular/forms';
 import { NgIf, NgFor } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 export interface UserProfile {
@@ -40,7 +39,7 @@ export class Home implements OnInit, OnDestroy {
   editandoPerfil = false;
   sinPerfiles = false;
   perfilEdit: UserProfile = { ...PERFIL_DEFAULT };
-  perfilesDisponibles: any[] = [];
+  perfilesDisponibles: Profile[] = [];
   cargandoPerfiles = false;
 
   avatares = [
@@ -74,7 +73,6 @@ export class Home implements OnInit, OnDestroy {
     private missionService: MissionService,
     private profileService: ProfileService,
     private levelPipe: LevelPipe,
-    private http: HttpClient,
     private router: Router,
   ) {}
 
@@ -99,7 +97,7 @@ export class Home implements OnInit, OnDestroy {
   cargarPerfil() {
     const perfilId = localStorage.getItem('checkpoint_profile_id');
     if (perfilId) {
-      this.http.get<any>(`http://localhost:8080/api/profiles/${perfilId}`).subscribe({
+      this.profileService.getById(Number(perfilId)).subscribe({
         next: (res) => {
           this.perfil = {
             nombre: res.nombre,
@@ -122,7 +120,7 @@ export class Home implements OnInit, OnDestroy {
   }
 
   private cargarPrimerPerfilDisponible() {
-    this.http.get<any[]>('http://localhost:8080/api/profiles').subscribe({
+    this.profileService.getAll().subscribe({
       next: (perfiles) => {
         if (perfiles.length > 0) {
           const primero = perfiles[0];
@@ -155,7 +153,7 @@ export class Home implements OnInit, OnDestroy {
 
   private cargarPerfilesDisponibles() {
     this.cargandoPerfiles = true;
-    this.http.get<any[]>('http://localhost:8080/api/profiles').subscribe({
+    this.profileService.getAll().subscribe({
       next: (perfiles) => {
         this.perfilesDisponibles = perfiles;
         this.cargandoPerfiles = false;
@@ -195,7 +193,7 @@ export class Home implements OnInit, OnDestroy {
     if (!confirm(`¿Eliminar el perfil "${perfil.nombre}"? Esta acción no se puede deshacer.`))
       return;
 
-    this.http.delete(`http://localhost:8080/api/profiles/${perfil.id}`).subscribe({
+    this.profileService.delete(perfil.id).subscribe({
       next: () => {
         const eraActivo = localStorage.getItem('checkpoint_profile_id') === perfil.id.toString();
         this.perfilesDisponibles = this.perfilesDisponibles.filter((p) => p.id !== perfil.id);
@@ -242,16 +240,16 @@ export class Home implements OnInit, OnDestroy {
 
     const perfilId = localStorage.getItem('checkpoint_profile_id');
     if (perfilId) {
-      this.http
-        .put(`http://localhost:8080/api/profiles/${perfilId}`, {
+      this.profileService
+        .update(Number(perfilId), {
           nombre: this.perfil.nombre,
           avatar: this.perfil.avatar,
           genero: this.perfil.genero,
         })
         .subscribe();
     } else {
-      this.http
-        .post<any>('http://localhost:8080/api/profiles', {
+      this.profileService
+        .create({
           nombre: this.perfil.nombre,
           avatar: this.perfil.avatar,
           genero: this.perfil.genero,
@@ -260,7 +258,7 @@ export class Home implements OnInit, OnDestroy {
           next: (res) => {
             localStorage.setItem('checkpoint_profile_id', res.id.toString());
             this.sinPerfiles = false;
-            this.missionService.cargarMisionesPorPerfil(Number(res.id));
+            this.missionService.cargarMisionesPorPerfil(res.id);
           },
           error: (err) => {
             const msg = err?.error?.mensaje || 'Error al crear el perfil';
