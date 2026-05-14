@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { MISSION_ESTADOS } from '../features/shared/constants/constants';
+import { environment } from '../../environments/environment';
 
 export interface Mision {
   id?: number;
@@ -19,7 +20,7 @@ export interface Mision {
   providedIn: 'root',
 })
 export class MissionService {
-  private readonly apiUrl = 'http://localhost:8080/api/missions';
+  private readonly apiUrl = `${environment.apiUrl}/missions`;
 
   private readonly _misiones$ = new BehaviorSubject<Mision[]>([]);
   misiones$ = this._misiones$.asObservable();
@@ -112,7 +113,11 @@ export class MissionService {
   }
 
   editarMision(id: number, datos: Partial<Mision>): Observable<Mision> {
-    return this.http.patch<Mision>(`${this.apiUrl}/${id}`, datos).pipe(
+    const payload: any = {
+      ...datos,
+      ...(datos.category ? { category: { id: datos.category.id } } : {}),
+    };
+    return this.http.patch<Mision>(`${this.apiUrl}/${id}`, payload).pipe(
       tap(() => this.recargarMisiones()),
       catchError(this.handleError('editarMision')),
     );
