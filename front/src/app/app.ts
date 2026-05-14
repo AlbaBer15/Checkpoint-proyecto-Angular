@@ -16,6 +16,13 @@ export class App implements OnInit {
   constructor(private missionService: MissionService) {}
 
   ngOnInit() {
+    const profileId = Number(localStorage.getItem('checkpoint_profile_id'));
+    if (profileId) {
+      this.missionService.cargarMisionesPorPerfil(profileId);
+    } else {
+      this.missionService.cargarMisiones();
+    }
+
     this.missionService.misionesActivas$.subscribe((lista) => {
       this.misionesPendientes = lista.length;
     });

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { profileGuard } from './guards/profile.guard';
 
 export const routes: Routes = [
   {
@@ -7,19 +8,20 @@ export const routes: Routes = [
   },
   {
     path: 'missions',
+    canActivate: [profileGuard],
     loadComponent: () =>
       import('./features/missions/mission-list/mission-list').then((m) => m.MissionList),
   },
   {
     path: 'missions/add',
+    canActivate: [profileGuard],
     loadComponent: () =>
       import('./features/missions/mission-add/mission-add').then((m) => m.MissionAdd),
   },
   {
     path: 'achievements',
+    canActivate: [profileGuard],
     loadComponent: () => import('./features/achievements/achievements').then((m) => m.Achievements),
   },
   { path: '**', redirectTo: '' },
 ];
-// TODO: tengo que meter la ruta para profile sera algo asi:
-// { path: 'profile', loadComponent: () => import('./features/profile/profile').then((m) => m.Profile) },
