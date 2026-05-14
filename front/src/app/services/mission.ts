@@ -12,6 +12,7 @@ export interface Mision {
   estado: 'pendiente' | 'completada';
   favorito?: boolean;
   category?: { id: number; nombre: string; icono: string; color: string };
+  profile?: { id: number; nombre: string; avatar: string; genero: string };
 }
 
 @Injectable({
@@ -42,16 +43,34 @@ export class MissionService {
     });
   }
 
-  getTotalXP$(): Observable<number> {
-    return this.http
-      .get<number>(`${this.apiUrl}/stats/total-xp`)
-      .pipe(catchError(this.handleError('getTotalXP')));
+  cargarMisionesPorPerfil(profileId: number): void {
+    this.http.get<Mision[]>(`${this.apiUrl}/profile/${profileId}`).subscribe({
+      next: (lista) => this._misiones$.next(lista),
+      error: (err) => console.error('Error al cargar misiones del perfil:', err),
+    });
   }
 
-  getActiveMissionsCount$(): Observable<number> {
-    return this.http
-      .get<number>(`${this.apiUrl}/stats/active-count`)
-      .pipe(catchError(this.handleError('getActiveMissionsCount')));
+  recargarMisiones(): void {
+    const profileId = Number(localStorage.getItem('checkpoint_profile_id'));
+    if (profileId) {
+      this.cargarMisionesPorPerfil(profileId);
+    } else {
+      this.cargarMisiones();
+    }
+  }
+
+  getTotalXP$(profileId?: number): Observable<number> {
+    const url = profileId
+      ? `${this.apiUrl}/stats/total-xp?profileId=${profileId}`
+      : `${this.apiUrl}/stats/total-xp`;
+    return this.http.get<number>(url).pipe(catchError(this.handleError('getTotalXP')));
+  }
+
+  getActiveMissionsCount$(profileId?: number): Observable<number> {
+    const url = profileId
+      ? `${this.apiUrl}/stats/active-count?profileId=${profileId}`
+      : `${this.apiUrl}/stats/active-count`;
+    return this.http.get<number>(url).pipe(catchError(this.handleError('getActiveMissionsCount')));
   }
 
   addMision(datos: Partial<Mision>): Observable<Mision> {
@@ -62,9 +81,10 @@ export class MissionService {
       estado: datos.estado ?? MISSION_ESTADOS.PENDIENTE,
       favorito: datos.favorito ?? false,
       ...(datos.category ? { category: { id: datos.category.id } } : {}),
+      ...(datos.profile ? { profile: { id: datos.profile.id } } : {}),
     };
     return this.http.post<Mision>(this.apiUrl, nueva).pipe(
-      tap(() => this.cargarMisiones()),
+      tap(() => this.recargarMisiones()),
       catchError(this.handleError('addMision')),
     );
   }
@@ -77,28 +97,30 @@ export class MissionService {
 
   eliminarMision(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
-      tap(() => this.cargarMisiones()),
+      tap(() => this.recargarMisiones()),
       catchError(this.handleError('eliminarMision')),
     );
   }
+
   revertirMision(id: number): Observable<Mision> {
     return this.http
       .patch<Mision>(`${this.apiUrl}/${id}`, { estado: MISSION_ESTADOS.PENDIENTE })
       .pipe(
-        tap(() => this.cargarMisiones()),
+        tap(() => this.recargarMisiones()),
         catchError(this.handleError('revertirMision')),
       );
   }
+
   editarMision(id: number, datos: Partial<Mision>): Observable<Mision> {
     return this.http.patch<Mision>(`${this.apiUrl}/${id}`, datos).pipe(
-      tap(() => this.cargarMisiones()),
+      tap(() => this.recargarMisiones()),
       catchError(this.handleError('editarMision')),
     );
   }
 
   toggleFavorito(id: number, favoritoActual: boolean): Observable<Mision> {
     return this.http.patch<Mision>(`${this.apiUrl}/${id}`, { favorito: !favoritoActual }).pipe(
-      tap(() => this.cargarMisiones()),
+      tap(() => this.recargarMisiones()),
       catchError(this.handleError('toggleFavorito')),
     );
   }
