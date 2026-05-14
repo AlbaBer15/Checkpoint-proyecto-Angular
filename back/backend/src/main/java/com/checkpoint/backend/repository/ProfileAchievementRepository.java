@@ -10,4 +10,6 @@ public interface ProfileAchievementRepository extends JpaRepository<ProfileAchie
     List<ProfileAchievement> findByProfileId(Long profileId); // devuelve todos los logros desbloqueados x un perfil concreto
 
     boolean existsByProfileIdAndAchievementId(Long profileId, Long achievementId); // comprueba si el perfil ya tiene un logro concreto
+
+    void deleteByProfileId(Long profileId);
 }
