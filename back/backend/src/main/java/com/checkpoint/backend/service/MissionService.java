@@ -1,6 +1,7 @@
 package com.checkpoint.backend.service;
 
 import com.checkpoint.backend.constants.CheckpointConstants;
+import com.checkpoint.backend.dto.PatchMisionDTO;
 import com.checkpoint.backend.entity.Mission;
 import com.checkpoint.backend.exception.ResourceNotFoundException;
 import com.checkpoint.backend.repository.CategoryRepository;
@@ -9,7 +10,6 @@ import com.checkpoint.backend.repository.ProfileRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -75,34 +75,30 @@ public class MissionService {
                 ));
     }
 
-    public Mission patch(Long id, Map<String, Object> changes) {
+    public Mission patch(Long id, PatchMisionDTO dto) {
         Mission mission = missionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No existe la misión con id " + id));
 
-        validarCambios(changes);
+        validarCambios(dto);
 
-        if (changes.containsKey("titulo")) {
-            mission.setTitulo(changes.get("titulo").toString().trim());
+        if (dto.getTitulo() != null) {
+            mission.setTitulo(dto.getTitulo().trim());
         }
-        if (changes.containsKey("descripcion")) {
-            mission.setDescripcion(changes.get("descripcion").toString().trim());
+        if (dto.getDescripcion() != null) {
+            mission.setDescripcion(dto.getDescripcion().trim());
         }
-        if (changes.containsKey("xp")) {
-            mission.setXp(Integer.parseInt(changes.get("xp").toString()));
+        if (dto.getXp() != null) {
+            mission.setXp(dto.getXp());
         }
-        if (changes.containsKey("estado")) {
-            Object v = changes.get("estado");
-            if (v != null) {
-                mission.setEstado(v.toString().trim().toLowerCase());
-            }
+        if (dto.getEstado() != null) {
+            mission.setEstado(dto.getEstado().trim().toLowerCase());
         }
-        if (changes.containsKey("favorito")) {
-            Object v = changes.get("favorito");
-            if (v instanceof Boolean b) {
-                mission.setFavorito(b);
-            } else if (v != null) {
-                mission.setFavorito(Boolean.parseBoolean(v.toString()));
-            }
+        if (dto.getFavorito() != null) {
+            mission.setFavorito(dto.getFavorito());
+        }
+        if (dto.getCategory() != null && dto.getCategory().getId() != null) {
+            categoryRepository.findById(dto.getCategory().getId())
+                    .ifPresent(mission::setCategory);
         }
 
         return missionRepository.save(mission);
@@ -156,53 +152,38 @@ public class MissionService {
         }
     }
 
-    private void validarCambios(Map<String, Object> changes) {
-        if (changes.containsKey("titulo")) {
-            Object v = changes.get("titulo");
-            if (v == null || v.toString().isBlank()) {
+    private void validarCambios(PatchMisionDTO dto) {
+        if (dto.getTitulo() != null) {
+            if (dto.getTitulo().isBlank()) {
                 throw new IllegalArgumentException("El título es obligatorio.");
             }
-            if (v.toString().trim().length() < 3) {
+            if (dto.getTitulo().trim().length() < 3) {
                 throw new IllegalArgumentException("El título debe tener al menos 3 caracteres.");
             }
-            if (v.toString().trim().length() > 120) {
+            if (dto.getTitulo().trim().length() > 120) {
                 throw new IllegalArgumentException("El título no puede exceder 120 caracteres.");
             }
         }
-        if (changes.containsKey("descripcion")) {
-            Object v = changes.get("descripcion");
-            if (v == null || v.toString().isBlank()) {
+        if (dto.getDescripcion() != null) {
+            if (dto.getDescripcion().isBlank()) {
                 throw new IllegalArgumentException("La descripción es obligatoria.");
             }
-            if (v.toString().trim().length() < 5) {
+            if (dto.getDescripcion().trim().length() < 5) {
                 throw new IllegalArgumentException("La descripción debe tener al menos 5 caracteres.");
             }
-            if (v.toString().trim().length() > 500) {
+            if (dto.getDescripcion().trim().length() > 500) {
                 throw new IllegalArgumentException("La descripción no puede exceder 500 caracteres.");
             }
         }
-        if (changes.containsKey("xp")) {
-            Object v = changes.get("xp");
-            if (v == null) {
-                throw new IllegalArgumentException("XP es obligatorio.");
-            }
-            int xp;
-            try {
-                xp = Integer.parseInt(v.toString());
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("XP debe ser un número válido.");
-            }
-            if (xp < 1 || xp > 999) {
+        if (dto.getXp() != null) {
+            if (dto.getXp() < 1 || dto.getXp() > 999) {
                 throw new IllegalArgumentException("XP debe ser un número entre 1 y 999.");
             }
         }
-        if (changes.containsKey("estado")) {
-            Object v = changes.get("estado");
-            if (v != null) {
-                String estado = v.toString().trim().toLowerCase();
-                if (!ESTADOS_VALIDOS.contains(estado)) {
-                    throw new IllegalArgumentException("Estado inválido. Usa 'pendiente' o 'completada'.");
-                }
+        if (dto.getEstado() != null) {
+            String estado = dto.getEstado().trim().toLowerCase();
+            if (!ESTADOS_VALIDOS.contains(estado)) {
+                throw new IllegalArgumentException("Estado inválido. Usa 'pendiente' o 'completada'.");
             }
         }
     }
