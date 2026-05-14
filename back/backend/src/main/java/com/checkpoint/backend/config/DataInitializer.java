@@ -2,8 +2,10 @@ package com.checkpoint.backend.config;
 
 import com.checkpoint.backend.entity.Achievement;
 import com.checkpoint.backend.entity.Category;
+import com.checkpoint.backend.entity.Mission;
 import com.checkpoint.backend.repository.AchievementRepository;
 import com.checkpoint.backend.repository.CategoryRepository;
+import com.checkpoint.backend.repository.MissionRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -15,12 +17,15 @@ public class DataInitializer implements ApplicationRunner {
 
     private final AchievementRepository achievementRepository;
     private final CategoryRepository categoryRepository;
+    private final MissionRepository missionRepository;
 
     public DataInitializer(
             AchievementRepository achievementRepository,
-            CategoryRepository categoryRepository) {
+            CategoryRepository categoryRepository,
+            MissionRepository missionRepository) {
         this.achievementRepository = achievementRepository;
         this.categoryRepository = categoryRepository;
+        this.missionRepository = missionRepository;
     }
 
     @Override
@@ -43,6 +48,7 @@ public class DataInitializer implements ApplicationRunner {
                 achievement("Imparable", "Completa 20 misiones", 0, "💫")
         ));
     }
+
 
     private void inicializarCategories() {
         if (categoryRepository.count() > 0) return;

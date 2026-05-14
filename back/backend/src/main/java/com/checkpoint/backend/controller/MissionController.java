@@ -51,13 +51,18 @@ public class MissionController {
     }
 
     @GetMapping("/stats/total-xp")
-    public Long getTotalXP() {
-        return missionService.getTotalXP();
+    public Long getTotalXP(@RequestParam(required = false) Long profileId) {
+        return missionService.getTotalXP(profileId);
     }
 
     @GetMapping("/stats/active-count")
-    public Long getActiveMissionsCount() {
-        return missionService.getActiveMissionsCount();
+    public Long getActiveMissionsCount(@RequestParam(required = false) Long profileId) {
+        return missionService.getActiveMissionsCount(profileId);
+    }
+
+    @GetMapping("/profile/{profileId}")
+    public List<Mission> getByProfile(@PathVariable Long profileId) {
+        return missionService.findByProfile(profileId);
     }
 
     @GetMapping("/{id}")

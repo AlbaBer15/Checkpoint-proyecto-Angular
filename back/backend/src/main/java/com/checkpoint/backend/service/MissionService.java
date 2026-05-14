@@ -5,6 +5,7 @@ import com.checkpoint.backend.entity.Mission;
 import com.checkpoint.backend.exception.ResourceNotFoundException;
 import com.checkpoint.backend.repository.CategoryRepository;
 import com.checkpoint.backend.repository.MissionRepository;
+import com.checkpoint.backend.repository.ProfileRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,16 +22,23 @@ public class MissionService {
 
     private final MissionRepository missionRepository;
     private final CategoryRepository categoryRepository;
+    private final ProfileRepository profileRepository;
 
-    public MissionService(MissionRepository missionRepository, CategoryRepository categoryRepository) {
+    public MissionService(
+            MissionRepository missionRepository,
+            CategoryRepository categoryRepository,
+            ProfileRepository profileRepository) {
         this.missionRepository = missionRepository;
         this.categoryRepository = categoryRepository;
+        this.profileRepository = profileRepository;
     }
-
-    // ─── CRUD ────────────────────────────────────────────────────────────────
 
     public List<Mission> findAll() {
         return missionRepository.findAll();
+    }
+
+    public List<Mission> findByProfile(Long profileId) {
+        return missionRepository.findByProfileId(profileId);
     }
 
     public Mission create(Mission mission) {
@@ -45,6 +53,10 @@ public class MissionService {
         if (mission.getCategory() != null && mission.getCategory().getId() != null) {
             categoryRepository.findById(mission.getCategory().getId())
                     .ifPresent(mission::setCategory);
+        }
+        if (mission.getProfile() != null && mission.getProfile().getId() != null) {
+            profileRepository.findById(mission.getProfile().getId())
+                    .ifPresent(mission::setProfile);
         }
         return missionRepository.save(mission);
     }
@@ -96,11 +108,19 @@ public class MissionService {
         return missionRepository.save(mission);
     }
 
-    public Long getTotalXP() {
+    public Long getTotalXP(Long profileId) {
+        if (profileId != null) {
+            return missionRepository.sumXpByEstadoAndProfileId(
+                    CheckpointConstants.ESTADO_COMPLETADA, profileId);
+        }
         return missionRepository.sumXpByEstado(CheckpointConstants.ESTADO_COMPLETADA);
     }
 
-    public Long getActiveMissionsCount() {
+    public Long getActiveMissionsCount(Long profileId) {
+        if (profileId != null) {
+            return missionRepository.countByEstadoAndProfileId(
+                    CheckpointConstants.ESTADO_PENDIENTE, profileId);
+        }
         return missionRepository.countByEstado(CheckpointConstants.ESTADO_PENDIENTE);
     }
 
