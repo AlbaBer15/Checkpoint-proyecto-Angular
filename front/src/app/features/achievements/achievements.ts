@@ -37,14 +37,19 @@ export class Achievements implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.missionService.cargarMisiones();
+    const profileId = Number(localStorage.getItem('checkpoint_profile_id'));
+    if (profileId) {
+      this.missionService.cargarMisionesPorPerfil(profileId);
+    } else {
+      this.missionService.cargarMisiones();
+    }
     this.cargarCatalogo();
 
-    this.missionService.misiones$.pipe(takeUntil(this.destroy$)).subscribe(misiones => {
-      const completadas = misiones.filter(m => m.estado === 'completada');
+    this.missionService.misiones$.pipe(takeUntil(this.destroy$)).subscribe((misiones) => {
+      const completadas = misiones.filter((m) => m.estado === 'completada');
       this.totalXp = completadas.reduce((sum, m) => sum + m.xp, 0);
       this.completedCount = completadas.length;
-      this.favoritasCount = misiones.filter(m => m.favorito).length;
+      this.favoritasCount = misiones.filter((m) => m.favorito).length;
       this.calcularYDesbloquear();
     });
   }
@@ -52,11 +57,11 @@ export class Achievements implements OnInit, OnDestroy {
   private cargarCatalogo() {
     const profileId = Number(localStorage.getItem('checkpoint_profile_id'));
 
-    this.achievementService.getCatalogo().subscribe(catalogo => {
+    this.achievementService.getCatalogo().subscribe((catalogo) => {
       this.catalogoApi = catalogo;
 
       if (profileId) {
-        this.achievementService.getDesbloqueados(profileId).subscribe(desbloqueados => {
+        this.achievementService.getDesbloqueados(profileId).subscribe((desbloqueados) => {
           this.desbloqueadosIds = new Set(desbloqueados.map((d: any) => d.achievement.id));
           this.calcularYDesbloquear();
         });
@@ -69,7 +74,7 @@ export class Achievements implements OnInit, OnDestroy {
   private calcularYDesbloquear() {
     const profileId = Number(localStorage.getItem('checkpoint_profile_id'));
 
-    this.achievements = this.catalogoApi.map(logro => {
+    this.achievements = this.catalogoApi.map((logro) => {
       const unlocked = this.cumpleCondicion(logro);
 
       if (unlocked && profileId && !this.desbloqueadosIds.has(logro.id)) {
@@ -86,20 +91,29 @@ export class Achievements implements OnInit, OnDestroy {
       };
     });
 
-    this.desbloqueadosCount = this.achievements.filter(a => a.unlocked).length;
+    this.desbloqueadosCount = this.achievements.filter((a) => a.unlocked).length;
   }
 
   private cumpleCondicion(logro: AchievementApi): boolean {
     switch (logro.titulo) {
-      case 'Primera Misión':  return this.completedCount >= 1;
-      case 'Explorador':      return this.totalXp >= 100;
-      case 'Racha de Fuego':  return this.completedCount >= 5;
-      case 'Coleccionista':   return this.favoritasCount >= 3;
-      case 'Veterano':        return this.totalXp >= 500;
-      case 'Leyenda':         return this.completedCount >= 10;
-      case 'Maestro':         return this.totalXp >= 1000;
-      case 'Imparable':       return this.completedCount >= 20;
-      default:                return false;
+      case 'Primera Misión':
+        return this.completedCount >= 1;
+      case 'Explorador':
+        return this.totalXp >= 100;
+      case 'Racha de Fuego':
+        return this.completedCount >= 5;
+      case 'Coleccionista':
+        return this.favoritasCount >= 3;
+      case 'Veterano':
+        return this.totalXp >= 500;
+      case 'Leyenda':
+        return this.completedCount >= 10;
+      case 'Maestro':
+        return this.totalXp >= 1000;
+      case 'Imparable':
+        return this.completedCount >= 20;
+      default:
+        return false;
     }
   }
 

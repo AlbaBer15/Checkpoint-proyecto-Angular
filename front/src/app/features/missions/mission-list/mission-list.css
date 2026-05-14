@@ -122,7 +122,3 @@
   font-weight: 700;
   box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
 }
-
-.btn-grupo button.activo {
-  background: transparent;
-}

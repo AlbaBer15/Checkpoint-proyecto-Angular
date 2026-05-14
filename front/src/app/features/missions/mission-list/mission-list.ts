@@ -51,7 +51,7 @@ export class MissionList implements OnInit, OnDestroy {
     }
 
     if (this.filtroCategoria !== undefined) {
-      lista = lista.filter(m => m.category?.id === this.filtroCategoria);
+      lista = lista.filter((m) => m.category?.id === this.filtroCategoria);
     }
 
     return lista;
@@ -68,15 +68,26 @@ export class MissionList implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.missionService.cargarMisiones();
+    const profileId = Number(localStorage.getItem('checkpoint_profile_id'));
+
+    if (profileId) {
+      this.missionService.cargarMisionesPorPerfil(profileId);
+    } else {
+      this.missionService.cargarMisiones();
+    }
+
     this.missionService.misiones$.pipe(takeUntil(this.destroy$)).subscribe((lista) => {
       this.misiones = lista;
       this.cargando = false;
     });
 
-    this.categoryService.getAll().subscribe(cats => {
+    this.categoryService.getAll().subscribe((cats) => {
       this.categorias = cats;
-   });
+    });
+
+    this.categoryService.getAll().subscribe((cats) => {
+      this.categorias = cats;
+    });
   }
 
   ngOnDestroy(): void {
@@ -96,7 +107,7 @@ export class MissionList implements OnInit, OnDestroy {
         next: () => {
           setTimeout(() => {
             this.misionesAnimado.delete(m.id!);
-            this.missionService.cargarMisiones();
+            this.missionService.recargarMisiones();
           }, 1000);
         },
         error: (err) => {

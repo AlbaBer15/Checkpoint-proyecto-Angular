@@ -14,7 +14,6 @@ import { CategoryService, Category } from '../../../services/category';
 export class MissionAdd implements OnInit {
   formulario: FormGroup;
   mostrarExito = false;
-
   mostrarError = false;
   mensajeError = '';
   misionOraculo?: Mision;
@@ -34,22 +33,27 @@ export class MissionAdd implements OnInit {
   }
 
   ngOnInit() {
-  this.categoryService.getAll().subscribe(cats => this.categorias = cats);
-}
+    this.categoryService.getAll().subscribe((cats) => (this.categorias = cats));
+  }
 
-  /**
-   * Solicita una misión aleatoria al servicio.
-   * Resetea la previa en caso de que exista.
-   */
+  private getProfileObject() {
+    const profileId = Number(localStorage.getItem('checkpoint_profile_id'));
+    return profileId ? { id: profileId, nombre: '', avatar: '', genero: 'FEMENINO' } : undefined;
+  }
+
+  private getCategoryObject() {
+    return this.categoriaSeleccionada
+      ? { id: this.categoriaSeleccionada, nombre: '', icono: '', color: '' }
+      : undefined;
+  }
+
   invocarOraculo() {
     this.misionOraculo = undefined;
-
     this.missionService.obtenerMisionAleatoria().subscribe({
       next: (mision) => {
         this.misionOraculo = mision;
       },
       error: () => {
-        // Fallback en caso de error de API
         this.misionOraculo = {
           titulo: '⚠ Error del Oráculo',
           descripcion: 'No se pudo obtener la misión.',
@@ -60,30 +64,6 @@ export class MissionAdd implements OnInit {
     });
   }
 
-  /**
-   *  Añade la misión generada por el Oráculo directamente al servicio.
-   * Limpia la vista previa y muestra mensaje de éxito.
-   */
-  guardar() {
-    if (this.formulario.invalid) return;
-    const valores = this.formulario.value;
-
-    this.missionService
-      .addMision({
-        titulo: valores.titulo,
-        descripcion: valores.descripcion,
-        xp: valores.xp,
-        category: this.categoriaSeleccionada ? { id: this.categoriaSeleccionada, nombre: '', icono: '', color: '' } : undefined,
-      })
-      .subscribe({
-        next: () => {
-          this.formulario.reset({ xp: 1 });
-          this.mostrarExitoTemporal();
-        },
-        error: (err) => this.mostrarErrorMensaje(err, 'Error al guardar la misión'),
-      });
-  }
-
   usarMisionDelOraculo() {
     if (!this.misionOraculo) return;
 
@@ -92,7 +72,8 @@ export class MissionAdd implements OnInit {
         titulo: this.misionOraculo.titulo,
         descripcion: this.misionOraculo.descripcion,
         xp: this.misionOraculo.xp,
-        category: this.categoriaSeleccionada ? { id: this.categoriaSeleccionada, nombre: '', icono: '', color: '' } : undefined,
+        category: this.getCategoryObject(),
+        profile: this.getProfileObject(),
       })
       .subscribe({
         next: () => {
@@ -103,6 +84,28 @@ export class MissionAdd implements OnInit {
         error: (err) => this.mostrarErrorMensaje(err, 'Error al guardar la misión del oráculo'),
       });
   }
+
+  guardar() {
+    if (this.formulario.invalid) return;
+    const valores = this.formulario.value;
+
+    this.missionService
+      .addMision({
+        titulo: valores.titulo,
+        descripcion: valores.descripcion,
+        xp: valores.xp,
+        category: this.getCategoryObject(),
+        profile: this.getProfileObject(),
+      })
+      .subscribe({
+        next: () => {
+          this.formulario.reset({ xp: 1 });
+          this.mostrarExitoTemporal();
+        },
+        error: (err) => this.mostrarErrorMensaje(err, 'Error al guardar la misión'),
+      });
+  }
+
   private mostrarExitoTemporal() {
     this.mostrarExito = true;
     this.mostrarError = false;
