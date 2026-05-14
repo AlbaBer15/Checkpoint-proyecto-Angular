@@ -1,7 +1,24 @@
 <div class="container">
   <div *ngIf="editandoPerfil" class="form-perfil">
     <h2 class="titulo-home">Editar perfil</h2>
-
+    <div *ngIf="perfilesDisponibles.length > 0" class="campo-perfil">
+      <label>Perfiles guardados</label>
+      <div class="perfiles-selector">
+        <div *ngFor="let p of perfilesDisponibles" class="perfil-fila">
+          <button
+            class="btn-perfil-guardado"
+            [class.activo]="p.id === +getPerfilId()"
+            (click)="seleccionarPerfil(p)"
+          >
+            {{ p.avatar ?? '🧝' }} {{ p.nombre }}
+          </button>
+          <button class="btn-eliminar-perfil" (click)="eliminarPerfil(p)" title="Eliminar perfil">
+            🗑
+          </button>
+        </div>
+        <button class="btn-nuevo-perfil" (click)="crearNuevoPerfil()">➕ Nuevo perfil</button>
+      </div>
+    </div>
     <div class="campo-perfil">
       <label>Nombre</label>
       <input
@@ -52,7 +69,17 @@
     </div>
   </div>
 
-  <div *ngIf="!editandoPerfil">
+  <div *ngIf="sinPerfiles && !editandoPerfil" class="sin-perfiles">
+    <p *ngIf="mensajeGuard" class="aviso-guard">
+      ⚠️ Necesitas un perfil para acceder a esa sección.
+    </p>
+    <div class="sin-perfiles-icono">🧭</div>
+    <h2 class="titulo-home">¡Bienvenida a Checkpoint!</h2>
+    <p class="subtitulo">Aún no tienes ningún perfil. Crea el tuyo para empezar la aventura.</p>
+    <button class="btn-guardar-perfil" (click)="iniciarCrearPerfil()">➕ Crear mi perfil</button>
+  </div>
+
+  <div *ngIf="!editandoPerfil && !sinPerfiles">
     <div class="cabecera-home">
       <h2 class="titulo-home">{{ saludoPersonalizado }}</h2>
       <button class="btn-editar-perfil" (click)="activarEdicionPerfil()">

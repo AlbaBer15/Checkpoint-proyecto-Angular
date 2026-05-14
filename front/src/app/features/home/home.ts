@@ -1,11 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MissionService } from '../../services/mission';
+import { ProfileService } from '../../services/profile.service';
 import { LevelPipe } from '../shared/pipes/level-pipe';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { skip, takeUntil } from 'rxjs/operators';
 import { FormsModule } from '@angular/forms';
 import { NgIf, NgFor } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 export interface UserProfile {
   nombre: string;
@@ -36,7 +38,10 @@ export class Home implements OnInit, OnDestroy {
 
   perfil: UserProfile = { ...PERFIL_DEFAULT };
   editandoPerfil = false;
+  sinPerfiles = false;
   perfilEdit: UserProfile = { ...PERFIL_DEFAULT };
+  perfilesDisponibles: any[] = [];
+  cargandoPerfiles = false;
 
   avatares = [
     '🧝‍♀️',
@@ -56,7 +61,6 @@ export class Home implements OnInit, OnDestroy {
     '🧚‍♂️',
     '🤴',
     '⚔️',
-    '🛡️',
     '🏹',
     '🔮',
     '💀',
@@ -64,29 +68,35 @@ export class Home implements OnInit, OnDestroy {
   ];
 
   private destroy$ = new Subject<void>();
+  mensajeGuard = false;
 
   constructor(
     private missionService: MissionService,
+    private profileService: ProfileService,
     private levelPipe: LevelPipe,
     private http: HttpClient,
+    private router: Router,
   ) {}
 
   ngOnInit() {
-    this.cargarPerfil();
-    this.cargarEstadisticas();
-    this.missionService.misiones$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.cargarEstadisticas());
-  }
+    const nav = this.router.getCurrentNavigation();
+    this.mensajeGuard = nav?.extras?.state?.['mensajeGuard'] ?? false;
 
-  // ─── PERFIL ──────────────────────────────────────────────
-
-  cargarPerfil() {
     const perfilGuardado = localStorage.getItem(PERFIL_KEY);
     if (perfilGuardado) {
-      this.perfil = JSON.parse(perfilGuardado);
+      try {
+        this.perfil = JSON.parse(perfilGuardado);
+      } catch {}
     }
 
+    this.missionService.misiones$
+      .pipe(skip(1), takeUntil(this.destroy$))
+      .subscribe(() => this.cargarEstadisticas());
+
+    this.cargarPerfil();
+  }
+
+  cargarPerfil() {
     const perfilId = localStorage.getItem('checkpoint_profile_id');
     if (perfilId) {
       this.http.get<any>(`http://localhost:8080/api/profiles/${perfilId}`).subscribe({
@@ -97,20 +107,128 @@ export class Home implements OnInit, OnDestroy {
             genero: res.genero ?? 'FEMENINO',
           };
           localStorage.setItem(PERFIL_KEY, JSON.stringify(this.perfil));
+          this.sinPerfiles = false;
+          this.missionService.cargarMisionesPorPerfil(Number(perfilId));
+          this.profileService.markReady();
         },
         error: () => {
           localStorage.removeItem('checkpoint_profile_id');
+          this.cargarPrimerPerfilDisponible();
         },
       });
+    } else {
+      this.cargarPrimerPerfilDisponible();
     }
   }
 
+  private cargarPrimerPerfilDisponible() {
+    this.http.get<any[]>('http://localhost:8080/api/profiles').subscribe({
+      next: (perfiles) => {
+        if (perfiles.length > 0) {
+          const primero = perfiles[0];
+          this.perfil = {
+            nombre: primero.nombre,
+            avatar: primero.avatar ?? '🧝‍♀️',
+            genero: primero.genero ?? 'FEMENINO',
+          };
+          localStorage.setItem(PERFIL_KEY, JSON.stringify(this.perfil));
+          localStorage.setItem('checkpoint_profile_id', primero.id.toString());
+          this.sinPerfiles = false;
+          this.missionService.cargarMisionesPorPerfil(primero.id);
+        } else {
+          this.sinPerfiles = true;
+          this.missionService.cargarMisiones();
+        }
+        this.profileService.markReady();
+      },
+      error: () => {
+        this.sinPerfiles = true;
+        this.profileService.markReady();
+      },
+    });
+  }
   activarEdicionPerfil() {
     this.perfilEdit = { ...this.perfil };
     this.editandoPerfil = true;
+    this.cargarPerfilesDisponibles();
+  }
+
+  private cargarPerfilesDisponibles() {
+    this.cargandoPerfiles = true;
+    this.http.get<any[]>('http://localhost:8080/api/profiles').subscribe({
+      next: (perfiles) => {
+        this.perfilesDisponibles = perfiles;
+        this.cargandoPerfiles = false;
+      },
+      error: () => (this.cargandoPerfiles = false),
+    });
+  }
+
+  seleccionarPerfil(perfil: any) {
+    this.perfil = {
+      nombre: perfil.nombre,
+      avatar: perfil.avatar ?? '🧝‍♀️',
+      genero: perfil.genero ?? 'FEMENINO',
+    };
+    localStorage.setItem(PERFIL_KEY, JSON.stringify(this.perfil));
+    localStorage.setItem('checkpoint_profile_id', perfil.id.toString());
+    this.editandoPerfil = false;
+    this.missionService.cargarMisionesPorPerfil(perfil.id);
+    const { nivel } = this.levelPipe.transform(this.totalXP, this.perfil.genero);
+    this.actualizarMensaje(nivel);
+  }
+
+  iniciarCrearPerfil() {
+    this.perfilEdit = { ...PERFIL_DEFAULT };
+    this.editandoPerfil = true;
+    this.perfilesDisponibles = [];
+    localStorage.removeItem('checkpoint_profile_id');
+  }
+
+  crearNuevoPerfil() {
+    localStorage.removeItem('checkpoint_profile_id');
+    this.perfilEdit = { ...PERFIL_DEFAULT };
+    this.perfilesDisponibles = [];
+  }
+
+  eliminarPerfil(perfil: any) {
+    if (!confirm(`¿Eliminar el perfil "${perfil.nombre}"? Esta acción no se puede deshacer.`))
+      return;
+
+    this.http.delete(`http://localhost:8080/api/profiles/${perfil.id}`).subscribe({
+      next: () => {
+        const eraActivo = localStorage.getItem('checkpoint_profile_id') === perfil.id.toString();
+        this.perfilesDisponibles = this.perfilesDisponibles.filter((p) => p.id !== perfil.id);
+
+        if (eraActivo) {
+          localStorage.removeItem('checkpoint_profile_id');
+          localStorage.removeItem(PERFIL_KEY);
+          this.perfil = { ...PERFIL_DEFAULT };
+
+          if (this.perfilesDisponibles.length > 0) {
+            this.seleccionarPerfil(this.perfilesDisponibles[0]);
+          } else {
+            this.sinPerfiles = true;
+            this.editandoPerfil = false;
+            this.missionService.cargarMisiones();
+            this.totalXP = 0;
+            this.totalMisiones = 0;
+            this.mensajeEstado = '';
+          }
+        }
+      },
+      error: () => alert('Error al eliminar el perfil. Inténtalo de nuevo.'),
+    });
   }
 
   cancelarEdicionPerfil() {
+    if (
+      this.perfilEdit.nombre !== this.perfil.nombre ||
+      this.perfilEdit.avatar !== this.perfil.avatar ||
+      this.perfilEdit.genero !== this.perfil.genero
+    ) {
+      if (!confirm('¿Descartar los cambios?')) return;
+    }
     this.editandoPerfil = false;
   }
 
@@ -138,10 +256,22 @@ export class Home implements OnInit, OnDestroy {
           avatar: this.perfil.avatar,
           genero: this.perfil.genero,
         })
-        .subscribe((res) => {
-          localStorage.setItem('checkpoint_profile_id', res.id);
+        .subscribe({
+          next: (res) => {
+            localStorage.setItem('checkpoint_profile_id', res.id.toString());
+            this.sinPerfiles = false;
+            this.missionService.cargarMisionesPorPerfil(Number(res.id));
+          },
+          error: (err) => {
+            const msg = err?.error?.mensaje || 'Error al crear el perfil';
+            alert(msg);
+          },
         });
     }
+  }
+
+  getPerfilId(): string {
+    return localStorage.getItem('checkpoint_profile_id') ?? '0';
   }
 
   get saludoPersonalizado(): string {
@@ -155,11 +285,11 @@ export class Home implements OnInit, OnDestroy {
     return this.perfil.genero === 'FEMENINO' ? 'Estado de la aventurera' : 'Estado del aventurero';
   }
 
-  // ─── STATS ───────────────────────────────────────────────
-
   private cargarEstadisticas() {
+    const profileId = Number(localStorage.getItem('checkpoint_profile_id')) || undefined;
+
     this.missionService
-      .getTotalXP$()
+      .getTotalXP$(profileId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (xp) => {
@@ -171,7 +301,7 @@ export class Home implements OnInit, OnDestroy {
       });
 
     this.missionService
-      .getActiveMissionsCount$()
+      .getActiveMissionsCount$(profileId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (count) => (this.totalMisiones = count),

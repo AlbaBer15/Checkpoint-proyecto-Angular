@@ -163,11 +163,10 @@
   box-shadow: 0 0 6px var(--cyan);
 }
 
-/* ─── SELECTOR DE AVATAR ────────────────────────────────── */
 .avatar-selector {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
 }
 
 .btn-avatar {
@@ -267,4 +266,91 @@
 .btn-editar-perfil:hover {
   border-color: var(--cyan);
   color: var(--cyan);
+}
+.perfiles-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn-perfil-guardado {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--text-soft);
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+.btn-perfil-guardado:hover {
+  border-color: var(--cyan);
+  color: var(--text-light);
+}
+
+.btn-perfil-guardado.activo {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+}
+
+.btn-nuevo-perfil {
+  background: transparent;
+  border: 1px dashed var(--card-border);
+  color: var(--text-soft);
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+.btn-nuevo-perfil:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+.perfil-fila {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-eliminar-perfil {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-soft);
+  padding: 6px 8px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: 0.2s;
+  opacity: 0.5;
+}
+
+.btn-eliminar-perfil:hover {
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+  opacity: 1;
+}
+
+.sin-perfiles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.sin-perfiles-icono {
+  font-size: 4rem;
+}
+
+.sin-perfiles .btn-guardar-perfil {
+  flex: unset;
+  padding: 12px 32px;
+  font-size: 1rem;
 }
