@@ -14,12 +14,24 @@
       <label>XP</label>
       <input type="number" [(ngModel)]="xpEdit" min="1" max="999" />
     </div>
+
+    <div class="campo-edit">
+      <label>Categoría</label>
+      <select [(ngModel)]="categoriaEdit">
+        <option [ngValue]="undefined">Sin categoría</option>
+        <option *ngFor="let cat of categorias" [ngValue]="cat.id">
+          {{ cat.icono }} {{ cat.nombre }}
+        </option>
+      </select>
+    </div>
+
     <p *ngIf="errorEdicion" class="error-edicion">{{ errorEdicion }}</p>
     <div class="acciones-edit">
       <button class="btn-guardar-edit" (click)="guardarEdicion()">💾 Guardar</button>
       <button class="btn-cancelar-edit" (click)="cancelarEdicion()">✖ Cancelar</button>
     </div>
   </div>
+
   <div *ngIf="!editando">
     <div class="fila-superior">
       <div class="lado-izquierdo">

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface AchievementApi {
   id: number;
@@ -12,7 +13,7 @@ export interface AchievementApi {
 
 @Injectable({ providedIn: 'root' })
 export class AchievementService {
-  private readonly apiUrl = 'http://localhost:8080/api/achievements';
+  private readonly apiUrl = `${environment.apiUrl}/achievements`;
 
   constructor(private http: HttpClient) {}
 

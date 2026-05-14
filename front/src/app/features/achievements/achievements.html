@@ -2,24 +2,70 @@
   <h2 class="titulo-achievements">🏅 Logros</h2>
   <p class="subtitulo">Desbloquea hazañas completando misiones y acumulando XP</p>
 
-  <div class="resumen-row">
-    <div class="small-card">
-      <div class="icono">⚡</div>
-      <h3>XP Total</h3>
-      <p class="valor">{{ totalXp }}</p>
-      <span class="descripcion">Experiencia acumulada</span>
+  <div class="chart-card">
+    <!-- Anillo de progreso SVG -->
+    <div class="ring-container">
+      <svg viewBox="0 0 120 120" class="ring-svg">
+        <circle cx="60" cy="60" r="54" fill="none" stroke="#ffffff0d" stroke-width="10" />
+        <circle
+          cx="60" cy="60" r="54"
+          fill="none"
+          stroke="#00eaff"
+          stroke-width="10"
+          stroke-linecap="round"
+          [attr.stroke-dasharray]="CIRCUMFERENCE"
+          [attr.stroke-dashoffset]="strokeOffset"
+          transform="rotate(-90 60 60)"
+          class="ring-progress"
+        />
+      </svg>
+      <div class="ring-center">
+        <span class="ring-nivel">Nv. {{ nivelActual }}</span>
+        <span class="ring-titulo">{{ tituloNivel }}</span>
+        <span class="ring-xp">{{ totalXp }} XP</span>
+      </div>
     </div>
-    <div class="small-card">
-      <div class="icono">🏆</div>
-      <h3>Misiones completadas</h3>
-      <p class="valor">{{ completedCount }}</p>
-      <span class="descripcion">Hazañas superadas</span>
-    </div>
-    <div class="small-card">
-      <div class="icono">🎖️</div>
-      <h3>Logros desbloqueados</h3>
-      <p class="valor">{{ desbloqueadosCount }}</p>
-      <span class="descripcion">De {{ achievements.length }} posibles</span>
+
+    <!-- Panel derecho -->
+    <div class="chart-info">
+      <div class="mini-stats">
+        <div class="mini-stat">
+          <span class="mini-val">{{ completedCount }}</span>
+          <span class="mini-label">Misiones</span>
+        </div>
+        <div class="mini-stat">
+          <span class="mini-val">{{ desbloqueadosCount }}</span>
+          <span class="mini-label">Logros</span>
+        </div>
+        <div class="mini-stat">
+          <span class="mini-val">{{ progresoNivel }}%</span>
+          <span class="mini-label">Progreso nivel</span>
+        </div>
+      </div>
+
+      <p class="xp-siguiente" *ngIf="nivelActual < 10">
+        ⚡ {{ xpEnNivel }} / {{ xpParaSiguiente }} XP en este nivel
+      </p>
+      <p class="xp-siguiente xp-max" *ngIf="nivelActual === 10">
+        ✨ ¡Has alcanzado el nivel máximo!
+      </p>
+
+      <!-- Track de niveles -->
+      <div class="level-track">
+        <ng-container *ngFor="let n of nivelesTrack; let last = last">
+          <div
+            class="level-node"
+            [class.completado]="n.completado"
+            [class.actual]="n.actual"
+            [title]="'Nivel ' + n.nivel"
+          >{{ n.nivel }}</div>
+          <div
+            *ngIf="!last"
+            class="level-connector"
+            [class.completado]="nivelesTrack[n.nivel]?.completado"
+          ></div>
+        </ng-container>
+      </div>
     </div>
   </div>
 

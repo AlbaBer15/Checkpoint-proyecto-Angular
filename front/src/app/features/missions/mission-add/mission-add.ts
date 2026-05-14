@@ -79,6 +79,7 @@ export class MissionAdd implements OnInit {
         next: () => {
           this.misionOraculo = undefined;
           this.formulario.reset({ xp: 1 });
+          this.categoriaSeleccionada = undefined;
           this.mostrarExitoTemporal();
         },
         error: (err) => this.mostrarErrorMensaje(err, 'Error al guardar la misión del oráculo'),
@@ -100,6 +101,7 @@ export class MissionAdd implements OnInit {
       .subscribe({
         next: () => {
           this.formulario.reset({ xp: 1 });
+          this.categoriaSeleccionada = undefined;
           this.mostrarExitoTemporal();
         },
         error: (err) => this.mostrarErrorMensaje(err, 'Error al guardar la misión'),

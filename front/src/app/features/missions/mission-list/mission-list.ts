@@ -84,10 +84,6 @@ export class MissionList implements OnInit, OnDestroy {
     this.categoryService.getAll().subscribe((cats) => {
       this.categorias = cats;
     });
-
-    this.categoryService.getAll().subscribe((cats) => {
-      this.categorias = cats;
-    });
   }
 
   ngOnDestroy(): void {

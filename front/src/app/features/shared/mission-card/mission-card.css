@@ -285,7 +285,29 @@
   border-radius: 20px;
   font-size: 0.78rem;
   font-weight: 600;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: var(--text-soft);
+}
+.campo-edit select {
+  background: #1a1a2e;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  color: var(--text-light);
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  transition: 0.2s;
+}
+
+.campo-edit select:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 6px var(--cyan);
+}
+
+.campo-edit select option {
+  background: #1a1a2e;
+  color: var(--text-light);
 }

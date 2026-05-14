@@ -29,7 +29,7 @@
       <button [class.activo]="orden === 'estado'" (click)="orden = 'estado'">Por estado</button>
     </div>
   </div>
-    <div class="grupo-control">
+  <div class="grupo-control">
     <span class="label-control">Categoría:</span>
     <div class="btn-grupo">
       <button [class.activo]="filtroCategoria === undefined" (click)="filtroCategoria = undefined">
@@ -42,13 +42,12 @@
         [style.color]="filtroCategoria === cat.id ? cat.color : ''"
         [style.boxShadow]="filtroCategoria === cat.id ? '0 0 8px ' + cat.color : ''"
         [style.background]="filtroCategoria === cat.id ? cat.color + '22' : ''"
-        (click)="filtroCategoria = cat.id">
+        (click)="filtroCategoria = cat.id"
+      >
         {{ cat.icono }} {{ cat.nombre }}
       </button>
-
     </div>
   </div>
-
 </div>
 
 <div class="alerta-error" *ngIf="mostrarError">❌ {{ mensajeError }}</div>
@@ -67,6 +66,7 @@
     <app-mission-card
       *ngFor="let m of misionesFiltradas"
       [mision]="m"
+      [categorias]="categorias"
       [animado]="misionesAnimado.has(m.id!)"
       (completar)="completarMision($event)"
       (revertir)="revertirMision($event)"

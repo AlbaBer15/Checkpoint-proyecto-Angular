@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Mision } from '../../../services/mission';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Category } from '../../../services/category';
 
 @Component({
   selector: 'app-mission-card',
@@ -13,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 export class MissionCard {
   @Input({ required: true }) mision!: Mision;
   @Input() animado = false;
+  @Input() categorias: Category[] = [];
 
   @Output() completar = new EventEmitter<Mision>();
   @Output() eliminar = new EventEmitter<Mision>();
@@ -25,11 +27,13 @@ export class MissionCard {
   descripcionEdit = '';
   xpEdit = 0;
   errorEdicion = '';
+  categoriaEdit?: number;
 
   activarEdicion() {
     this.tituloEdit = this.mision.titulo;
     this.descripcionEdit = this.mision.descripcion;
     this.xpEdit = this.mision.xp;
+    this.categoriaEdit = this.mision.category?.id;
     this.editando = true;
   }
 
@@ -60,6 +64,9 @@ export class MissionCard {
         titulo: this.tituloEdit.trim(),
         descripcion: this.descripcionEdit.trim(),
         xp: this.xpEdit,
+        category: this.categoriaEdit
+          ? { id: this.categoriaEdit, nombre: '', icono: '', color: '' }
+          : undefined,
       },
     });
     this.editando = false;
