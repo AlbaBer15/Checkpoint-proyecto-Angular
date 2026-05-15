@@ -1,29 +1,25 @@
 <header class="topbar">
-  <div class="brand">⭐ CheckPoint ⭐</div>
+  <div class="brand">⭐CHECKPOINT⭐</div>
 
-  <nav class="menu">
+  <nav class="menu" aria-label="Navegación principal">
     <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       Inicio
     </a>
 
     <a routerLink="/missions" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       Misiones
-      <span class="badge" *ngIf="misionesPendientes > 0">{{ misionesPendientes }}</span>
-      <!-- Contador de misiones pendientes -->
+      <span
+        class="badge"
+        *ngIf="misionesPendientes > 0"
+        [attr.aria-label]="misionesPendientes + ' misiones pendientes'"
+      >{{ misionesPendientes }}</span>
     </a>
 
-    <a
-      routerLink="/missions/add"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-    >
-      Añadir misión
+    <a routerLink="/missions/add" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      Nueva misión
     </a>
-    <a
-      routerLink="/achievements"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-    >
+
+    <a routerLink="/achievements" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       Logros
     </a>
   </nav>
