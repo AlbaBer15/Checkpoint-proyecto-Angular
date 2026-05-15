@@ -15,7 +15,7 @@
 
 .home-layout {
   display: grid;
-  grid-template-columns: 1fr 350px;
+  grid-template-columns: 1fr 320px;
   gap: 40px;
 }
 
@@ -31,12 +31,13 @@
   border-radius: var(--radius);
   text-align: center;
   border: 1px solid var(--card-border);
-  transition: 0.2s;
+  transition: var(--transition);
 }
 
 .small-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 0 12px var(--cyan);
+  box-shadow: 0 0 14px var(--cyan-dim);
+  border-color: var(--cyan-dim);
 }
 
 .small-card.wide {
@@ -56,11 +57,11 @@
 
 .panel-nivel {
   background: linear-gradient(135deg, rgba(0, 20, 40, 0.7), rgba(25, 0, 45, 0.7));
-  border: 2px solid #00eaff88;
+  border: 1px solid var(--cyan-dim);
   border-radius: 18px;
   padding: 25px;
   text-align: center;
-  box-shadow: 0 0 20px #00eaff55;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.1);
 }
 
 .avatar {
@@ -90,15 +91,15 @@
 
 .barra-progreso {
   height: 100%;
-  background: linear-gradient(90deg, #00eaff, #a855f7);
-  transition: 0.3s;
+  background: linear-gradient(90deg, var(--cyan), #a855f7);
+  transition: width 0.4s ease;
 }
 
 .nivel-msg {
   color: var(--text-soft);
   font-size: 0.9rem;
 }
-/* ─── CABECERA CON BOTÓN EDITAR ─────────────────────────── */
+
 .cabecera-home {
   display: flex;
   align-items: center;
@@ -110,19 +111,23 @@
 
 .btn-editar-perfil {
   background: transparent;
-  border: none;
-  font-size: 1.2rem;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  color: var(--text-soft);
+  font-size: 0.85rem;
   cursor: pointer;
-  opacity: 0.6;
-  transition: 0.2s;
+  padding: 5px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
 }
 
 .btn-editar-perfil:hover {
-  opacity: 1;
-  transform: scale(1.2);
+  border-color: var(--cyan);
+  color: var(--cyan);
 }
 
-/* ─── FORMULARIO DE PERFIL ──────────────────────────────── */
 .form-perfil {
   max-width: 500px;
   margin: 40px auto;
@@ -155,12 +160,12 @@
   padding: 10px 14px;
   font-size: 1rem;
   outline: none;
-  transition: 0.2s;
+  transition: var(--transition);
 }
 
 .campo-perfil input:focus {
   border-color: var(--cyan);
-  box-shadow: 0 0 6px var(--cyan);
+  box-shadow: 0 0 6px var(--cyan-dim);
 }
 
 .avatar-selector {
@@ -176,7 +181,7 @@
   border-radius: var(--radius);
   cursor: pointer;
   padding: 6px;
-  transition: 0.2s;
+  transition: var(--transition);
 }
 
 .btn-avatar:hover {
@@ -185,10 +190,9 @@
 
 .btn-avatar.seleccionado {
   border-color: var(--cyan);
-  box-shadow: 0 0 8px var(--cyan);
+  box-shadow: 0 0 8px var(--cyan-dim);
 }
 
-/* ─── SELECTOR DE GÉNERO ────────────────────────────────── */
 .genero-selector {
   display: flex;
   gap: 10px;
@@ -203,14 +207,14 @@
   color: var(--text-soft);
   cursor: pointer;
   font-weight: 600;
-  transition: 0.2s;
+  transition: var(--transition);
 }
 
 .btn-genero.activo {
   background: var(--cyan);
   border-color: var(--cyan);
   color: #000;
-  box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+  box-shadow: 0 0 10px var(--cyan-dim);
 }
 
 .acciones-perfil {
@@ -227,11 +231,11 @@
   cursor: pointer;
   font-weight: bold;
   color: #000;
-  transition: 0.2s;
+  transition: var(--transition);
 }
 
 .btn-guardar-perfil:hover {
-  box-shadow: 0 0 10px var(--cyan);
+  box-shadow: 0 0 12px var(--cyan);
 }
 
 .btn-cancelar-perfil {
@@ -242,31 +246,14 @@
   border-radius: var(--radius);
   cursor: pointer;
   color: var(--text-soft);
-  transition: 0.2s;
+  transition: var(--transition);
 }
 
 .btn-cancelar-perfil:hover {
-  border-color: #ff6b6b;
-  color: #ff6b6b;
-}
-.btn-editar-perfil {
-  background: transparent;
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius);
-  color: var(--text-soft);
-  font-size: 0.85rem;
-  cursor: pointer;
-  padding: 5px 12px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: 0.2s;
+  border-color: var(--danger);
+  color: var(--danger);
 }
 
-.btn-editar-perfil:hover {
-  border-color: var(--cyan);
-  color: var(--cyan);
-}
 .perfiles-selector {
   display: flex;
   flex-wrap: wrap;
@@ -281,7 +268,7 @@
   border-radius: var(--radius);
   cursor: pointer;
   font-size: 0.9rem;
-  transition: 0.2s;
+  transition: var(--transition);
 }
 
 .btn-perfil-guardado:hover {
@@ -292,7 +279,7 @@
 .btn-perfil-guardado.activo {
   border-color: var(--cyan);
   color: var(--cyan);
-  box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+  box-shadow: 0 0 8px var(--cyan-dim);
 }
 
 .btn-nuevo-perfil {
@@ -303,7 +290,7 @@
   border-radius: var(--radius);
   cursor: pointer;
   font-size: 0.9rem;
-  transition: 0.2s;
+  transition: var(--transition);
 }
 
 .btn-nuevo-perfil:hover {
@@ -325,13 +312,13 @@
   border-radius: var(--radius);
   cursor: pointer;
   font-size: 0.85rem;
-  transition: 0.2s;
+  transition: var(--transition);
   opacity: 0.5;
 }
 
 .btn-eliminar-perfil:hover {
-  border-color: #ff6b6b;
-  color: #ff6b6b;
+  border-color: var(--danger);
+  color: var(--danger);
   opacity: 1;
 }
 
@@ -353,4 +340,86 @@
   flex: unset;
   padding: 12px 32px;
   font-size: 1rem;
+}
+
+.error-perfil {
+  color: var(--danger);
+  background: rgba(255, 71, 87, 0.08);
+  border: 1px solid var(--danger);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  animation: aparecer 0.3s ease;
+}
+
+.confirmacion-perfil {
+  padding: 14px 16px;
+  background: rgba(255, 71, 87, 0.08);
+  border: 1px solid var(--danger);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  color: var(--text-light);
+  animation: aparecer 0.25s ease;
+}
+
+.confirmacion-acciones-perfil {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-confirmar-si-perfil {
+  background: var(--danger);
+  border: none;
+  padding: 7px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: bold;
+  color: #fff;
+  transition: var(--transition);
+}
+
+.btn-confirmar-si-perfil:hover {
+  box-shadow: 0 0 10px var(--danger);
+}
+
+.btn-confirmar-no-perfil {
+  background: transparent;
+  border: 1px solid #555;
+  padding: 7px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  color: var(--text-soft);
+  transition: var(--transition);
+}
+
+.btn-confirmar-no-perfil:hover {
+  border-color: var(--text-light);
+  color: var(--text-light);
+}
+
+@media (max-width: 900px) {
+  .home-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-nivel {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .avatar-selector {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .small-card.wide {
+    grid-column: span 1;
+  }
+
+  .titulo-home {
+    font-size: 1.6rem;
+  }
 }

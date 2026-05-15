@@ -1,38 +1,11 @@
 .titulo-misiones {
   font-size: 2.4rem;
   font-weight: 900;
-  color: #00eaff;
-  text-shadow:
-    0 0 5px #00eaff,
-    0 0 12px #00bcd4,
-    0 0 20px #0097a7;
-  font-family: 'Orbitron', sans-serif;
+  color: var(--cyan);
+  text-shadow: 0 0 5px var(--cyan), 0 0 20px var(--cyan-dim);
   letter-spacing: 2px;
   text-align: center;
   margin-bottom: 30px;
-}
-
-.alerta-error {
-  margin-bottom: 20px;
-  padding: 12px;
-  background: #ff6b6b;
-  color: white;
-  border-radius: var(--radius);
-  font-weight: 700;
-  text-align: center;
-  animation: aparecer 0.4s ease;
-  box-shadow: 0 0 12px #ff6b6b;
-}
-
-@keyframes aparecer {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .sin-misiones {
@@ -40,32 +13,6 @@
   color: var(--text-soft);
   margin-top: 40px;
   font-size: 1.1rem;
-}
-
-.loading-container {
-  text-align: center;
-  margin-top: 60px;
-}
-
-.loading-spinner {
-  font-size: 2.5rem;
-  animation: girar 1.5s linear infinite;
-  display: inline-block;
-}
-
-.loading-texto {
-  margin-top: 12px;
-  font-size: 1rem;
-  color: var(--text-soft);
-}
-
-@keyframes girar {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 .controles {
@@ -90,7 +37,7 @@
   color: var(--text-soft);
   font-size: 0.85rem;
   font-weight: 600;
-  min-width: 60px;
+  min-width: 65px;
 }
 
 .btn-grupo {
@@ -120,5 +67,5 @@
   border-color: var(--cyan);
   color: #000;
   font-weight: 700;
-  box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+  box-shadow: 0 0 10px var(--cyan-dim);
 }

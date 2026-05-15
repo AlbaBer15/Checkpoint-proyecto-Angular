@@ -1,32 +1,50 @@
 .tarjeta {
-  background: #222;
-  border: 1px solid #333;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   padding: 20px;
-  border-radius: 12px;
+  border-radius: var(--radius);
   margin-bottom: 18px;
-  transition: 0.25s ease;
+  transition: var(--transition);
   position: relative;
 }
 
 .tarjeta:hover {
-  border-color: #00e5ff;
-  box-shadow: 0 0 12px #00e5ff;
+  border-color: var(--cyan-dim);
+  box-shadow: 0 0 14px var(--cyan-dim);
+}
+
+.tarjeta.completada {
+  opacity: 0.6;
+  filter: grayscale(20%);
+}
+
+.fila-superior {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.lado-izquierdo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .titulo-mision {
-  margin: 0 0 8px 0;
-  color: #00e5ff;
-  font-size: 1.2rem;
+  margin: 0;
+  color: var(--cyan);
+  font-size: 1.1rem;
   font-weight: 700;
 }
 
 .descripcion {
   margin: 0;
-  color: #dcdcdc;
+  color: var(--text-soft);
 }
 
 .xp-badge {
-  background: #ffd447;
+  background: var(--xp-color);
   color: #000;
   padding: 6px 12px;
   border-radius: 8px;
@@ -35,10 +53,19 @@
   align-items: center;
   gap: 6px;
   box-shadow: 0 0 10px rgba(255, 212, 71, 0.4);
+  white-space: nowrap;
 }
 
-.icono {
-  font-size: 1.1rem;
+.badge-categoria {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-soft);
 }
 
 .tag-completada {
@@ -52,62 +79,14 @@
   text-shadow: 0 0 8px #00ffdd;
 }
 
-.tarjeta.completada {
-  opacity: 0.6;
-  filter: grayscale(20%);
-}
-.acciones {
-  display: flex;
-  gap: 15px;
-  margin-top: 12px;
-}
-
-.btn-completar-gamer {
-  background: #00f0ff;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  color: #000;
-  box-shadow: 0 0 8px #00f0ff;
-  transition: 0.2s;
-}
-
-.btn-completar-gamer:hover {
-  box-shadow: 0 0 12px #00f0ff;
-  transform: translateY(-3px);
-}
-
-.btn-eliminar-gamer {
-  background: #ff3b3b;
-  border: 1px solid #ff7b7b;
-  padding: 10px 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  color: white;
-  text-shadow: 0 0 5px #000;
-  box-shadow: 0 0 8px rgba(255, 60, 60, 0.6);
-  transition: 0.2s;
-}
-
-.btn-eliminar-gamer:hover {
-  background: #ff1f1f;
-  box-shadow: 0 0 12px rgba(255, 50, 50, 1);
-  transform: translateY(-3px);
-}
-.btn-eliminar-gamer {
-  margin-left: auto;
-}
-
 .btn-favorito {
   font-size: 1.4rem;
   background: none;
   border: none;
   cursor: pointer;
-  transition: 0.25s ease;
+  transition: var(--transition);
   filter: grayscale(100%);
+  padding: 2px;
 }
 
 .btn-favorito:hover {
@@ -119,65 +98,149 @@
   text-shadow: 0 0 8px red;
   transform: scale(1.2);
 }
-.fila-superior {
+
+.acciones {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-.lado-izquierdo {
-  display: flex;
-  align-items: center;
   gap: 10px;
+  margin-top: 14px;
+  flex-wrap: wrap;
 }
+
+.btn-completar-gamer {
+  background: var(--cyan);
+  border: none;
+  padding: 9px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #000;
+  box-shadow: 0 0 8px var(--cyan-dim);
+  transition: var(--transition);
+}
+
+.btn-completar-gamer:hover {
+  box-shadow: 0 0 14px var(--cyan);
+  transform: translateY(-2px);
+}
+
+.btn-revertir-gamer {
+  background: transparent;
+  border: 1px solid var(--cyan);
+  padding: 9px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--cyan);
+  box-shadow: 0 0 6px var(--cyan-dim);
+  transition: var(--transition);
+}
+
+.btn-revertir-gamer:hover {
+  background: rgba(0, 229, 255, 0.08);
+  box-shadow: 0 0 14px var(--cyan);
+  transform: translateY(-2px);
+}
+
+.btn-editar-gamer {
+  background: transparent;
+  border: 1px solid var(--xp-color);
+  padding: 9px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--xp-color);
+  transition: var(--transition);
+}
+
+.btn-editar-gamer:hover {
+  background: rgba(255, 212, 71, 0.08);
+  box-shadow: 0 0 10px rgba(255, 212, 71, 0.5);
+  transform: translateY(-2px);
+}
+
+.btn-eliminar-gamer {
+  background: rgba(255, 71, 87, 0.1);
+  border: 1px solid var(--danger);
+  padding: 9px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--danger);
+  box-shadow: 0 0 6px rgba(255, 71, 87, 0.3);
+  transition: var(--transition);
+  margin-left: auto;
+}
+
+.btn-eliminar-gamer:hover {
+  background: rgba(255, 71, 87, 0.2);
+  box-shadow: 0 0 14px var(--danger);
+  transform: translateY(-2px);
+}
+
 @keyframes completar {
-  0% {
-    transform: scale(1);
-    box-shadow: none;
-    border-color: #333;
-  }
-  30% {
-    transform: scale(1.03);
-    box-shadow:
-      0 0 30px #00ff9d,
-      0 0 60px #00ff9d;
-    border-color: #00ff9d;
-  }
-  60% {
-    transform: scale(1.03);
-    box-shadow:
-      0 0 30px #00ff9d,
-      0 0 60px #00ff9d;
-    border-color: #00ff9d;
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: none;
-    border-color: #333;
-  }
+  0%   { transform: scale(1); box-shadow: none; border-color: var(--card-border); }
+  30%  { transform: scale(1.03); box-shadow: 0 0 30px #00ff9d, 0 0 60px #00ff9d; border-color: #00ff9d; }
+  60%  { transform: scale(1.03); box-shadow: 0 0 30px #00ff9d, 0 0 60px #00ff9d; border-color: #00ff9d; }
+  100% { transform: scale(1); box-shadow: none; border-color: var(--card-border); }
 }
 
 .tarjeta.animado {
   animation: completar 1s ease;
 }
 
-.btn-revertir-gamer {
-  background: transparent;
-  border: 1px solid #00e5ff;
-  padding: 10px 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  color: #00e5ff;
-  box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
-  transition: 0.2s;
+.confirmacion-eliminar {
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 71, 87, 0.08);
+  border: 1px solid var(--danger);
+  border-radius: var(--radius);
+  animation: aparecer 0.25s ease;
 }
 
-.btn-revertir-gamer:hover {
-  background: rgba(0, 229, 255, 0.1);
-  box-shadow: 0 0 14px rgba(0, 229, 255, 0.8);
-  transform: translateY(-3px);
+.confirmacion-texto {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--danger);
+  margin-bottom: 10px;
+  font-weight: 600;
 }
+
+.confirmacion-acciones {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-confirmar-si {
+  background: var(--danger);
+  border: none;
+  padding: 7px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: bold;
+  color: #fff;
+  transition: var(--transition);
+}
+
+.btn-confirmar-si:hover {
+  box-shadow: 0 0 10px var(--danger);
+  transform: translateY(-1px);
+}
+
+.btn-confirmar-no {
+  background: transparent;
+  border: 1px solid #555;
+  padding: 7px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  color: var(--text-soft);
+  transition: var(--transition);
+}
+
+.btn-confirmar-no:hover {
+  border-color: var(--text-light);
+  color: var(--text-light);
+}
+
 .form-edicion {
   display: flex;
   flex-direction: column;
@@ -197,7 +260,8 @@
 }
 
 .campo-edit input,
-.campo-edit textarea {
+.campo-edit textarea,
+.campo-edit select {
   background: #1a1a2e;
   border: 1px solid var(--card-border);
   border-radius: var(--radius);
@@ -205,14 +269,21 @@
   padding: 8px 12px;
   font-size: 0.9rem;
   outline: none;
-  transition: 0.2s;
+  transition: var(--transition);
   resize: none;
+  width: 100%;
 }
 
 .campo-edit input:focus,
-.campo-edit textarea:focus {
+.campo-edit textarea:focus,
+.campo-edit select:focus {
   border-color: var(--cyan);
-  box-shadow: 0 0 6px var(--cyan);
+  box-shadow: 0 0 6px var(--cyan-dim);
+}
+
+.campo-edit select option {
+  background: #1a1a2e;
+  color: var(--text-light);
 }
 
 .campo-xp input {
@@ -233,7 +304,7 @@
   cursor: pointer;
   font-weight: bold;
   color: #000;
-  transition: 0.2s;
+  transition: var(--transition);
 }
 
 .btn-guardar-edit:hover {
@@ -248,66 +319,16 @@
   border-radius: var(--radius);
   cursor: pointer;
   color: var(--text-soft);
-  transition: 0.2s;
+  transition: var(--transition);
 }
 
 .btn-cancelar-edit:hover {
-  border-color: #ff6b6b;
-  color: #ff6b6b;
+  border-color: var(--danger);
+  color: var(--danger);
 }
 
-.btn-editar-gamer {
-  background: transparent;
-  border: 1px solid var(--xp-color);
-  padding: 10px 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  color: var(--xp-color);
-  transition: 0.2s;
-}
-
-.btn-editar-gamer:hover {
-  background: rgba(255, 212, 71, 0.1);
-  box-shadow: 0 0 10px rgba(255, 212, 71, 0.5);
-  transform: translateY(-3px);
-}
 .error-edicion {
-  color: #ff6b6b;
+  color: var(--danger);
   font-size: 0.85rem;
   margin: 0;
-}
-
-.badge-categoria {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: var(--text-soft);
-}
-.campo-edit select {
-  background: #1a1a2e;
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius);
-  color: var(--text-light);
-  padding: 8px 10px;
-  font-size: 0.9rem;
-  width: 100%;
-  cursor: pointer;
-  outline: none;
-  transition: 0.2s;
-}
-
-.campo-edit select:focus {
-  border-color: var(--cyan);
-  box-shadow: 0 0 6px var(--cyan);
-}
-
-.campo-edit select option {
-  background: #1a1a2e;
-  color: var(--text-light);
 }
