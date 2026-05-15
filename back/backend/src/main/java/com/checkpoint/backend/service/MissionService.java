@@ -3,11 +3,13 @@ package com.checkpoint.backend.service;
 import com.checkpoint.backend.constants.CheckpointConstants;
 import com.checkpoint.backend.dto.PatchMisionDTO;
 import com.checkpoint.backend.entity.Mission;
+import com.checkpoint.backend.entity.Category;
 import com.checkpoint.backend.exception.ResourceNotFoundException;
 import com.checkpoint.backend.repository.CategoryRepository;
 import com.checkpoint.backend.repository.MissionRepository;
 import com.checkpoint.backend.repository.ProfileRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -51,12 +53,17 @@ public class MissionService {
             mission.setEstado(CheckpointConstants.ESTADO_PENDIENTE);
         }
         if (mission.getCategory() != null && mission.getCategory().getId() != null) {
-            categoryRepository.findById(mission.getCategory().getId())
-                    .ifPresent(mission::setCategory);
+            Category cat = categoryRepository.findById(mission.getCategory().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Categoría no encontrada con id " + mission.getCategory().getId()));
+            mission.setCategory(cat);
+        } else {
+            mission.setCategory(null);
         }
         if (mission.getProfile() != null && mission.getProfile().getId() != null) {
-            profileRepository.findById(mission.getProfile().getId())
-                    .ifPresent(mission::setProfile);
+            mission.setProfile(profileRepository.findById(mission.getProfile().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Perfil no encontrado con id " + mission.getProfile().getId())));
         }
         return missionRepository.save(mission);
     }
@@ -75,6 +82,7 @@ public class MissionService {
                 ));
     }
 
+    @Transactional
     public Mission patch(Long id, PatchMisionDTO dto) {
         Mission mission = missionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No existe la misión con id " + id));
@@ -96,9 +104,15 @@ public class MissionService {
         if (dto.getFavorito() != null) {
             mission.setFavorito(dto.getFavorito());
         }
-        if (dto.getCategory() != null && dto.getCategory().getId() != null) {
-            categoryRepository.findById(dto.getCategory().getId())
-                    .ifPresent(mission::setCategory);
+        if (dto.isCategoryPresent()) {
+            if (dto.getCategory() != null && dto.getCategory().getId() != null) {
+                Category cat = categoryRepository.findById(dto.getCategory().getId())
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "Categoría no encontrada con id " + dto.getCategory().getId()));
+                mission.setCategory(cat);
+            } else {
+                mission.setCategory(null);
+            }
         }
 
         return missionRepository.save(mission);
@@ -128,20 +142,26 @@ public class MissionService {
             throw new IllegalArgumentException("El título es obligatorio.");
         }
         m.setTitulo(m.getTitulo().trim());
+        if (m.getTitulo().length() < 3) {
+            throw new IllegalArgumentException("El título debe tener al menos 3 caracteres.");
+        }
+        if (m.getTitulo().length() > 120) {
+            throw new IllegalArgumentException("El título no puede exceder 120 caracteres.");
+        }
 
         if (m.getDescripcion() == null || m.getDescripcion().isBlank()) {
             throw new IllegalArgumentException("La descripción es obligatoria.");
         }
         m.setDescripcion(m.getDescripcion().trim());
+        if (m.getDescripcion().length() < 5) {
+            throw new IllegalArgumentException("La descripción debe tener al menos 5 caracteres.");
+        }
+        if (m.getDescripcion().length() > 500) {
+            throw new IllegalArgumentException("La descripción no puede exceder 500 caracteres.");
+        }
 
         if (m.getXp() == null || m.getXp() < 1 || m.getXp() > 999) {
             throw new IllegalArgumentException("XP debe ser un número entre 1 y 999.");
-        }
-        if (m.getTitulo().length() > 120) {
-            throw new IllegalArgumentException("Título no puede exceder 120 caracteres.");
-        }
-        if (m.getDescripcion().length() > 500) {
-            throw new IllegalArgumentException("Descripción no puede exceder 500 caracteres.");
         }
         if (m.getEstado() != null && !m.getEstado().isBlank()) {
             String estado = m.getEstado().trim().toLowerCase();

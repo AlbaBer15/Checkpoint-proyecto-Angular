@@ -72,7 +72,11 @@ public class ProfileService {
         Profile profile = findById(id);
         if (datos.getNombre() != null) {
             validarNombrePerfil(datos.getNombre());
-            profile.setNombre(datos.getNombre().trim());
+            String nombreNuevo = datos.getNombre().trim();
+            if (!nombreNuevo.equals(profile.getNombre()) && profileRepository.existsByNombre(nombreNuevo)) {
+                throw new IllegalArgumentException("Ya existe un perfil con ese nombre.");
+            }
+            profile.setNombre(nombreNuevo);
         }
         if (datos.getAvatar() != null) {
             profile.setAvatar(datos.getAvatar());
@@ -100,9 +104,7 @@ public class ProfileService {
     private void validarNombrePerfil(String nombre) {
         if (nombre == null || nombre.isBlank())
             throw new IllegalArgumentException("El nombre es obligatorio.");
-        if (nombre.trim().length() <= 1)
-            throw new IllegalArgumentException("El nombre debe tener al menos 1 caracter.");
-        if (nombre.trim().length() >= 25)
+        if (nombre.trim().length() > 25)
             throw new IllegalArgumentException("El nombre no puede exceder 25 caracteres.");
     }
 }

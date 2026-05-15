@@ -114,8 +114,10 @@ export class MissionService {
 
   editarMision(id: number, datos: Partial<Mision>): Observable<Mision> {
     const payload: any = {
-      ...datos,
-      ...(datos.category ? { category: { id: datos.category.id } } : {}),
+      titulo: datos.titulo,
+      descripcion: datos.descripcion,
+      xp: datos.xp,
+      category: datos.category ? { id: datos.category.id } : null,
     };
     return this.http.patch<Mision>(`${this.apiUrl}/${id}`, payload).pipe(
       tap(() => this.recargarMisiones()),

@@ -1,5 +1,8 @@
 package com.checkpoint.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
+
 public class PatchMisionDTO {
 
     private String titulo;
@@ -7,7 +10,9 @@ public class PatchMisionDTO {
     private Integer xp;
     private String estado;
     private Boolean favorito;
+
     private CategoryRef category;
+    private boolean categoryPresent = false;
 
     public static class CategoryRef {
         private Long id;
@@ -15,6 +20,15 @@ public class PatchMisionDTO {
         public Long getId() { return id; }
         public void setId(Long id) { this.id = id; }
     }
+
+    @JsonSetter(nulls = Nulls.SET)
+    public void setCategory(CategoryRef category) {
+        this.category = category;
+        this.categoryPresent = true;
+    }
+
+    public CategoryRef getCategory() { return category; }
+    public boolean isCategoryPresent() { return categoryPresent; }
 
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
@@ -30,7 +44,4 @@ public class PatchMisionDTO {
 
     public Boolean getFavorito() { return favorito; }
     public void setFavorito(Boolean favorito) { this.favorito = favorito; }
-
-    public CategoryRef getCategory() { return category; }
-    public void setCategory(CategoryRef category) { this.category = category; }
 }
