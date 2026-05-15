@@ -50,10 +50,10 @@
   </div>
 </div>
 
-<div class="alerta-error" *ngIf="mostrarError">❌ {{ mensajeError }}</div>
+<div class="alerta-error" *ngIf="mostrarError" role="alert">❌ {{ mensajeError }}</div>
 
-<div *ngIf="cargando" class="loading-container">
-  <div class="loading-spinner">⚔️</div>
+<div *ngIf="cargando" class="loading-container" aria-label="Cargando misiones" aria-live="polite">
+  <div class="loading-spinner" aria-hidden="true">⚔️</div>
   <p class="loading-texto">Cargando misiones...</p>
 </div>
 

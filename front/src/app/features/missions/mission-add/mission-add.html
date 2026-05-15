@@ -1,14 +1,11 @@
 <div class="container">
   <h2 class="titulo-pagina">Añadir misión</h2>
 
-  <!-- Formulario reactivo (valida en tiempo real) -->
   <form [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
-    <!-- Validaciones -->
     <div class="campo">
       <label for="titulo">Título</label>
       <input id="titulo" type="text" formControlName="titulo" placeholder="Ej: Beber agua" />
 
-      <!-- Mensaje si el usuario toca el campo y no cumple validación -->
       <p
         class="error"
         *ngIf="formulario.get('titulo')?.touched && formulario.get('titulo')?.invalid"
@@ -67,9 +64,9 @@
 
     <button type="submit" [disabled]="formulario.invalid" class="btn-guardar">Añadir misión</button>
 
-    <div class="alerta-exito" *ngIf="mostrarExito">✔ Misión añadida correctamente</div>
+    <div class="alerta-exito" *ngIf="mostrarExito" role="alert">✔ Misión añadida correctamente</div>
 
-    <div class="alerta-error" *ngIf="mostrarError">❌ {{ mensajeError }}</div>
+    <div class="alerta-error" *ngIf="mostrarError" role="alert">❌ {{ mensajeError }}</div>
 
     <hr class="separador" />
 
