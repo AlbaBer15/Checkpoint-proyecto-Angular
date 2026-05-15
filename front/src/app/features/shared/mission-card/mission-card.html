@@ -1,4 +1,5 @@
 <div class="tarjeta" [class.completada]="mision.estado === 'completada'" [class.animado]="animado">
+
   <div *ngIf="editando" class="form-edicion">
     <div class="campo-edit">
       <label>Título</label>
@@ -25,7 +26,8 @@
       </select>
     </div>
 
-    <p *ngIf="errorEdicion" class="error-edicion">{{ errorEdicion }}</p>
+    <p *ngIf="errorEdicion" class="error-edicion" role="alert">{{ errorEdicion }}</p>
+
     <div class="acciones-edit">
       <button class="btn-guardar-edit" (click)="guardarEdicion()">💾 Guardar</button>
       <button class="btn-cancelar-edit" (click)="cancelarEdicion()">✖ Cancelar</button>
@@ -38,13 +40,13 @@
         <button
           class="btn-favorito"
           [ngClass]="{ activo: mision.favorito ?? false }"
+          [attr.aria-label]="(mision.favorito ? 'Quitar de favoritos' : 'Añadir a favoritos') + ': ' + mision.titulo"
+          [attr.aria-pressed]="mision.favorito ?? false"
           (click)="toggleFavorito()"
-        >
-          ❤️
-        </button>
+        >❤️</button>
         <h3 class="titulo-mision">{{ mision.titulo }}</h3>
       </div>
-      <span class="xp-badge">⚡ {{ mision.xp }} XP</span>
+      <span class="xp-badge" aria-label="{{ mision.xp }} puntos de experiencia">⚡ {{ mision.xp }} XP</span>
     </div>
 
     <p class="descripcion">{{ mision.descripcion }}</p>
@@ -57,21 +59,30 @@
         class="btn-completar-gamer"
         *ngIf="mision.estado === 'pendiente'"
         (click)="marcarComoCompletada()"
-      >
-        🎯 Completar misión
-      </button>
+      >🎯 Completar misión</button>
 
       <button
         class="btn-revertir-gamer"
         *ngIf="mision.estado === 'completada'"
         (click)="revertirMision()"
-      >
-        🔄 Revertir
-      </button>
+      >🔄 Revertir</button>
 
       <button class="btn-editar-gamer" (click)="activarEdicion()">✏️ Editar</button>
 
-      <button class="btn-eliminar-gamer" (click)="eliminarMision()">🗑️ Eliminar</button>
+      <button
+        *ngIf="!confirmandoEliminacion"
+        class="btn-eliminar-gamer"
+        aria-label="Eliminar misión: {{ mision.titulo }}"
+        (click)="pedirConfirmacionEliminar()"
+      >🗑️ Eliminar</button>
+    </div>
+
+    <div *ngIf="confirmandoEliminacion" class="confirmacion-eliminar" role="alert">
+      <span class="confirmacion-texto">¿Eliminar esta misión? Esta acción no se puede deshacer.</span>
+      <div class="confirmacion-acciones">
+        <button class="btn-confirmar-si" (click)="eliminarMision()">✓ Eliminar</button>
+        <button class="btn-confirmar-no" (click)="cancelarEliminacion()">✗ Cancelar</button>
+      </div>
     </div>
 
     <p *ngIf="mision.estado === 'completada'" class="tag-completada">🏆 Misión completada</p>

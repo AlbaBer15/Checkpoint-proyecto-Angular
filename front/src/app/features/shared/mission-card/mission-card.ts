@@ -23,6 +23,7 @@ export class MissionCard {
   @Output() editar = new EventEmitter<{ id: number; datos: Partial<Mision> }>();
 
   editando = false;
+  confirmandoEliminacion = false;
   tituloEdit = '';
   descripcionEdit = '';
   xpEdit = 0;
@@ -76,7 +77,16 @@ export class MissionCard {
     this.completar.emit(this.mision);
   }
 
+  pedirConfirmacionEliminar() {
+    this.confirmandoEliminacion = true;
+  }
+
+  cancelarEliminacion() {
+    this.confirmandoEliminacion = false;
+  }
+
   eliminarMision() {
+    this.confirmandoEliminacion = false;
     this.eliminar.emit(this.mision);
   }
 

@@ -12,9 +12,11 @@
           >
             {{ p.avatar ?? '🧝' }} {{ p.nombre }}
           </button>
-          <button class="btn-eliminar-perfil" (click)="eliminarPerfil(p)" title="Eliminar perfil">
-            🗑
-          </button>
+          <button
+            class="btn-eliminar-perfil"
+            [attr.aria-label]="'Eliminar perfil ' + p.nombre"
+            (click)="pedirConfirmacionEliminarPerfil(p)"
+          >🗑</button>
         </div>
         <button class="btn-nuevo-perfil" (click)="crearNuevoPerfil()">➕ Nuevo perfil</button>
       </div>
@@ -63,6 +65,16 @@
       </div>
     </div>
 
+    <p *ngIf="errorPerfil" class="error-perfil" role="alert">⚠️ {{ errorPerfil }}</p>
+
+    <div *ngIf="perfilParaEliminar" class="confirmacion-perfil" role="alert">
+      <span>¿Eliminar el perfil <strong>{{ perfilParaEliminar.nombre }}</strong>? Esta acción no se puede deshacer.</span>
+      <div class="confirmacion-acciones-perfil">
+        <button class="btn-confirmar-si-perfil" (click)="confirmarEliminacionPerfil()">✓ Eliminar</button>
+        <button class="btn-confirmar-no-perfil" (click)="cancelarEliminacionPerfil()">✗ Cancelar</button>
+      </div>
+    </div>
+
     <div class="acciones-perfil">
       <button class="btn-guardar-perfil" (click)="guardarPerfil()">💾 Guardar</button>
       <button class="btn-cancelar-perfil" (click)="cancelarEdicionPerfil()">✖ Cancelar</button>
@@ -70,7 +82,7 @@
   </div>
 
   <div *ngIf="sinPerfiles && !editandoPerfil" class="sin-perfiles">
-    <p *ngIf="mensajeGuard" class="aviso-guard">
+    <p *ngIf="mensajeGuard" class="aviso-guard" role="alert">
       ⚠️ Necesitas un perfil para acceder a esa sección.
     </p>
     <div class="sin-perfiles-icono">🧭</div>
@@ -98,7 +110,6 @@
           <span class="descripcion">Experiencia acumulada</span>
         </div>
 
-        <!-- Misiones pendientes -->
         <div class="small-card">
           <div class="icono">🎯</div>
           <h3>Misiones activas</h3>
@@ -106,14 +117,12 @@
           <span class="descripcion">Tareas pendientes</span>
         </div>
 
-        <!-- Mensaje dinámico según nivel -->
         <div class="small-card wide">
           <div class="icono">💬</div>
           <h3>{{ tituloEstado }}</h3>
           <p class="mensaje">{{ mensajeEstado }}</p>
         </div>
       </div>
-      <!-- PANEL DE NIVEL: avatar, número de nivel y barra progreso -->
       <div class="panel-nivel">
         <div class="avatar">{{ perfil.avatar }}</div>
 
@@ -122,7 +131,6 @@
           {{ (totalXP | level: perfil.genero).titulo }}
         </p>
         <div class="barra-container">
-          <!-- Se rellena con el porcentaje devuelto por el pipe -->
           <div
             class="barra-progreso"
             [style.width.%]="(totalXP | level: perfil.genero).progreso"

@@ -115,7 +115,6 @@ export class MissionList implements OnInit, OnDestroy {
 
   eliminarMision(m: Mision) {
     if (!m.id) return;
-    if (!confirm(`¿Eliminar la misión "${m.titulo}"?`)) return;
     this.missionService
       .eliminarMision(m.id)
       .pipe(takeUntil(this.destroy$))

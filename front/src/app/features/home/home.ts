@@ -41,6 +41,8 @@ export class Home implements OnInit, OnDestroy {
   perfilEdit: UserProfile = { ...PERFIL_DEFAULT };
   perfilesDisponibles: Profile[] = [];
   cargandoPerfiles = false;
+  errorPerfil = '';
+  perfilParaEliminar: Profile | null = null;
 
   avatares = [
     '🧝‍♀️',
@@ -189,9 +191,18 @@ export class Home implements OnInit, OnDestroy {
     this.perfilesDisponibles = [];
   }
 
-  eliminarPerfil(perfil: any) {
-    if (!confirm(`¿Eliminar el perfil "${perfil.nombre}"? Esta acción no se puede deshacer.`))
-      return;
+  pedirConfirmacionEliminarPerfil(perfil: Profile) {
+    this.perfilParaEliminar = perfil;
+  }
+
+  cancelarEliminacionPerfil() {
+    this.perfilParaEliminar = null;
+  }
+
+  confirmarEliminacionPerfil() {
+    const perfil = this.perfilParaEliminar;
+    if (!perfil) return;
+    this.perfilParaEliminar = null;
 
     this.profileService.delete(perfil.id).subscribe({
       next: () => {
@@ -215,23 +226,21 @@ export class Home implements OnInit, OnDestroy {
           }
         }
       },
-      error: () => alert('Error al eliminar el perfil. Inténtalo de nuevo.'),
+      error: () => this.mostrarErrorPerfil('Error al eliminar el perfil. Inténtalo de nuevo.'),
     });
   }
 
   cancelarEdicionPerfil() {
-    if (
-      this.perfilEdit.nombre !== this.perfil.nombre ||
-      this.perfilEdit.avatar !== this.perfil.avatar ||
-      this.perfilEdit.genero !== this.perfil.genero
-    ) {
-      if (!confirm('¿Descartar los cambios?')) return;
-    }
     this.editandoPerfil = false;
+    this.errorPerfil = '';
   }
 
   guardarPerfil() {
-    if (!this.perfilEdit.nombre.trim()) return;
+    if (!this.perfilEdit.nombre.trim()) {
+      this.errorPerfil = 'El nombre no puede estar vacío.';
+      return;
+    }
+    this.errorPerfil = '';
     this.perfil = { ...this.perfilEdit };
     localStorage.setItem(PERFIL_KEY, JSON.stringify(this.perfil));
     this.editandoPerfil = false;
@@ -261,8 +270,7 @@ export class Home implements OnInit, OnDestroy {
             this.missionService.cargarMisionesPorPerfil(res.id);
           },
           error: (err) => {
-            const msg = err?.error?.mensaje || 'Error al crear el perfil';
-            alert(msg);
+            this.mostrarErrorPerfil(err?.error?.mensaje || 'Error al crear el perfil.');
           },
         });
     }
@@ -335,6 +343,11 @@ export class Home implements OnInit, OnDestroy {
     const mensajes =
       this.perfil.genero === 'FEMENINO' ? this.mensajesFemenino : this.mensajesMasculino;
     this.mensajeEstado = mensajes[nivel] ?? '✨ Tu historia ya es parte de las estrellas. 🌌';
+  }
+
+  private mostrarErrorPerfil(msg: string) {
+    this.errorPerfil = msg;
+    setTimeout(() => (this.errorPerfil = ''), 5000);
   }
 
   ngOnDestroy() {
