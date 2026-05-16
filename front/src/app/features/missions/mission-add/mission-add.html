@@ -39,6 +39,7 @@
         Introduce un valor entre 1 y 999 XP.
       </p>
     </div>
+
     <div class="campo">
       <label>Categoría <span class="opcional">(opcional)</span></label>
       <div class="categoria-selector">
@@ -62,29 +63,49 @@
       </div>
     </div>
 
-    <button type="submit" [disabled]="formulario.invalid" class="btn-guardar">Añadir misión</button>
-
-    <div class="alerta-exito" *ngIf="mostrarExito" role="alert">✔ Misión añadida correctamente</div>
-
-    <div class="alerta-error" *ngIf="mostrarError" role="alert">❌ {{ mensajeError }}</div>
-
-    <hr class="separador" />
-
-    <div class="oraculo-seccion">
-      <p class="texto-oraculo">¿Necesitas ayuda del Oráculo?</p>
+    <div class="fila-botones">
+      <button type="submit" [disabled]="formulario.invalid" class="btn-guardar">Añadir misión</button>
       <button type="button" class="btn-oraculo" (click)="invocarOraculo()">
         🔮 Invocar misión aleatoria
       </button>
     </div>
 
-    <div *ngIf="misionOraculo" class="preview-oraculo">
-      <h3>{{ misionOraculo.titulo }}</h3>
-      <p>{{ misionOraculo.descripcion }}</p>
-      <span class="xp-badge">⚡ {{ misionOraculo.xp }} XP</span>
+    <div class="alerta-exito" *ngIf="mostrarExito" role="alert">✔ Misión añadida correctamente</div>
 
-      <button type="button" class="btn-usar" (click)="usarMisionDelOraculo()">
-        ⭐ Usar esta misión
-      </button>
+    <div class="alerta-error" *ngIf="mostrarError" role="alert">❌ {{ mensajeError }}</div>
+
+    <div *ngIf="misionOraculo" class="overlay-oraculo" (click)="misionOraculo = undefined">
+      <div class="preview-oraculo" (click)="$event.stopPropagation()">
+
+        <div class="preview-oraculo-header">
+          <span class="icono-oraculo">🔮</span>
+          <h3>El Oráculo ha hablado</h3>
+        </div>
+
+        <div class="preview-oraculo-body">
+          <div class="body-info">
+            <p class="preview-oraculo-titulo">{{ misionOraculo.titulo }}</p>
+            <p class="preview-oraculo-desc">{{ misionOraculo.descripcion }}</p>
+          </div>
+          <span class="xp-badge">⚡ {{ misionOraculo.xp }} XP</span>
+        </div>
+
+        <div class="preview-oraculo-footer">
+          <button type="button" class="btn-cancelar-oraculo" (click)="misionOraculo = undefined">
+            ✖ Cancelar
+          </button>
+          <div class="acciones-oraculo">
+            <button type="button" class="btn-otra-mision" (click)="invocarOraculo()">
+              🎲 Quiero otra misión
+            </button>
+            <button type="button" class="btn-usar" (click)="usarMisionDelOraculo()">
+              ⭐ Usar esta misión
+            </button>
+          </div>
+        </div>
+
+      </div>
     </div>
+
   </form>
 </div>

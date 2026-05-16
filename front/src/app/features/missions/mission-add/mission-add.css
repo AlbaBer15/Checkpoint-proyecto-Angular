@@ -46,6 +46,15 @@
   color: var(--text-soft);
 }
 
+.fila-botones {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 32px;
+  margin-bottom: 20px;
+}
+
 .btn-guardar {
   padding: 12px 20px;
   border-radius: var(--radius);
@@ -96,22 +105,6 @@
   font-weight: 600;
 }
 
-.separador {
-  margin: 24px 0;
-  border: 0;
-  border-top: 1px solid var(--card-border);
-}
-
-.oraculo-seccion {
-  text-align: center;
-  margin-top: 10px;
-}
-
-.texto-oraculo {
-  color: var(--text-soft);
-  margin-bottom: 8px;
-}
-
 .btn-oraculo {
   padding: 10px 16px;
   background: var(--purple);
@@ -122,6 +115,7 @@
   font-weight: bold;
   box-shadow: 0 0 10px var(--cyan-dim);
   transition: var(--transition);
+  margin-right: 40px;
 }
 
 .btn-oraculo:hover:not(:disabled) {
@@ -134,41 +128,146 @@
   cursor: not-allowed;
 }
 
+.overlay-oraculo {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: aparecer 0.2s ease;
+}
+
 .preview-oraculo {
-  margin-top: 20px;
-  padding: 16px;
-  border-radius: var(--radius);
+  width: 100%;
+  max-width: 680px;
   background: var(--card-bg);
-  border: 1px solid var(--cyan);
+  border: 1px solid var(--purple);
+  border-radius: var(--radius);
+  box-shadow:
+    0 0 40px rgba(108, 75, 244, 0.4),
+    0 0 80px rgba(108, 75, 244, 0.15);
+  overflow: hidden;
   animation: aparecer 0.3s ease-out;
 }
 
-.preview-oraculo h3 {
-  margin-bottom: 6px;
+.preview-oraculo-header {
+  background: linear-gradient(135deg, var(--purple-dark), var(--purple));
+  padding: 20px 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.xp-badge {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 6px 12px;
-  background: var(--xp-color);
-  color: #000;
-  border-radius: var(--radius);
-  font-weight: bold;
+.preview-oraculo-header .icono-oraculo {
+  font-size: 1.8rem;
+}
+
+.preview-oraculo-header h3 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  color: #fff;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.preview-oraculo-body {
+  padding: 28px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
+.preview-oraculo-titulo {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--cyan);
+  font-family: 'Orbitron', sans-serif;
+}
+
+.preview-oraculo-desc {
+  color: var(--text-soft);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+.body-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.preview-oraculo-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 28px;
+  border-top: 1px solid var(--card-border);
+}
+
+.acciones-oraculo {
+  display: flex;
+  gap: 10px;
 }
 
 .btn-usar {
-  margin-top: 12px;
-  padding: 8px 14px;
+  padding: 10px 22px;
   background: var(--cyan);
   color: #000;
   border-radius: var(--radius);
   border: none;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 700;
+  font-size: 0.95rem;
   transition: var(--transition);
+  box-shadow: 0 0 12px var(--cyan-dim);
 }
 
 .btn-usar:hover {
-  box-shadow: 0 0 10px var(--cyan);
+  box-shadow: 0 0 20px var(--cyan);
+  transform: translateY(-2px);
+}
+
+.btn-cancelar-oraculo {
+  padding: 10px 22px;
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--text-soft);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+.btn-cancelar-oraculo:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.btn-otra-mision {
+  padding: 10px 22px;
+  background: transparent;
+  border: 1px solid var(--purple);
+  color: var(--purple);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.btn-otra-mision:hover {
+  background: var(--purple-dark);
+  color: #fff;
+  box-shadow: 0 0 14px rgba(108, 75, 244, 0.5);
+  transform: translateY(-2px);
+}
+.xp-badge {
+  margin-left: auto;
+  margin-right: 96px;
 }
