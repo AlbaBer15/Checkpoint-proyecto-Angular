@@ -16,12 +16,13 @@ import { CategoryService, Category } from '../../../services/category';
 export class MissionList implements OnInit, OnDestroy {
   misiones: Mision[] = [];
   filtro: 'todas' | 'pendientes' | 'completadas' | 'favoritas' = 'todas';
-  orden: 'ninguno' | 'xp-desc' | 'xp-asc' | 'favoritas' | 'estado' = 'ninguno';
+  orden: 'ninguno' | 'xp-desc' | 'xp-asc' | 'estado' = 'ninguno';
   categorias: Category[] = [];
   filtroCategoria?: number;
 
   get misionesFiltradas(): Mision[] {
     let lista = [...this.misiones];
+    lista.sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
 
     switch (this.filtro) {
       case 'pendientes':
@@ -41,9 +42,6 @@ export class MissionList implements OnInit, OnDestroy {
         break;
       case 'xp-asc':
         lista.sort((a, b) => a.xp - b.xp);
-        break;
-      case 'favoritas':
-        lista.sort((a, b) => (b.favorito ? 1 : 0) - (a.favorito ? 1 : 0));
         break;
       case 'estado':
         lista.sort((a, b) => a.estado.localeCompare(b.estado));
