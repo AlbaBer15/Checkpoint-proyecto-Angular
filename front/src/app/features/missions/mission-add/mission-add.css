@@ -177,8 +177,7 @@
 .preview-oraculo-body {
   padding: 28px;
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
   gap: 16px;
 }
 
@@ -193,13 +192,6 @@
   color: var(--text-soft);
   line-height: 1.7;
   font-size: 0.95rem;
-}
-
-.body-info {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  flex: 1;
 }
 
 .preview-oraculo-footer {
@@ -267,7 +259,32 @@
   box-shadow: 0 0 14px rgba(108, 75, 244, 0.5);
   transform: translateY(-2px);
 }
+
 .xp-badge {
-  margin-left: auto;
-  margin-right: 96px;
+  flex-shrink: 0;
+  margin-left: 200px;
+}
+
+.select-categoria-oraculo {
+  flex: 1;
+  max-width: 200px;
+  padding: 8px 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  color: var(--text-light);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.select-categoria-oraculo:focus {
+  border-color: var(--purple);
+  outline: none;
+}
+
+.body-bottom {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }

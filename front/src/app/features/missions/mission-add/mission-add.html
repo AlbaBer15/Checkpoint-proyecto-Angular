@@ -83,11 +83,17 @@
         </div>
 
         <div class="preview-oraculo-body">
-          <div class="body-info">
-            <p class="preview-oraculo-titulo">{{ misionOraculo.titulo }}</p>
-            <p class="preview-oraculo-desc">{{ misionOraculo.descripcion }}</p>
+          <p class="preview-oraculo-titulo">{{ misionOraculo.titulo }}</p>
+          <p class="preview-oraculo-desc">{{ misionOraculo.descripcion }}</p>
+          <div class="body-bottom">
+            <select class="select-categoria-oraculo" [(ngModel)]="categoriaSeleccionada" [ngModelOptions]="{standalone: true}">
+              <option [ngValue]="undefined">Sin categoría</option>
+              <option *ngFor="let cat of categorias" [ngValue]="cat.id">
+                {{ cat.icono }} {{ cat.nombre }}
+              </option>
+            </select>
+            <span class="xp-badge">⚡ {{ misionOraculo.xp }} XP</span>
           </div>
-          <span class="xp-badge">⚡ {{ misionOraculo.xp }} XP</span>
         </div>
 
         <div class="preview-oraculo-footer">

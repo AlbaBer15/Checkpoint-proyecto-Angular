@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule,  FormsModule } from '@angular/forms';
 import { MissionService, Mision } from '../../../services/mission';
 import { NgIf, NgFor } from '@angular/common';
 import { CategoryService, Category } from '../../../services/category';
@@ -9,7 +9,7 @@ import { CategoryService, Category } from '../../../services/category';
   standalone: true,
   templateUrl: './mission-add.html',
   styleUrl: './mission-add.css',
-  imports: [ReactiveFormsModule, NgIf, NgFor],
+  imports: [ReactiveFormsModule, NgIf, NgFor,  FormsModule],
 })
 export class MissionAdd implements OnInit {
   formulario: FormGroup;
