@@ -32,9 +32,12 @@
     </div>
 
     <div class="campo">
-      <label for="xp">XP</label>
-      <input id="xp" type="number" formControlName="xp" min="1" max="999" />
-
+     <label for="xp">XP</label>
+      <div class="xp-control">
+        <button type="button" class="btn-xp" (click)="formulario.get('xp')!.setValue(+formulario.get('xp')!.value - 1)">−</button>
+        <input id="xp" type="number" formControlName="xp" min="1" max="999" />
+        <button type="button" class="btn-xp" (click)="formulario.get('xp')!.setValue(+formulario.get('xp')!.value + 1)">+</button>
+      </div>
       <p class="error" *ngIf="formulario.get('xp')?.touched && formulario.get('xp')?.invalid">
         Introduce un valor entre 1 y 999 XP.
       </p>

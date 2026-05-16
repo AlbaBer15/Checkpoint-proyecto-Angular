@@ -18,12 +18,16 @@
 .controles {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 24px;
-  padding: 16px;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
+  gap: 16px;
+  margin-bottom: 28px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(24, 24, 32, 0.95), rgba(15, 0, 30, 0.8));
+  border: 1px solid var(--cyan-dim);
   border-radius: var(--radius);
+  box-shadow: 0 0 30px rgba(108, 75, 244, 0.08);
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .grupo-control {
@@ -31,13 +35,22 @@
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.grupo-control:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .label-control {
-  color: var(--text-soft);
-  font-size: 0.85rem;
-  font-weight: 600;
-  min-width: 65px;
+  color: var(--cyan);
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 70px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
 }
 
 .btn-grupo {
@@ -50,8 +63,8 @@
   background: transparent;
   border: 1px solid var(--card-border);
   color: var(--text-soft);
-  padding: 6px 12px;
-  border-radius: var(--radius);
+  padding: 6px 14px;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 0.85rem;
   transition: var(--transition);
@@ -60,6 +73,7 @@
 .btn-grupo button:hover {
   border-color: var(--cyan);
   color: var(--text-light);
+  background: rgba(0, 229, 255, 0.05);
 }
 
 .btn-grupo button.activo {
@@ -67,5 +81,6 @@
   border-color: var(--cyan);
   color: #000;
   font-weight: 700;
-  box-shadow: 0 0 10px var(--cyan-dim);
+  box-shadow: 0 0 12px var(--cyan-dim), 0 0 24px rgba(0, 229, 255, 0.15);
+  border-radius: 20px;
 }

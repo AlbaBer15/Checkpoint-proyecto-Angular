@@ -48,7 +48,14 @@ export class MissionAdd implements OnInit {
   }
 
   invocarOraculo() {
-    this.misionOraculo = undefined;
+    if (!this.misionOraculo) {
+      this.misionOraculo = {
+        titulo: '...',
+        descripcion: 'El oráculo está consultando los astros...',
+        xp: 0,
+        estado: 'pendiente',
+      };
+    }
     this.missionService.obtenerMisionAleatoria().subscribe({
       next: (mision) => {
         this.misionOraculo = mision;

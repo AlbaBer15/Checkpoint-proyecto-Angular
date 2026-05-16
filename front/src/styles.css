@@ -166,3 +166,8 @@ a {
   font-weight: 600;
   text-align: center;
 }
+
+router-outlet + * {
+  animation: aparecer 0.25s ease;
+}
+

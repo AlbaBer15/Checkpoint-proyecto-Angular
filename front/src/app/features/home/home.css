@@ -11,6 +11,8 @@
   margin-bottom: 35px;
   font-size: 1.05rem;
   color: var(--text-soft);
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(168, 239, 255, 0.4);
 }
 
 .home-layout {
@@ -27,17 +29,19 @@
 
 .small-card {
   background: var(--card-bg);
-  padding: 18px;
+  padding: 22px 18px;
   border-radius: var(--radius);
   text-align: center;
-  border: 1px solid var(--card-border);
+  border: 1px solid #00eaff88;
+  box-shadow: 0 0 10px #00eaff18;
   transition: var(--transition);
 }
 
 .small-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 0 14px var(--cyan-dim);
+  transform: translateY(-4px);
+  box-shadow: 0 0 20px var(--cyan-dim);
   border-color: var(--cyan-dim);
+  border-top-color: var(--cyan);
 }
 
 .small-card.wide {
@@ -46,7 +50,17 @@
 
 .icono {
   font-size: 1.8rem;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid var(--cyan-dim);
+  border-radius: 50%;
+  box-shadow: 0 0 14px var(--cyan-dim);
 }
 
 .valor {
@@ -56,17 +70,39 @@
 }
 
 .panel-nivel {
-  background: linear-gradient(135deg, rgba(0, 20, 40, 0.7), rgba(25, 0, 45, 0.7));
+  background: linear-gradient(135deg, rgba(0, 20, 40, 0.9), rgba(25, 0, 45, 0.9));
   border: 1px solid var(--cyan-dim);
   border-radius: 18px;
-  padding: 25px;
+  padding: 30px 25px;
   text-align: center;
-  box-shadow: 0 0 20px rgba(0, 229, 255, 0.1);
+  box-shadow: 0 0 40px rgba(0, 229, 255, 0.08), 0 0 80px rgba(108, 75, 244, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.panel-nivel::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(108, 75, 244, 0.15), transparent 70%);
+  pointer-events: none;
 }
 
 .avatar {
   font-size: 4rem;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+  border: 2px solid var(--cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 20px var(--cyan-dim), inset 0 0 20px rgba(0, 229, 255, 0.05);
 }
 
 .nivel-num {
@@ -82,17 +118,20 @@
 }
 
 .barra-container {
-  background: #222;
-  height: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  height: 14px;
   border-radius: 10px;
   overflow: hidden;
   margin-bottom: 12px;
+  border: 1px solid var(--card-border);
 }
 
 .barra-progreso {
   height: 100%;
   background: linear-gradient(90deg, var(--cyan), #a855f7);
-  transition: width 0.4s ease;
+  transition: width 0.6s ease;
+  box-shadow: 0 0 10px var(--cyan), 0 0 20px rgba(168, 85, 247, 0.4);
+  border-radius: 10px;
 }
 
 .nivel-msg {
@@ -101,15 +140,17 @@
 }
 
 .cabecera-home {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
   margin-top: 10px;
   margin-bottom: 5px;
 }
 
 .btn-editar-perfil {
+  position: absolute;
+  right: 0;
   background: transparent;
   border: 1px solid var(--card-border);
   border-radius: var(--radius);

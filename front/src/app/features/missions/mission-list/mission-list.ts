@@ -22,7 +22,10 @@ export class MissionList implements OnInit, OnDestroy {
 
   get misionesFiltradas(): Mision[] {
     let lista = [...this.misiones];
-    lista.sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
+    lista.sort((a, b) => {
+      if (a.estado === b.estado) return (b.id ?? 0) - (a.id ?? 0);
+      return a.estado === 'pendiente' ? -1 : 1;
+    });
 
     switch (this.filtro) {
       case 'pendientes':
