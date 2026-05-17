@@ -32,21 +32,25 @@ export class MissionAdd implements OnInit {
     });
   }
 
+  // Carga las categorías para el selector del formulario
   ngOnInit() {
     this.categoryService.getAll().subscribe((cats) => (this.categorias = cats));
   }
 
+  // Obtiene el perfil activo desde localStorage para asociarlo a la misión
   private getProfileObject() {
     const profileId = Number(localStorage.getItem('checkpoint_profile_id'));
     return profileId ? { id: profileId, nombre: '', avatar: '', genero: 'FEMENINO' } : undefined;
   }
 
+  // Obtiene la categoría seleccionada para asociarla a la misión
   private getCategoryObject() {
     return this.categoriaSeleccionada
       ? { id: this.categoriaSeleccionada, nombre: '', icono: '', color: '' }
       : undefined;
   }
 
+  // Solicita una misión aleatoria al oráculo y muestra el resultado mientras carga
   invocarOraculo() {
     if (!this.misionOraculo) {
       this.misionOraculo = {
@@ -71,6 +75,7 @@ export class MissionAdd implements OnInit {
     });
   }
 
+  // Guarda la misión propuesta por el oráculo con la categoría y perfil seleccionados
   usarMisionDelOraculo() {
     if (!this.misionOraculo) return;
 
@@ -93,6 +98,7 @@ export class MissionAdd implements OnInit {
       });
   }
 
+  // Valida el formulario y guarda la nueva misión creada por el usuario
   guardar() {
     if (this.formulario.invalid) return;
     const valores = this.formulario.value;
@@ -115,12 +121,14 @@ export class MissionAdd implements OnInit {
       });
   }
 
+  // Muestra el mensaje de éxito y lo oculta después de 2 segundos
   private mostrarExitoTemporal() {
     this.mostrarExito = true;
     this.mostrarError = false;
     setTimeout(() => (this.mostrarExito = false), 2000);
   }
 
+  // Muestra el error recibido y lo oculta después de 5 segundos
   private mostrarErrorMensaje(err: any, accion: string) {
     this.mensajeError = err?.error?.mensaje || accion;
     this.mostrarError = true;

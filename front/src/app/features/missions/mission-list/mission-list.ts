@@ -20,6 +20,7 @@ export class MissionList implements OnInit, OnDestroy {
   categorias: Category[] = [];
   filtroCategoria?: number;
 
+  // Filtra y ordena la lista según el estado, la categoría y el orden elegidos
   get misionesFiltradas(): Mision[] {
     let lista = [...this.misiones];
     lista.sort((a, b) => {
@@ -68,6 +69,7 @@ export class MissionList implements OnInit, OnDestroy {
     private categoryService: CategoryService,
   ) {}
 
+  // Carga las misiones del perfil activo y las categorías para el filtro
   ngOnInit(): void {
     const profileId = Number(localStorage.getItem('checkpoint_profile_id'));
 
@@ -87,11 +89,13 @@ export class MissionList implements OnInit, OnDestroy {
     });
   }
 
+  // Cancela todas las suscripciones activas al destruir el componente
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
+  // Marca la misión como completada y recarga la lista tras una animación
   completarMision(m: Mision) {
     if (!m.id) return;
 
@@ -114,6 +118,7 @@ export class MissionList implements OnInit, OnDestroy {
       });
   }
 
+  // Elimina la misión y actualiza la lista
   eliminarMision(m: Mision) {
     if (!m.id) return;
     this.missionService
@@ -123,6 +128,8 @@ export class MissionList implements OnInit, OnDestroy {
         error: (err) => this.mostrarErrorMensaje(err, 'Error eliminando misión'),
       });
   }
+
+  // Revierte la misión completada a estado pendiente
   revertirMision(m: Mision) {
     if (!m.id) return;
     this.missionService
@@ -132,6 +139,8 @@ export class MissionList implements OnInit, OnDestroy {
         error: (err) => this.mostrarErrorMensaje(err, 'Error revirtiendo misión'),
       });
   }
+
+  // Guarda los cambios de una misión editada
   editarMision(evento: { id: number; datos: Partial<Mision> }) {
     this.missionService
       .editarMision(evento.id, evento.datos)
@@ -141,6 +150,7 @@ export class MissionList implements OnInit, OnDestroy {
       });
   }
 
+  // Cambia el estado "favorito" de la misión al valor contrario y actualiza la lista
   marcarFavorito(m: Mision) {
     if (!m.id) return;
     this.missionService
@@ -151,6 +161,7 @@ export class MissionList implements OnInit, OnDestroy {
       });
   }
 
+  // Muestra un mensaje de error y lo borra automáticamente
   private mostrarErrorMensaje(err: any, accion: string) {
     this.mensajeError = err?.error?.mensaje || accion;
     this.mostrarError = true;

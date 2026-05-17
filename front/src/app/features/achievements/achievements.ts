@@ -39,6 +39,7 @@ export class Achievements implements OnInit, OnDestroy {
 
   readonly CIRCUMFERENCE = 2 * Math.PI * 54;
 
+  // Calcula el desplazamiento del círculo de progreso en base al nivel actual
   get strokeOffset(): number {
     return this.CIRCUMFERENCE * (1 - this.nivelActual / 10);
   }
@@ -66,6 +67,7 @@ export class Achievements implements OnInit, OnDestroy {
     private levelPipe: LevelPipe,
   ) {}
 
+  // Carga el perfil, las misiones y el catálogo de logros; suscribe las estadísticas de juego
   ngOnInit(): void {
     const perfilData = localStorage.getItem('checkpoint_profile');
     if (perfilData) {
@@ -92,6 +94,7 @@ export class Achievements implements OnInit, OnDestroy {
     });
   }
 
+  // Recalcula el nivel, título y progreso del jugador según el XP acumulado
   private actualizarNivel(): void {
     const info = this.levelPipe.transform(this.totalXp, this.genero);
     this.nivelActual = info.nivel;
@@ -107,6 +110,7 @@ export class Achievements implements OnInit, OnDestroy {
     }));
   }
 
+  // Obtiene el catálogo de logros y los desbloqueados del perfil
   private cargarCatalogo() {
     const profileId = Number(localStorage.getItem('checkpoint_profile_id'));
 
@@ -124,6 +128,7 @@ export class Achievements implements OnInit, OnDestroy {
     });
   }
 
+  // Comprueba los logros alcanzados y los desbloquea si aún no lo estaban
   private calcularYDesbloquear() {
     const profileId = Number(localStorage.getItem('checkpoint_profile_id'));
 
@@ -147,6 +152,7 @@ export class Achievements implements OnInit, OnDestroy {
     this.desbloqueadosCount = this.achievements.filter((a) => a.unlocked).length;
   }
 
+  // Comprueba si el jugador cumple la condición de XP o misiones requerida por el logro
   private cumpleCondicion(logro: AchievementApi): boolean {
     switch (logro.titulo) {
       case 'Primera Misión':
@@ -170,6 +176,7 @@ export class Achievements implements OnInit, OnDestroy {
     }
   }
 
+  // Cancela todas las suscripciones activas al destruir el componente
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

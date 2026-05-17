@@ -27,16 +27,18 @@ export class MissionService {
 
   constructor(private http: HttpClient) {}
 
+  // Devuelve lista actual de misiones cargadas
   get misionesActuales(): Mision[] {
     return this._misiones$.value;
   }
 
+  // Devuelve observable con misiones pendientes
   get misionesActivas$(): Observable<Mision[]> {
     return this.misiones$.pipe(
       map((lista) => lista.filter((m) => m.estado === MISSION_ESTADOS.PENDIENTE)),
     );
   }
-
+  // Obtiene todas las misiones desde el backend y actualiza el estado global
   cargarMisiones(): void {
     this.http.get<Mision[]>(this.apiUrl).subscribe({
       next: (lista) => this._misiones$.next(lista),
@@ -44,6 +46,7 @@ export class MissionService {
     });
   }
 
+  // Obtiene las misiones filtrando por el perfil del usuario activo
   cargarMisionesPorPerfil(profileId: number): void {
     this.http.get<Mision[]>(`${this.apiUrl}/profile/${profileId}`).subscribe({
       next: (lista) => this._misiones$.next(lista),
@@ -51,6 +54,7 @@ export class MissionService {
     });
   }
 
+  // Decide qué método de carga usar según si hay un perfil guardado en localStorage
   recargarMisiones(): void {
     const profileId = Number(localStorage.getItem('checkpoint_profile_id'));
     if (profileId) {
@@ -60,6 +64,7 @@ export class MissionService {
     }
   }
 
+  // Suma el XP de las misiones completadas; aplica el filtro de perfil si existe
   getTotalXP$(profileId?: number): Observable<number> {
     const url = profileId
       ? `${this.apiUrl}/stats/total-xp?profileId=${profileId}`
@@ -67,6 +72,7 @@ export class MissionService {
     return this.http.get<number>(url).pipe(catchError(this.handleError('getTotalXP')));
   }
 
+  // Obtiene el número de misiones pendientes, filtrado por perfil si existe
   getActiveMissionsCount$(profileId?: number): Observable<number> {
     const url = profileId
       ? `${this.apiUrl}/stats/active-count?profileId=${profileId}`
@@ -74,6 +80,7 @@ export class MissionService {
     return this.http.get<number>(url).pipe(catchError(this.handleError('getActiveMissionsCount')));
   }
 
+  // Crea una nueva misión en el backend y recarga la lista actualizada
   addMision(datos: Partial<Mision>): Observable<Mision> {
     const nueva: any = {
       titulo: datos.titulo!,
@@ -90,12 +97,14 @@ export class MissionService {
     );
   }
 
+  // Actualiza el estado de la misión en el backend para marcarla como completada
   completarMision(id: number): Observable<Mision> {
     return this.http
       .patch<Mision>(`${this.apiUrl}/${id}`, { estado: MISSION_ESTADOS.COMPLETADA })
       .pipe(catchError(this.handleError('completarMision')));
   }
 
+  // Elimina una misión en el backend y recarga la lista
   eliminarMision(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
       tap(() => this.recargarMisiones()),
@@ -103,6 +112,7 @@ export class MissionService {
     );
   }
 
+  // Revierte una misión completada a pendiente
   revertirMision(id: number): Observable<Mision> {
     return this.http
       .patch<Mision>(`${this.apiUrl}/${id}`, { estado: MISSION_ESTADOS.PENDIENTE })
@@ -112,6 +122,7 @@ export class MissionService {
       );
   }
 
+  // Actualiza campos editables de una misión existente
   editarMision(id: number, datos: Partial<Mision>): Observable<Mision> {
     const payload: any = {
       titulo: datos.titulo,
@@ -125,6 +136,7 @@ export class MissionService {
     );
   }
 
+  // Cambia el estado "favorito" de una misión al valor contrario
   toggleFavorito(id: number, favoritoActual: boolean): Observable<Mision> {
     return this.http.patch<Mision>(`${this.apiUrl}/${id}`, { favorito: !favoritoActual }).pipe(
       tap(() => this.recargarMisiones()),
@@ -132,6 +144,7 @@ export class MissionService {
     );
   }
 
+  // Llama a DummyJSON para obtener una misión aleatoria y la traduce al español automáticamente
   obtenerMisionAleatoria(): Observable<Mision> {
     return this.http.get('https://dummyjson.com/todos/random').pipe(
       map((data: any) => data.todo),
@@ -165,6 +178,8 @@ export class MissionService {
       ),
     );
   }
+
+  // Maneja los errores de las peticiones HTTP y los registra en consola
   private handleError(operacion: string) {
     return (error: any) => {
       console.error(`Error en ${operacion}:`, error);

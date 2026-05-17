@@ -15,6 +15,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   standalone: true,
 })
 export class LevelPipe implements PipeTransform {
+  // Calcula el nivel, título y progreso del jugador según su XP y género
   transform(
     xp: number,
     genero: 'FEMENINO' | 'MASCULINO' = 'FEMENINO',
