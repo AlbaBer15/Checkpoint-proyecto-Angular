@@ -30,6 +30,7 @@ export class MissionCard {
   errorEdicion = '';
   categoriaEdit?: number;
 
+  // Abre el modo edición con los datos actuales de la misión
   activarEdicion() {
     this.tituloEdit = this.mision.titulo;
     this.descripcionEdit = this.mision.descripcion;
@@ -38,10 +39,12 @@ export class MissionCard {
     this.editando = true;
   }
 
+  // Cierra el formulario de edición sin guardar cambios
   cancelarEdicion() {
     this.editando = false;
   }
 
+  // Valida los campos y guarda los cambios
   guardarEdicion() {
     if (!this.mision.id) return;
 
@@ -73,27 +76,33 @@ export class MissionCard {
     this.editando = false;
   }
 
+  // Emite el evento para marcar la misión como completada
   marcarComoCompletada() {
     this.completar.emit(this.mision);
   }
 
+  // Muestra el mensaje de confirmación para eliminar la misión
   pedirConfirmacionEliminar() {
     this.confirmandoEliminacion = true;
   }
 
+  // Cancela la eliminación
   cancelarEliminacion() {
     this.confirmandoEliminacion = false;
   }
 
+  // Elimina la misión tras confirmar la acción
   eliminarMision() {
     this.confirmandoEliminacion = false;
     this.eliminar.emit(this.mision);
   }
 
+  // Cambia el estado de favorito de la misión
   toggleFavorito() {
     this.marcarFavorito.emit(this.mision);
   }
 
+  // Revierte la misión a pendiente
   revertirMision() {
     this.revertir.emit(this.mision);
   }

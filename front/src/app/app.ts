@@ -15,6 +15,7 @@ export class App implements OnInit {
 
   constructor(private missionService: MissionService) {}
 
+  // Carga las misiones al iniciar la app y actualiza el contador de misiones pendientes
   ngOnInit() {
     const profileId = Number(localStorage.getItem('checkpoint_profile_id'));
     if (profileId) {

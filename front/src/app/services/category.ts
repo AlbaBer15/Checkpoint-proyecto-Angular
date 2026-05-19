@@ -16,6 +16,7 @@ export class CategoryService {
 
   constructor(private http: HttpClient) {}
 
+  // Obtiene todas las categorías disponibles para clasificar las misiones
   getAll(): Observable<Category[]> {
     return this.http.get<Category[]>(this.apiUrl);
   }

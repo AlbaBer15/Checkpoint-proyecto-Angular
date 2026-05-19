@@ -17,16 +17,19 @@ export class AchievementService {
 
   constructor(private http: HttpClient) {}
 
+  // Obtiene el catálogo completo de logros disponibles en la app
   getCatalogo(): Observable<AchievementApi[]> {
     return this.http.get<AchievementApi[]>(this.apiUrl);
   }
 
+  // Desbloquea un logro específico para el perfil cuando se cumple la condición de XP
   unlock(profileId: number, achievementId: number): Observable<any> {
     return this.http.post(
       `${this.apiUrl}/profile/${profileId}/unlock/${achievementId}`, {}
     );
   }
 
+  // Obtiene los logros que ya ha desbloqueado un perfil
   getDesbloqueados(profileId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/profile/${profileId}`);
   }

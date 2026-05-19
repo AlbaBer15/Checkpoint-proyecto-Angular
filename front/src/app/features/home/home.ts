@@ -78,6 +78,7 @@ export class Home implements OnInit, OnDestroy {
     private router: Router,
   ) {}
 
+  // Carga el perfil guardado y suscribe las estadísticas
   ngOnInit() {
     const nav = this.router.getCurrentNavigation();
     this.mensajeGuard = nav?.extras?.state?.['mensajeGuard'] ?? false;
@@ -96,6 +97,7 @@ export class Home implements OnInit, OnDestroy {
     this.cargarPerfil();
   }
 
+  // Carga el perfil activo o si no hay ID guardado, busca el primero disponible
   cargarPerfil() {
     const perfilId = localStorage.getItem('checkpoint_profile_id');
     if (perfilId) {
@@ -121,6 +123,7 @@ export class Home implements OnInit, OnDestroy {
     }
   }
 
+  // Selecciona el primer perfil disponible cuando no hay ninguno en localStorage
   private cargarPrimerPerfilDisponible() {
     this.profileService.getAll().subscribe({
       next: (perfiles) => {
@@ -147,12 +150,14 @@ export class Home implements OnInit, OnDestroy {
       },
     });
   }
+  // Abre el panel de edición y carga la lista de perfiles disponibles
   activarEdicionPerfil() {
     this.perfilEdit = { ...this.perfil };
     this.editandoPerfil = true;
     this.cargarPerfilesDisponibles();
   }
 
+  // Obtiene todos los perfiles para mostrarlos en el selector
   private cargarPerfilesDisponibles() {
     this.cargandoPerfiles = true;
     this.profileService.getAll().subscribe({
@@ -164,6 +169,7 @@ export class Home implements OnInit, OnDestroy {
     });
   }
 
+  // Establece el perfil seleccionado como activo y recarga sus misiones
   seleccionarPerfil(perfil: any) {
     this.perfil = {
       nombre: perfil.nombre,
@@ -178,6 +184,7 @@ export class Home implements OnInit, OnDestroy {
     this.actualizarMensaje(nivel);
   }
 
+  // Abre el formulario para crear un perfil nuevo
   iniciarCrearPerfil() {
     this.perfilEdit = { ...PERFIL_DEFAULT };
     this.editandoPerfil = true;
@@ -185,20 +192,24 @@ export class Home implements OnInit, OnDestroy {
     localStorage.removeItem('checkpoint_profile_id');
   }
 
+  // Limpia el formulario para empezar un perfil desde cero
   crearNuevoPerfil() {
     localStorage.removeItem('checkpoint_profile_id');
     this.perfilEdit = { ...PERFIL_DEFAULT };
     this.perfilesDisponibles = [];
   }
 
+  // Guarda el perfil seleccionado para eliminarlo una vez confirmado
   pedirConfirmacionEliminarPerfil(perfil: Profile) {
     this.perfilParaEliminar = perfil;
   }
 
+  // Cancela la eliminación y limpia el perfil pendiente
   cancelarEliminacionPerfil() {
     this.perfilParaEliminar = null;
   }
 
+  // Elimina el perfil confirmado; si era el activo, selecciona otro o limpia el estado
   confirmarEliminacionPerfil() {
     const perfil = this.perfilParaEliminar;
     if (!perfil) return;
@@ -230,11 +241,13 @@ export class Home implements OnInit, OnDestroy {
     });
   }
 
+  // Cierra el panel de edición
   cancelarEdicionPerfil() {
     this.editandoPerfil = false;
     this.errorPerfil = '';
   }
 
+  // Guarda los cambios del perfil o crea uno nuevo si no existe
   guardarPerfil() {
     if (!this.perfilEdit.nombre.trim()) {
       this.errorPerfil = 'El nombre no puede estar vacío.';
@@ -276,10 +289,12 @@ export class Home implements OnInit, OnDestroy {
     }
   }
 
+  // Devuelve el ID del perfil activo desde localStorage
   getPerfilId(): string {
     return localStorage.getItem('checkpoint_profile_id') ?? '0';
   }
 
+  // Devuelve un saludo personalizado según el género del perfil activo
   get saludoPersonalizado(): string {
     const nombre = this.perfil.nombre || 'Aventurera';
     return this.perfil.genero === 'FEMENINO'
@@ -287,10 +302,12 @@ export class Home implements OnInit, OnDestroy {
       : `¡Bienvenido, ${nombre}!`;
   }
 
+  // Devuelve el título del panel según el género del perfil activo
   get tituloEstado(): string {
     return this.perfil.genero === 'FEMENINO' ? 'Estado de la aventurera' : 'Estado del aventurero';
   }
 
+  // Consulta el XP total y el número de misiones activas y actualiza la vista
   private cargarEstadisticas() {
     const profileId = Number(localStorage.getItem('checkpoint_profile_id')) || undefined;
 
@@ -339,17 +356,20 @@ export class Home implements OnInit, OnDestroy {
     9: '💫 Campeón Arcano… Tu poder trasciende este mundo. 🔥',
   };
 
+  // Actualiza el mensaje según el nivel alcanzado y el género del perfil
   private actualizarMensaje(nivel: number) {
     const mensajes =
       this.perfil.genero === 'FEMENINO' ? this.mensajesFemenino : this.mensajesMasculino;
     this.mensajeEstado = mensajes[nivel] ?? '✨ Tu historia ya es parte de las estrellas. 🌌';
   }
 
+  // Muestra un mensaje de error y lo borra automáticamente tras 5 segundos
   private mostrarErrorPerfil(msg: string) {
     this.errorPerfil = msg;
     setTimeout(() => (this.errorPerfil = ''), 5000);
   }
 
+  // Cancela todas las suscripciones activas al destruir el componente
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();

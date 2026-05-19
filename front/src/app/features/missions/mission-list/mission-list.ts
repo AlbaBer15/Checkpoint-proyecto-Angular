@@ -16,12 +16,17 @@ import { CategoryService, Category } from '../../../services/category';
 export class MissionList implements OnInit, OnDestroy {
   misiones: Mision[] = [];
   filtro: 'todas' | 'pendientes' | 'completadas' | 'favoritas' = 'todas';
-  orden: 'ninguno' | 'xp-desc' | 'xp-asc' | 'favoritas' | 'estado' = 'ninguno';
+  orden: 'ninguno' | 'xp-desc' | 'xp-asc' | 'estado' = 'ninguno';
   categorias: Category[] = [];
   filtroCategoria?: number;
 
+  // Filtra y ordena la lista según el estado, la categoría y el orden elegidos
   get misionesFiltradas(): Mision[] {
     let lista = [...this.misiones];
+    lista.sort((a, b) => {
+      if (a.estado === b.estado) return (b.id ?? 0) - (a.id ?? 0);
+      return a.estado === 'pendiente' ? -1 : 1;
+    });
 
     switch (this.filtro) {
       case 'pendientes':
@@ -41,9 +46,6 @@ export class MissionList implements OnInit, OnDestroy {
         break;
       case 'xp-asc':
         lista.sort((a, b) => a.xp - b.xp);
-        break;
-      case 'favoritas':
-        lista.sort((a, b) => (b.favorito ? 1 : 0) - (a.favorito ? 1 : 0));
         break;
       case 'estado':
         lista.sort((a, b) => a.estado.localeCompare(b.estado));
@@ -67,6 +69,7 @@ export class MissionList implements OnInit, OnDestroy {
     private categoryService: CategoryService,
   ) {}
 
+  // Carga las misiones del perfil activo y las categorías para el filtro
   ngOnInit(): void {
     const profileId = Number(localStorage.getItem('checkpoint_profile_id'));
 
@@ -86,11 +89,13 @@ export class MissionList implements OnInit, OnDestroy {
     });
   }
 
+  // Cancela todas las suscripciones activas al destruir el componente
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
+  // Marca la misión como completada y recarga la lista tras una animación
   completarMision(m: Mision) {
     if (!m.id) return;
 
@@ -113,6 +118,7 @@ export class MissionList implements OnInit, OnDestroy {
       });
   }
 
+  // Elimina la misión y actualiza la lista
   eliminarMision(m: Mision) {
     if (!m.id) return;
     this.missionService
@@ -122,6 +128,8 @@ export class MissionList implements OnInit, OnDestroy {
         error: (err) => this.mostrarErrorMensaje(err, 'Error eliminando misión'),
       });
   }
+
+  // Revierte la misión completada a estado pendiente
   revertirMision(m: Mision) {
     if (!m.id) return;
     this.missionService
@@ -131,6 +139,8 @@ export class MissionList implements OnInit, OnDestroy {
         error: (err) => this.mostrarErrorMensaje(err, 'Error revirtiendo misión'),
       });
   }
+
+  // Guarda los cambios de una misión editada
   editarMision(evento: { id: number; datos: Partial<Mision> }) {
     this.missionService
       .editarMision(evento.id, evento.datos)
@@ -140,6 +150,7 @@ export class MissionList implements OnInit, OnDestroy {
       });
   }
 
+  // Cambia el estado "favorito" de la misión al valor contrario y actualiza la lista
   marcarFavorito(m: Mision) {
     if (!m.id) return;
     this.missionService
@@ -150,6 +161,7 @@ export class MissionList implements OnInit, OnDestroy {
       });
   }
 
+  // Muestra un mensaje de error y lo borra automáticamente
   private mostrarErrorMensaje(err: any, accion: string) {
     this.mensajeError = err?.error?.mensaje || accion;
     this.mostrarError = true;

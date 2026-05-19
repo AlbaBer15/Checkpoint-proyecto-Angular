@@ -23,9 +23,6 @@
       <button [class.activo]="orden === 'ninguno'" (click)="orden = 'ninguno'">Por defecto</button>
       <button [class.activo]="orden === 'xp-desc'" (click)="orden = 'xp-desc'">⚡ Mayor XP</button>
       <button [class.activo]="orden === 'xp-asc'" (click)="orden = 'xp-asc'">⚡ Menor XP</button>
-      <button [class.activo]="orden === 'favoritas'" (click)="orden = 'favoritas'">
-        ❤️ Favoritas primero
-      </button>
       <button [class.activo]="orden === 'estado'" (click)="orden = 'estado'">Por estado</button>
     </div>
   </div>
@@ -61,6 +58,9 @@
   <p *ngIf="misiones.length === 0" class="sin-misiones">
     No tienes misiones todavía. ¡Añade una nueva!
   </p>
+  <p *ngIf="misiones.length > 0 && misionesFiltradas.length === 0" class="sin-misiones">
+  No hay misiones con este filtro.
+</p>
 
   <div class="container">
     <app-mission-card
