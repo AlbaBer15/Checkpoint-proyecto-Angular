@@ -1,3 +1,6 @@
+VERSIÓN ESTABLE DEL PROYECTO EN DESARROLLO. -> DESARROLLO EN DEVELOP.
+
+
 # CheckPoint – Gestor de Misiones Gamificadas
 
 CheckPoint es una aplicación web desarrollada en **Angular** que transforma acciones cotidianas en misiones RPG.  
