@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 /**
  * Tabla intermedia que registra que logros ha desbloqueado cada perfil.
  * La combinación {@code (profile, achievement)} es única;
- *  se garantiza en la capa de servicio mediante
+ * se garantiza en la capa de servicio mediante
  * {@code ProfileAchievementRepository.existsByProfileIdAndAchievementId}.
  */
 @Getter
@@ -24,17 +24,23 @@ public class ProfileAchievement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /** Perfil que ha conseguido el logro. */
+    /**
+     * Perfil que ha conseguido el logro.
+     */
     @ManyToOne
     @JoinColumn(name = "profile_id", nullable = false)
     private Profile profile;
 
-    /** Logro desbloqueado. */
+    /**
+     * Logro desbloqueado.
+     */
     @ManyToOne
     @JoinColumn(name = "achievement_id", nullable = false)
     private Achievement achievement;
 
-    /** Fecha y hora en que se desbloqueo el logro. */
+    /**
+     * Fecha y hora en que se desbloqueo el logro.
+     */
     @Column
     private LocalDateTime desbloqueadoEn = LocalDateTime.now();
 }

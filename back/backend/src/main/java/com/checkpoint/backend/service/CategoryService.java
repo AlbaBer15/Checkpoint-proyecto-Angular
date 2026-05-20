@@ -21,7 +21,9 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    /** Devuelve todas las categorías disponibles. */
+    /**
+     * Devuelve todas las categorías disponibles.
+     */
     public List<Category> findAll() {
         return categoryRepository.findAll();
     }
@@ -55,7 +57,8 @@ public class CategoryService {
      * Elimina una categoría por su ID.
      * Las misiones con esta categoria se quedan sin ella
      * porque la FK admite null (relacion es opcional)
-     *Misión puede existir sin categoría
+     * Misión puede existir sin categoría
+     *
      * @param id ID de la categoría a eliminar
      * @throws ResourceNotFoundException si no existe
      */

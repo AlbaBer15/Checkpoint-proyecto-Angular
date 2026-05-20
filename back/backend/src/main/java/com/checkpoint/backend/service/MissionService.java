@@ -2,8 +2,8 @@ package com.checkpoint.backend.service;
 
 import com.checkpoint.backend.constants.CheckpointConstants;
 import com.checkpoint.backend.dto.PatchMisionDTO;
-import com.checkpoint.backend.entity.Mission;
 import com.checkpoint.backend.entity.Category;
+import com.checkpoint.backend.entity.Mission;
 import com.checkpoint.backend.exception.ResourceNotFoundException;
 import com.checkpoint.backend.repository.CategoryRepository;
 import com.checkpoint.backend.repository.MissionRepository;
@@ -41,7 +41,9 @@ public class MissionService {
         this.profileRepository = profileRepository;
     }
 
-    /** Devuelve todas las misiones de la base de datos sin filtro. */
+    /**
+     * Devuelve todas las misiones de la base de datos sin filtro.
+     */
     public List<Mission> findAll() {
         return missionRepository.findAll();
     }
@@ -65,7 +67,7 @@ public class MissionService {
      * @param mission datos de la misión a crear
      * @return misión con su ID generado
      * @throws ResourceNotFoundException si la categoría o perfil seleccionados no existen
-     * @throws IllegalArgumentException si los datos no pasan la validación
+     * @throws IllegalArgumentException  si los datos no pasan la validación
      */
     public Mission create(Mission mission) {
         normalizarYValidar(mission);
@@ -129,7 +131,7 @@ public class MissionService {
      * @param dto campos a modificar
      * @return misión actualizada
      * @throws ResourceNotFoundException cuando la misión o la nueva categoría no existan
-     * @throws IllegalArgumentException cuando los nuevos valores no pasan la validación
+     * @throws IllegalArgumentException  cuando los nuevos valores no pasan la validación
      */
     @Transactional
     public Mission patch(Long id, PatchMisionDTO dto) {

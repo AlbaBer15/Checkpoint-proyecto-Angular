@@ -31,8 +31,8 @@ public class CategoryController {
 
     @Operation(summary = "Obtener una categoría por ID")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Categoría encontrada"),
-        @ApiResponse(responseCode = "404", description = "Categoría no encontrada")
+            @ApiResponse(responseCode = "200", description = "Categoría encontrada"),
+            @ApiResponse(responseCode = "404", description = "Categoría no encontrada")
     })
     @GetMapping("/{id}")
     public Category getById(@PathVariable Long id) {
@@ -41,8 +41,8 @@ public class CategoryController {
 
     @Operation(summary = "Crear una nueva categoría")
     @ApiResponses({
-        @ApiResponse(responseCode = "201", description = "Categoría creada correctamente"),
-        @ApiResponse(responseCode = "400", description = "Datos inválidos")
+            @ApiResponse(responseCode = "201", description = "Categoría creada correctamente"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos")
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -52,8 +52,8 @@ public class CategoryController {
 
     @Operation(summary = "Eliminar una categoría")
     @ApiResponses({
-        @ApiResponse(responseCode = "204", description = "Categoría eliminada correctamente"),
-        @ApiResponse(responseCode = "404", description = "Categoría no encontrada")
+            @ApiResponse(responseCode = "204", description = "Categoría eliminada correctamente"),
+            @ApiResponse(responseCode = "404", description = "Categoría no encontrada")
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

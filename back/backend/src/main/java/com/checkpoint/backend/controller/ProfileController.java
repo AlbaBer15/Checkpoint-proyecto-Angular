@@ -31,8 +31,8 @@ public class ProfileController {
 
     @Operation(summary = "Obtener un perfil por ID")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Perfil encontrado"),
-        @ApiResponse(responseCode = "404", description = "Perfil no encontrado")
+            @ApiResponse(responseCode = "200", description = "Perfil encontrado"),
+            @ApiResponse(responseCode = "404", description = "Perfil no encontrado")
     })
     @GetMapping("/{id}")
     public Profile getById(@PathVariable Long id) {
@@ -41,8 +41,8 @@ public class ProfileController {
 
     @Operation(summary = "Crear un nuevo perfil", description = "Al crear el perfil se generan automáticamente 3 misiones de bienvenida")
     @ApiResponses({
-        @ApiResponse(responseCode = "201", description = "Perfil creado correctamente"),
-        @ApiResponse(responseCode = "400", description = "Nombre inválido o ya existente")
+            @ApiResponse(responseCode = "201", description = "Perfil creado correctamente"),
+            @ApiResponse(responseCode = "400", description = "Nombre inválido o ya existente")
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -52,9 +52,9 @@ public class ProfileController {
 
     @Operation(summary = "Actualizar un perfil", description = "Permite actualizar nombre, avatar y género")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Perfil actualizado correctamente"),
-        @ApiResponse(responseCode = "400", description = "Datos inválidos"),
-        @ApiResponse(responseCode = "404", description = "Perfil no encontrado")
+            @ApiResponse(responseCode = "200", description = "Perfil actualizado correctamente"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos"),
+            @ApiResponse(responseCode = "404", description = "Perfil no encontrado")
     })
     @PutMapping("/{id}")
     public Profile update(@PathVariable Long id, @RequestBody Profile datos) {
@@ -63,8 +63,8 @@ public class ProfileController {
 
     @Operation(summary = "Eliminar un perfil", description = "Elimina el perfil junto con todas sus misiones y logros asociados")
     @ApiResponses({
-        @ApiResponse(responseCode = "204", description = "Perfil eliminado correctamente"),
-        @ApiResponse(responseCode = "404", description = "Perfil no encontrado")
+            @ApiResponse(responseCode = "204", description = "Perfil eliminado correctamente"),
+            @ApiResponse(responseCode = "404", description = "Perfil no encontrado")
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

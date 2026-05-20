@@ -30,23 +30,31 @@ public class Achievement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /** Nombre del logro. Obligatorio, entre 3 y 80 caracteres. */
+    /**
+     * Nombre del logro. Obligatorio, entre 3 y 80 caracteres.
+     */
     @NotBlank(message = "El título del logro es obligatorio.")
     @Size(min = 3, max = 80, message = "El título debe tener entre 3 y 80 caracteres.")
     @Column(nullable = false, length = 80)
     private String titulo;
 
-    /** Descripción para obtener el logro. Máximo 200 caracteres. */
+    /**
+     * Descripción para obtener el logro. Máximo 200 caracteres.
+     */
     @Size(max = 200, message = "La descripción no puede exceder 200 caracteres.")
     @Column(length = 200)
     private String descripcion;
 
-    /** XP mínimo total que debe tener el perfil para desbloquear el logro. */
+    /**
+     * XP mínimo total que debe tener el perfil para desbloquear el logro.
+     */
     @Min(value = 0, message = "El XP requerido no puede ser negativo.")
     @Column
     private Integer xpRequerido = 0;
 
-    /** Icono del logro. */
+    /**
+     * Icono del logro.
+     */
     @Column(length = 10)
     private String icono;
 }

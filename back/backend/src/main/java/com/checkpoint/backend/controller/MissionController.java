@@ -32,8 +32,8 @@ public class MissionController {
 
     @Operation(summary = "Obtener misiones de un perfil")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Lista de misiones del perfil"),
-        @ApiResponse(responseCode = "404", description = "Perfil no encontrado")
+            @ApiResponse(responseCode = "200", description = "Lista de misiones del perfil"),
+            @ApiResponse(responseCode = "404", description = "Perfil no encontrado")
     })
     @GetMapping("/profile/{profileId}")
     public List<Mission> getByProfile(@PathVariable Long profileId) {
@@ -42,8 +42,8 @@ public class MissionController {
 
     @Operation(summary = "Obtener una misión por ID")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Misión encontrada"),
-        @ApiResponse(responseCode = "404", description = "Misión no encontrada")
+            @ApiResponse(responseCode = "200", description = "Misión encontrada"),
+            @ApiResponse(responseCode = "404", description = "Misión no encontrada")
     })
     @GetMapping("/{id}")
     public Mission getById(@PathVariable Long id) {
@@ -52,8 +52,8 @@ public class MissionController {
 
     @Operation(summary = "Crear una nueva misión")
     @ApiResponses({
-        @ApiResponse(responseCode = "201", description = "Misión creada correctamente"),
-        @ApiResponse(responseCode = "400", description = "Datos inválidos")
+            @ApiResponse(responseCode = "201", description = "Misión creada correctamente"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos")
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -63,9 +63,9 @@ public class MissionController {
 
     @Operation(summary = "Actualizar parcialmente una misión", description = "Permite actualizar título, descripción, XP, estado, favorito y categoría de forma independiente")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Misión actualizada correctamente"),
-        @ApiResponse(responseCode = "400", description = "Datos inválidos"),
-        @ApiResponse(responseCode = "404", description = "Misión no encontrada")
+            @ApiResponse(responseCode = "200", description = "Misión actualizada correctamente"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos"),
+            @ApiResponse(responseCode = "404", description = "Misión no encontrada")
     })
     @PatchMapping("/{id}")
     public Mission patch(@PathVariable Long id, @RequestBody PatchMisionDTO dto) {
@@ -74,8 +74,8 @@ public class MissionController {
 
     @Operation(summary = "Eliminar una misión")
     @ApiResponses({
-        @ApiResponse(responseCode = "204", description = "Misión eliminada correctamente"),
-        @ApiResponse(responseCode = "404", description = "Misión no encontrada")
+            @ApiResponse(responseCode = "204", description = "Misión eliminada correctamente"),
+            @ApiResponse(responseCode = "404", description = "Misión no encontrada")
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

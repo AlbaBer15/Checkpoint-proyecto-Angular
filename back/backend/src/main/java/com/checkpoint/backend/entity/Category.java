@@ -22,15 +22,21 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /** Nombre de la categoría. Entre 3 y 40 caracteres. */
+    /**
+     * Nombre de la categoría. Entre 3 y 40 caracteres.
+     */
     @Column(nullable = false, length = 40)
     private String nombre;
 
-    /** Icono de la categoría. */
+    /**
+     * Icono de la categoría.
+     */
     @Column(length = 10)
     private String icono;
 
-    /** Color usado para el frontend en la categoría. */
+    /**
+     * Color usado para el frontend en la categoría.
+     */
     @Column(length = 20)
     private String color;
 }

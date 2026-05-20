@@ -33,8 +33,8 @@ public class AchievementController {
 
     @Operation(summary = "Obtener logros desbloqueados por un perfil")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Logros desbloqueados del perfil"),
-        @ApiResponse(responseCode = "404", description = "Perfil no encontrado")
+            @ApiResponse(responseCode = "200", description = "Logros desbloqueados del perfil"),
+            @ApiResponse(responseCode = "404", description = "Perfil no encontrado")
     })
     @GetMapping("/profile/{profileId}")
     public List<ProfileAchievement> getByProfile(@PathVariable Long profileId) {
@@ -43,8 +43,8 @@ public class AchievementController {
 
     @Operation(summary = "Crear un nuevo logro en el catálogo")
     @ApiResponses({
-        @ApiResponse(responseCode = "201", description = "Logro creado correctamente"),
-        @ApiResponse(responseCode = "400", description = "Datos inválidos")
+            @ApiResponse(responseCode = "201", description = "Logro creado correctamente"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos")
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -54,9 +54,9 @@ public class AchievementController {
 
     @Operation(summary = "Desbloquear un logro para un perfil", description = "Registra que un perfil ha conseguido un logro. No permite duplicados")
     @ApiResponses({
-        @ApiResponse(responseCode = "201", description = "Logro desbloqueado correctamente"),
-        @ApiResponse(responseCode = "400", description = "El logro ya estaba desbloqueado"),
-        @ApiResponse(responseCode = "404", description = "Perfil o logro no encontrado")
+            @ApiResponse(responseCode = "201", description = "Logro desbloqueado correctamente"),
+            @ApiResponse(responseCode = "400", description = "El logro ya estaba desbloqueado"),
+            @ApiResponse(responseCode = "404", description = "Perfil o logro no encontrado")
     })
     @PostMapping("/profile/{profileId}/unlock/{achievementId}")
     @ResponseStatus(HttpStatus.CREATED)

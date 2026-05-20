@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 /**
  * Manejador de excepciones para todos los controladores
  * Spring respeta el orden al que se declaran:
- *  {@link ResourceNotFoundException} - 404
- *  {@link MethodArgumentNotValidException} - 400 (Validacion Bean, la manda Spring)
- *  {@link IllegalArgumentException} - 400 (validación manual)
- *  {@link Exception} genérica - 500
+ * {@link ResourceNotFoundException} - 404
+ * {@link MethodArgumentNotValidException} - 400 (Validacion Bean, la manda Spring)
+ * {@link IllegalArgumentException} - 400 (validación manual)
+ * {@link Exception} genérica - 500
  * Todas las respuestas siguen la estructura: {@code {codigo, mensaje}}.
  */
 
@@ -54,7 +54,9 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(500, "Error interno del servidor"));
     }
 
-    /** Estructura de respuesta de error estándar devuelta por todos los manejadores. */
+    /**
+     * Estructura de respuesta de error estándar devuelta por todos los manejadores.
+     */
     public static class ErrorResponse {
         private final int codigo;
         private final String mensaje;

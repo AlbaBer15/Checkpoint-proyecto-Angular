@@ -1,7 +1,5 @@
 package com.checkpoint.backend.service;
 
-import com.checkpoint.backend.entity.Achievement;
-import com.checkpoint.backend.entity.Profile;
 import com.checkpoint.backend.entity.ProfileAchievement;
 import com.checkpoint.backend.exception.ResourceNotFoundException;
 import com.checkpoint.backend.repository.AchievementRepository;
@@ -16,8 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AchievementServiceTest {

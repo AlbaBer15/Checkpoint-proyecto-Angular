@@ -24,24 +24,18 @@ public class PatchMisionDTO {
     private String estado;
     private Boolean favorito;
 
-    /** Lombok no genera setter para este campo porque {@link #setCategory} tiene lógica independiente que tenemos que
-     * gestionar. */
+    /**
+     * Lombok no genera setter para este campo porque {@link #setCategory} tiene lógica independiente que tenemos que
+     * gestionar.
+     */
     @Setter(AccessLevel.NONE)
     private CategoryRef category;
 
-    /** {@code true} si el campo {@code "category"} apareció en el JSON. */
+    /**
+     * {@code true} si el campo {@code "category"} apareció en el JSON.
+     */
     @Setter(AccessLevel.NONE)
     private boolean categoryPresent = false;
-
-    /**
-     * Clase para categoría que guarda {@code id}.
-     * Se usa ese id para cargar la categoría completa desde la base de datos.
-     */
-    @Getter
-    @Setter
-    public static class CategoryRef {
-        private Long id;
-    }
 
     /**
      * Jackson (libreria que convierte JSON a objetos Java) normalmente ignora los campos
@@ -52,5 +46,15 @@ public class PatchMisionDTO {
     public void setCategory(CategoryRef category) {
         this.category = category;
         this.categoryPresent = true;
+    }
+
+    /**
+     * Clase para categoría que guarda {@code id}.
+     * Se usa ese id para cargar la categoría completa desde la base de datos.
+     */
+    @Getter
+    @Setter
+    public static class CategoryRef {
+        private Long id;
     }
 }

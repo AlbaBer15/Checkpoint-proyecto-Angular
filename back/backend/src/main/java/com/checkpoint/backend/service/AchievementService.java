@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Lógica de negocio : gestionar logros.
  * Usa Bean Validation ({@code @NotBlank}, {@code @Size}, {@code @Min} en la entidad
- *  {@code @Valid} en el controller) en vez de validación manual,
+ * {@code @Valid} en el controller) en vez de validación manual,
  * para documentar ambos enfoques en el proyecto.
  */
 @Service
@@ -33,7 +33,9 @@ public class AchievementService {
         this.profileRepository = profileRepository;
     }
 
-    /** Muestra todos los logros disponibles. */
+    /**
+     * Muestra todos los logros disponibles.
+     */
     public List<Achievement> findAll() {
         return achievementRepository.findAll();
     }
@@ -53,6 +55,7 @@ public class AchievementService {
 
     /**
      * Devuelve los logros desbloqueados según el perfil seleccionado.
+     *
      * @param profileId ID del perfil
      * @return lista de registros desbloqueados, estará vacia si no ha conseguido ninguno
      */
@@ -65,10 +68,10 @@ public class AchievementService {
      * Lanza una excepción si el logro ya estaba desbloqueado para ese perfil,
      * asi evitamos las duplicidades en la tabla intermedia.
      *
-     * @param profileId : ID del perfil
+     * @param profileId     : ID del perfil
      * @param achievementId : ID del logro
      * @return registro de desbloqueos
-     * @throws IllegalArgumentException cuando el logro estaba desbloqueado
+     * @throws IllegalArgumentException  cuando el logro estaba desbloqueado
      * @throws ResourceNotFoundException si el perfil o el logro no existen
      */
     public ProfileAchievement unlock(Long profileId, Long achievementId) {

@@ -32,6 +32,7 @@ public class SecurityConfig {
                 );
         return http.build();
     }
+
     /**
      * Define origenes,métodos y cabeceras permitidos para las peticiones al backend.
      * CORS solo funciona para las rutas de la aplicación (para no romper el Swagger)
@@ -41,9 +42,9 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
-            "http://localhost:4200",
-            "http://3.221.75.194:8080",
-            "http://checkpoint-frontend.s3-website-us-east-1.amazonaws.com"
+                "http://localhost:4200",
+                "http://3.221.75.194:8080",
+                "http://checkpoint-frontend.s3-website-us-east-1.amazonaws.com"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));

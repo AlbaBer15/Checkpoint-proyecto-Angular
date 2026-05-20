@@ -32,7 +32,9 @@ public class ProfileService {
         this.profileAchievementRepository = profileAchievementRepository;
     }
 
-    /** Devuelve todos los perfiles existentes. */
+    /**
+     * Devuelve todos los perfiles existentes.
+     */
     public List<Profile> findAll() {
         return profileRepository.findAll();
     }
@@ -83,7 +85,9 @@ public class ProfileService {
         return savedProfile;
     }
 
-    /** Crea la misión de bienvenida sin categoría asignada al perfil. */
+    /**
+     * Crea la misión de bienvenida sin categoría asignada al perfil.
+     */
     private Mission misionBienvenida(String titulo, String descripcion, int xp, Profile profile) {
         Mission m = new Mission();
         m.setTitulo(titulo);
@@ -104,7 +108,7 @@ public class ProfileService {
      * @param datos campos nuevos (los null se ignoran)
      * @return perfil actualizado
      * @throws ResourceNotFoundException excepcion cuando el perfil no existe
-     * @throws IllegalArgumentException excepcion si el nuevo nombre esta duplicado o es inválido
+     * @throws IllegalArgumentException  excepcion si el nuevo nombre esta duplicado o es inválido
      */
     public Profile update(Long id, Profile datos) {
         Profile profile = findById(id);
@@ -124,6 +128,7 @@ public class ProfileService {
         }
         return profileRepository.save(profile);
     }
+
     /**
      * Elimina un perfil y sus datos relacionados.
      * Orden de borrado: logros desbloqueados - misiones y por ultimo perfil.
