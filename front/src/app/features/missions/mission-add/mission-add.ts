@@ -26,8 +26,8 @@ export class MissionAdd implements OnInit {
     private categoryService: CategoryService,
   ) {
     this.formulario = this.fb.group({
-      titulo: ['', [Validators.required, Validators.minLength(3)]],
-      descripcion: ['', [Validators.required, Validators.minLength(5)]],
+      titulo: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(120)]],
+      descripcion: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(500)]],
       xp: [1, [Validators.required, Validators.min(1), Validators.max(999)]],
     });
   }

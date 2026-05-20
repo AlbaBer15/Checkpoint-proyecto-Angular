@@ -9,11 +9,18 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 
-@ControllerAdvice
+/**
+ * Manejador de excepciones para todos los controladores
+ * Spring respeta el orden al que se declaran:
+ *  {@link ResourceNotFoundException} - 404
+ *  {@link MethodArgumentNotValidException} - 400 (Validacion Bean, la manda Spring)
+ *  {@link IllegalArgumentException} - 400 (validación manual)
+ *  {@link Exception} genérica - 500
+ * Todas las respuestas siguen la estructura: {@code {codigo, mensaje}}.
+ */
+
+@ControllerAdvice(basePackages = "com.checkpoint.backend.controller")
 public class GlobalExceptionHandler {
-    // Si hay varios ExceptionHandler Spring los ve en orden. El generico el ultimo porque es el que recoge cualquier error (te lo modifico x eso)
-    // + Logger y campos ordenaos
-    //404 - recurso no encontrado | 400 - validación | 500 - error interno
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -23,13 +30,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    // captura los errores de anotaciones como NotBlank o Size
     public ResponseEntity<ErrorResponse> handleValidationErrors(MethodArgumentNotValidException e) {
-        // captura excepciones
         String mensaje = e.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(err -> err.getDefaultMessage())
+                .map(org.springframework.validation.FieldError::getDefaultMessage)
                 .findFirst()
                 .orElse("Error de validación.");
         return ResponseEntity.badRequest()
@@ -49,9 +54,10 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(500, "Error interno del servidor"));
     }
 
+    /** Estructura de respuesta de error estándar devuelta por todos los manejadores. */
     public static class ErrorResponse {
-        public int codigo;
-        public String mensaje;
+        private final int codigo;
+        private final String mensaje;
 
         public ErrorResponse(int codigo, String mensaje) {
             this.codigo = codigo;

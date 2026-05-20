@@ -4,12 +4,12 @@
   <form [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
     <div class="campo">
       <label for="titulo">Título</label>
-      <input id="titulo" type="text" formControlName="titulo" placeholder="Ej: Beber agua" />
+      <input id="titulo" type="text" formControlName="titulo" placeholder="Ej: Beber agua" maxlength="120" />
 
-      <p
-        class="error"
-        *ngIf="formulario.get('titulo')?.touched && formulario.get('titulo')?.invalid"
-      >
+      <p class="error" *ngIf="formulario.get('titulo')?.touched && formulario.get('titulo')?.errors?.['required']">
+        El título es obligatorio.
+      </p>
+      <p class="error" *ngIf="formulario.get('titulo')?.touched && formulario.get('titulo')?.errors?.['minlength']">
         El título debe tener al menos 3 caracteres.
       </p>
     </div>
@@ -21,12 +21,13 @@
         rows="3"
         formControlName="descripcion"
         placeholder="Describe la misión..."
+        maxlength="500"
       ></textarea>
 
-      <p
-        class="error"
-        *ngIf="formulario.get('descripcion')?.touched && formulario.get('descripcion')?.invalid"
-      >
+      <p class="error" *ngIf="formulario.get('descripcion')?.touched && formulario.get('descripcion')?.errors?.['required']">
+        La descripción es obligatoria.
+      </p>
+      <p class="error" *ngIf="formulario.get('descripcion')?.touched && formulario.get('descripcion')?.errors?.['minlength']">
         La descripción debe tener al menos 5 caracteres.
       </p>
     </div>

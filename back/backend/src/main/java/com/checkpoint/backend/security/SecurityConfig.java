@@ -11,11 +11,16 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+/**
+ * Configuración de seguridad HTTP de la aplicación.
+ * CSRF se desactiva porque es una protección pensada para aplicaciones con sesión
+ * al ser esta una API REST sin sesiones, no se necesita.
+ * CORS se configura para que el navegador permita llamadas desde el frontend al backend,
+ * Todas las rutas son públicas porque el proyecto no tiene sistema de login.
+ */
 @Configuration
 public class SecurityConfig {
-    /*
-    TODO: permitir rutas Swagger funciona porque esta con anyRequest.permitAll pero con las nuevas Swagger igual peta
-     */
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -27,6 +32,11 @@ public class SecurityConfig {
                 );
         return http.build();
     }
+    /**
+     * Define origenes,métodos y cabeceras permitidos para las peticiones al backend.
+     * CORS solo funciona para las rutas de la aplicación (para no romper el Swagger)
+     * Tenemos 3 origenes: Angular en local, EC2 desplegado (AWS) y el bucket S3 para el front.
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();

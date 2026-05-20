@@ -8,7 +8,6 @@ export interface Profile {
   nombre: string;
   avatar: string;
   genero: 'FEMENINO' | 'MASCULINO';
-  nivelMax?: number;
 }
 
 @Injectable({ providedIn: 'root' })

@@ -11,6 +11,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Lógica de negocio : gestionar logros.
+ * Usa Bean Validation ({@code @NotBlank}, {@code @Size}, {@code @Min} en la entidad
+ *  {@code @Valid} en el controller) en vez de validación manual,
+ * para documentar ambos enfoques en el proyecto.
+ */
 @Service
 public class AchievementService {
 
@@ -27,24 +33,45 @@ public class AchievementService {
         this.profileRepository = profileRepository;
     }
 
+    /** Muestra todos los logros disponibles. */
     public List<Achievement> findAll() {
         return achievementRepository.findAll();
     }
 
-    public Achievement create(Achievement achievement) { // he puesto validacion en anotaciones para tener ambas opciones
+    /**
+     * Añade un nuevo logro.
+     * La validación de campos se ejecuta gracias a las anotaciones de la entidad
+     * ({@code @NotBlank}, {@code @Size}, {@code @Min}) activas gracias a {@code @Valid} en el controller.
+     *
+     * @param achievement datos del logro que creamos
+     * @return logro con ID creado
+     */
+    public Achievement create(Achievement achievement) {
         achievement.setTitulo(achievement.getTitulo().trim());
         return achievementRepository.save(achievement);
     }
 
-    // Logros desbloqueados por un perfil
+    /**
+     * Devuelve los logros desbloqueados según el perfil seleccionado.
+     * @param profileId ID del perfil
+     * @return lista de registros desbloqueados, estará vacia si no ha conseguido ninguno
+     */
     public List<ProfileAchievement> findByProfile(Long profileId) {
         return profileAchievementRepository.findByProfileId(profileId);
     }
 
-    // Desbloquear un logro para un perfil
+    /**
+     * Registra que un perfil ha desbloqueado un logro.
+     * Lanza una excepción si el logro ya estaba desbloqueado para ese perfil,
+     * asi evitamos las duplicidades en la tabla intermedia.
+     *
+     * @param profileId : ID del perfil
+     * @param achievementId : ID del logro
+     * @return registro de desbloqueos
+     * @throws IllegalArgumentException cuando el logro estaba desbloqueado
+     * @throws ResourceNotFoundException si el perfil o el logro no existen
+     */
     public ProfileAchievement unlock(Long profileId, Long achievementId) {
-
-        // Comprobar que no lo tenga ya
         if (profileAchievementRepository.existsByProfileIdAndAchievementId(profileId, achievementId)) {
             throw new IllegalArgumentException("Este logro ya está desbloqueado.");
         }

@@ -2,30 +2,34 @@ package com.checkpoint.backend.config;
 
 import com.checkpoint.backend.entity.Achievement;
 import com.checkpoint.backend.entity.Category;
-import com.checkpoint.backend.entity.Mission;
 import com.checkpoint.backend.repository.AchievementRepository;
 import com.checkpoint.backend.repository.CategoryRepository;
-import com.checkpoint.backend.repository.MissionRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * Inicializa con logros y categorias predefinidas
+ * Crea los 8 logros y las 6 categorías.
+ * Las primeras misiones por defecto no se crean aquí.
+ * Se crean en {@code ProfileService.create()}
+ * para quedar asociadas al perfil cuando se crea.
+ *
+ */
+
 @Component
 public class DataInitializer implements ApplicationRunner {
 
     private final AchievementRepository achievementRepository;
     private final CategoryRepository categoryRepository;
-    private final MissionRepository missionRepository;
 
     public DataInitializer(
             AchievementRepository achievementRepository,
-            CategoryRepository categoryRepository,
-            MissionRepository missionRepository) {
+            CategoryRepository categoryRepository) {
         this.achievementRepository = achievementRepository;
         this.categoryRepository = categoryRepository;
-        this.missionRepository = missionRepository;
     }
 
     @Override
