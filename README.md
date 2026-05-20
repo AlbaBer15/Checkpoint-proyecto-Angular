@@ -1,190 +1,147 @@
-VERSIÓN ESTABLE DEL PROYECTO EN DESARROLLO. -> DESARROLLO EN DEVELOP.
+<h1 align="center">Checkpoint</h1>
+<h3 align="center">Trabajo Final de Grado – 2º DAM</h3>
 
+<p align="center">
+  <img src="./front/public/finalicon.png" alt="Checkpoint Logo" width="200"/>
+</p>
 
-# CheckPoint – Gestor de Misiones Gamificadas
-
-CheckPoint es una aplicación web desarrollada en **Angular** que transforma acciones cotidianas en misiones RPG.  
-Incluye un sistema de XP, niveles, misiones favoritas, formulario para añadir misiones, un oráculo de misiones aleatorias todo ello, aplicado sobre una interfaz personalizada.
-
-Este proyecto forma parte del módulo  
-*Ampliación de Desarrollo de Interfaces – 2º DAM (IES Cañaveral, 2024/25)*.
+<p align="center">Angular · Spring Boot · Java · MySQL · Docker · AWS</p>
 
 ---
 
-# Índice
+## Índice
 
-1. Descripción general  
-2. Tecnologías utilizadas  
-3. Funcionalidades principales  
-4. Requisitos previos  
-5. Instalación  
-6. Ejecución  
-7. Instrucciones de uso  
-8. Arquitectura del proyecto
-9. APIs utilizadas  
-10. Licencia  
-
----
-
-# 1. Descripción general
-
-CheckPoint permite:
-
-- Crear misiones  
-- Listarlas con diseño RPG  
-- Completarlas y ganar XP  
-- Subir de nivel mediante un `LevelPipe` personalizado  
-- Marcar misiones como favoritas usando `ngClass`  
-- Eliminar misiones  
-- Generar misiones aleatorias gracias al **Oráculo**  
-
-La app es totalmente SPA gracias al routing de Angular.
+1. [Descripción del proyecto](#1-descripción-del-proyecto)
+2. [Estado del proyecto](#2-estado-del-proyecto)
+3. [Funcionalidades principales](#3-funcionalidades-principales)
+4. [Acceso al proyecto](#4-acceso-al-proyecto)
+5. [Tecnologías utilizadas](#5-tecnologías-utilizadas)
+6. [Arquitectura del proyecto](#6-arquitectura-del-proyecto)
+7. [Requisitos previos](#7-requisitos-previos)
+8. [Instalación y ejecución](#8-instalación-y-ejecución)
+9. [Desarrolladoras](#9-desarrolladoras)
+10. [Licencia](#10-licencia)
 
 ---
 
-# 2. Tecnologías utilizadas
+## 1. Descripción del proyecto
 
-- **Angular 17+**  
-- **TypeScript**  
-- **RxJS**  
-- **HTML + CSS personalizado**  
-- **APIs externas:** DummyJSON + MyMemory Translation API  
-- **Angular Standalone Components**
+Checkpoint es una aplicación web full stack de gestión de tareas con estética futurista basada en el RPG. Su nombre viene de 'Punto de Control', haciendo alusión a los puntos de guardado de los videojuegos.
+En lugar de una lista de tareas estándar, el usuario crea un perfil de jugador y completa tareas transformadas en misiones que otorgan puntos de experiencia (XP) y desbloquean logros, como si se tratara de un juego.
+
+Cada perfil tiene sus propias misiones, que pueden organizarse por categorías. Los títulos de nivel están adaptados al género del perfil y los logros se desbloquean automáticamente al llegar a ciertos hitos.
+
+El proyecto está desarrollado con Angular en el frontend y Spring Boot en el backend, comunicados a través de una API REST, con base de datos MySQL y desplegado en AWS.
+---
+
+## 2. Estado del proyecto
+
+Completado como Trabajo Final de Grado de 2º DAM.
 
 ---
 
-# 3. Funcionalidades principales
+## 3. Funcionalidades principales
 
--  *ngFor para mostrar las misiones  
--  Formulario reactivo para añadir misiones  
--  Validaciones de formulario  
--  XP dinámico y cálculo de nivel  
--  Pipe personalizado (`LevelPipe`)  
--  Marcar misión como favorita (`ngClass`)  
--  Eliminar misión  
--  Completar misión  
--  Creación de misión aleatoria  
--  Routing completo (`/home`, `/missions`, `/add-mission`)  
+La aplicación soporta múltiples perfiles de jugador. Cada perfil tiene sus propias misiones, su propio XP y sus propios logros: los datos no se comparten entre perfiles. No hay sistema de login; en su lugar, al abrir la aplicación se selecciona el perfil con el que se quiere jugar, y todo lo que se hace en esa sesión queda asociado a ese perfil. Al crear uno nuevo, el sistema genera automáticamente tres misiones de bienvenida para que el usuario pueda empezar a explorar la aplicación desde el primer momento.
 
----
+Las misiones se pueden crear de dos formas. La primera es manual: desde un formulario con validaciones donde el usuario define el nombre, la descripción, la categoría y los xp a recibir.
+La segunda es mediante el **Oráculo**, una funcionalidad que llama a una API externa para obtener una tarea aleatoria en inglés y la traduce automáticamente al español, generando así una misión lista para completar sin tener que pensar en qué escribir.
 
-# 4. Requisitos previos
+El sistema de niveles y progreso funciona en el frontend: cada misión completada otorga una cantidad de XP según su dificultad, y ese XP acumulado determina el nivel del jugador. Los títulos de nivel no son genéricos; se adaptan al género configurado en el perfil, así que la experiencia es distinta según si el jugador es masculino o femenino. Además, al alcanzar ciertos logros (como completar un número determinado de misiones o llegar a x puntos) se desbloquean logros que quedan registrados en el perfil.
 
-Asegúrate de tener instalado:
+Las misiones también se pueden editar una vez creadas, revertir a estado pendiente si se completaron por error, clasificar por categorías (cada una con su propio icono y color) y marcar como favoritas para filtrarlas fácilmente.
 
-- Node.js (mínimo 18).  
-- Angular CLI  
-
-# 5. Instalación
-
-1. Clonar el repositorio:
-   git clone https://github.com/usuario/proyecto.git
-
-2. Instalar dependencias:
-   npm install
-
-# 6. Ejecución
-
- Ejecutar la app:
-   ng serve
-
-Se abrirá automáticamente el navegador:
-   http://localhost:4200
-
-# 7. Instrucciones de uso
-
-### Home
-- Muestra el nivel actual del jugador mediante un `LevelPipe` personalizado.
-- El XP total aumenta conforme se completan misiones.
-- Incluye una barra de progreso y un mensaje dinámico según el nivel.
-
-![Vista Home](./screenshots/imagen1.png)
----
-
-### Misiones disponibles
- Cada misión aparece en una tarjeta visual.
-- Acciones disponibles:
-  - ❤️ Marcar como favorita (hecho con `ngClass`)
-  - Completar misión
-  - Eliminar misión
-- Muestra misiones activas (pendientes) y completadas diferenciadas.
-- Las completadas suman XP al jugador.
-
-![Vista listado junto sus misiones](./screenshots/imagen2.png)
-
-### Añadir misión
-- Formulario reactivo con validaciones:
-  - Título mínimo 3 caracteres
-  - Descripción mínima 5 caracteres
-  - XP entre 1 y 999
-- Botón para generar una misión con el **Oráculo**, usando API externa.
-- La misión generada se puede añadir directamente.
-
-![Vista para añadir misiones y Oráculo](./screenshots/imagen3.png)
-
-# 8. Arquitectura del proyecto
-La aplicación esta organizada siguiendo una estructura modular basada en **Standalone Components**, tal y como recomienda Angular.
-Cada parte del proyecto asume responsabilidades: 
-
-### * features/*
-Contiene las vistas principales de la aplicación.
-
-- *home/* → Muestra XP total, nivel, progreso y resumen del aventurero.
-- **missions/**
-  - **mission-list/** → Lista de misiones activas.
-  - **mission-add/** → Formulario para crear misiones + integración API (Oráculo).
-### **shared/**
-Componentes reutilizables utilizados en varias vistas.
-
-- **mission-card/**  
-  Tarjeta visual que representa una misión individual, con:
-  - XP  
-  - botón completar  
-  - botón eliminar  
-  - favorito (emoji con `ngClass`)  
-
-- **pipes/level-pipe.ts**  
-  Pipe personalizado que:
-  - calcula el nivel según XP,
-  - asigna un título al jugador,
-  - calcula el % de progreso hacia el siguiente nivel.
+Toda la API está documentada y accesible desde Swagger UI.
 
 ---
 
-### ** services/**
-- **mission.service.ts**  
-  Contiene toda la lógica de negocio:
-  - añadir misiones  
-  - completar misiones  
-  - eliminar misiones  
-  - marcar favorito  
-  - consumir API externa  
-  - calcular XP total  
+## 4. Acceso al proyecto
+
+- Repositorio: https://github.com/AlbaBer15/Checkpoint-proyecto-Angular
+- Frontend desplegado (AWS S3): http://checkpoint-frontend.s3-website-us-east-1.amazonaws.com
+- Backend desplegado (AWS EC2): http://3.221.75.194:8080
+- Swagger UI: http://3.221.75.194:8080/swagger-ui/index.html
 
 ---
 
-### ** app.routes.ts**
-Define el sistema de navegación SPA:
-- `/home`
-- `/misiones`
-- `/add`
+## 5. Tecnologías utilizadas
 
+**Frontend**
 
-# 9. APIs utilizadas
+Angular 20 con TypeScript y componentes standalone. Para la comunicación con el backend se usa `HttpClient` y de RxJS. 
+Los tests están realizados con Jasmine y con Karma. 
+Al proyecto en el frontend se configuro Prettier como formateador de código compartido entre las dos desarrolladoras para mantener código limpio y alineado.
 
-###  DummyJSON API  
-Se utiliza para obtener texto en inglés aleatorio para misiones del Oráculo.  
-https://dummyjson.com/todos/random
+**Backend**
 
-### MyMemory Translation API  
-Permite traducir automáticamente la misión al español.  
-https://mymemory.translated.net/
+Spring Boot 3.2.5 con Java 17. 
+Usamos Spring Data JPA con Hibernate sobre MySQL. 
+Spring Security gestiona la configuración CORS. 
+Lombok reduce el código repetitivo en las entidades y DTOs. 
+La documentación de la API se genera automáticamente con Springdoc OpenAPI (Swagger).
+Los tests unitarios y de integración usan JUnit 5 y Mockito.
 
-Ambas se combinan para generar misiones completamente adaptadas y en castellano.
+**Infraestructura**
 
-# 10. Licencia
+En local la base de datos corre en MySQL 8 en el puerto 3306. Se levanta mediante Docker: el comando docker run descarga la imagen oficial de MySQL, crea el contenedor con la base de datos checkpoint ya configurada y lo arranca en un solo paso.
+En producción el proyecto está desplegado en tres servicios de AWS: el backend corre en una instancia EC2, la base de datos MySQL está gestionada por RDS y el frontend está alojado como sitio estático en un bucket S3.
 
-Proyecto de uso educativo.  
+---
 
+## 6. Arquitectura del proyecto
 
+El proyecto está dividido en dos módulos independientes dentro del mismo repositorio.
 
+**Frontend** — la carpeta `front/src/app` está organizada en tres bloques: `features` con las vistas principales (home, missions, achievements), `services` con los servicios que se comunican con el backend y `shared` con los componentes reutilizables como `MissionCard` y el pipe `LevelPipe`
+
+**Backend** — arquitectura en capas: `controller` expone los endpoints REST, `service` contiene la lógica de negocio, `entity` define las entidades JPA, `repository` gestiona el acceso a la base de datos, `dto` agrupa los objetos de transferencia, `config` incluye la configuración e inicialización, `security` gestiona CORS y `exception` centraliza el manejo de errores.
+
+---
+
+## 7. Requisitos previos
+
+Para ejecutar el proyecto en local necesitas tener instalado Node.js 18 o superior, Angular CLI, Java 17 y Maven. 
+Para la base de datos necesitas Docker o un servidor MySQL 8 local.
+
+---
+
+## 8. Instalación y ejecución
+
+**Base de datos**
+
+```bash
+docker run --name checkpoint-db -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=checkpoint -p 3306:3306 -d mysql:8
+```
+
+**Backend**
+
+```bash
+cd back/backend
+mvn spring-boot:run
+```
+Arranca en `http://localhost:8080`. 
+Swagger disponible en `http://localhost:8080/swagger-ui/index.html`.
+
+**Frontend**
+
+```bash
+cd front
+npm install
+ng serve
+```
+Arranca en `http://localhost:4200`.
+
+---
+
+## 9. Desarrolladoras
+
+Proyecto desarrollado por **Alba Bernal** y **Sonia Kendil** como Trabajo Final de Grado del ciclo de 2º DESARROLLO DE APLICACIONES MULTIPLATAFORMA(DAM) en IES Cañaveral, curso 2025/2026.
+
+- Alba Bernal – https://github.com/AlbaBer15
+- Sonia Kendil – https://github.com/soniak05
+
+---
+
+## 10. Licencia
+
+Proyecto de uso educativo desarrollado como Trabajo Final de Grado.
