@@ -150,7 +150,7 @@ public class ProfileService {
     }
 
     /**
-     * Valida el nombre de perfil: comprobamos que no esta vacío y máximo 25 caracteres.
+     * Valida el nombre de perfil: comprobamos que no esta vacío y máximo 24 caracteres.
      *
      * @throws IllegalArgumentException excepcion cuando el nombre no cumple las validaciones
      */

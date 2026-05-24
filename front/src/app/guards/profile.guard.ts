@@ -14,7 +14,7 @@ export const profileGuard: CanActivateFn = () => {
     map(() => {
       const profileId = localStorage.getItem('checkpoint_profile_id');
       if (!profileId) {
-        router.navigate(['/'], { state: { mensajeGuard: true } });
+        router.navigate(['/']);
         return false;
       }
       return true;

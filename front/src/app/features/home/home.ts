@@ -6,7 +6,6 @@ import { Subject } from 'rxjs';
 import { skip, takeUntil } from 'rxjs/operators';
 import { FormsModule } from '@angular/forms';
 import { NgIf, NgFor } from '@angular/common';
-import { Router } from '@angular/router';
 
 export interface UserProfile {
   nombre: string;
@@ -69,20 +68,15 @@ export class Home implements OnInit, OnDestroy {
   ];
 
   private destroy$ = new Subject<void>();
-  mensajeGuard = false;
 
   constructor(
     private missionService: MissionService,
     private profileService: ProfileService,
     private levelPipe: LevelPipe,
-    private router: Router,
   ) {}
 
   // Carga el perfil guardado y suscribe las estadísticas
   ngOnInit() {
-    const nav = this.router.getCurrentNavigation();
-    this.mensajeGuard = nav?.extras?.state?.['mensajeGuard'] ?? false;
-
     const perfilGuardado = localStorage.getItem(PERFIL_KEY);
     if (perfilGuardado) {
       try {
@@ -254,31 +248,42 @@ export class Home implements OnInit, OnDestroy {
       return;
     }
     this.errorPerfil = '';
-    this.perfil = { ...this.perfilEdit };
-    localStorage.setItem(PERFIL_KEY, JSON.stringify(this.perfil));
-    this.editandoPerfil = false;
-    const { nivel } = this.levelPipe.transform(this.totalXP, this.perfil.genero);
-    this.actualizarMensaje(nivel);
 
     const perfilId = localStorage.getItem('checkpoint_profile_id');
     if (perfilId) {
       this.profileService
         .update(Number(perfilId), {
-          nombre: this.perfil.nombre,
-          avatar: this.perfil.avatar,
-          genero: this.perfil.genero,
+          nombre: this.perfilEdit.nombre,
+          avatar: this.perfilEdit.avatar,
+          genero: this.perfilEdit.genero,
         })
-        .subscribe();
+        .subscribe({
+          next: () => {
+            this.perfil = { ...this.perfilEdit };
+            localStorage.setItem(PERFIL_KEY, JSON.stringify(this.perfil));
+            this.editandoPerfil = false;
+            const { nivel } = this.levelPipe.transform(this.totalXP, this.perfil.genero);
+            this.actualizarMensaje(nivel);
+          },
+          error: (err) => {
+            this.mostrarErrorPerfil(err?.error?.mensaje || 'Error al actualizar el perfil.');
+          },
+        });
     } else {
       this.profileService
         .create({
-          nombre: this.perfil.nombre,
-          avatar: this.perfil.avatar,
-          genero: this.perfil.genero,
+          nombre: this.perfilEdit.nombre,
+          avatar: this.perfilEdit.avatar,
+          genero: this.perfilEdit.genero,
         })
         .subscribe({
           next: (res) => {
+            this.perfil = { ...this.perfilEdit };
+            localStorage.setItem(PERFIL_KEY, JSON.stringify(this.perfil));
             localStorage.setItem('checkpoint_profile_id', res.id.toString());
+            this.editandoPerfil = false;
+            const { nivel } = this.levelPipe.transform(this.totalXP, this.perfil.genero);
+            this.actualizarMensaje(nivel);
             this.sinPerfiles = false;
             this.missionService.cargarMisionesPorPerfil(res.id);
           },

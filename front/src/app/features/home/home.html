@@ -82,10 +82,7 @@
   </div>
 
   <div *ngIf="sinPerfiles && !editandoPerfil" class="sin-perfiles">
-    <p *ngIf="mensajeGuard" class="aviso-guard" role="alert">
-      ⚠️ Necesitas un perfil para acceder a esa sección.
-    </p>
-    <div class="sin-perfiles-icono">🧭</div>
+<div class="sin-perfiles-icono">🧭</div>
     <h2 class="titulo-home">¡Bienvenida a Checkpoint!</h2>
     <p class="subtitulo">Aún no tienes ningún perfil. Crea el tuyo para empezar la aventura.</p>
     <button class="btn-guardar-perfil" (click)="iniciarCrearPerfil()">➕ Crear mi perfil</button>

@@ -157,16 +157,6 @@ a {
   color: var(--text-soft);
 }
 
-.aviso-guard {
-  background: rgba(255, 212, 71, 0.1);
-  border: 1px solid var(--xp-color);
-  color: var(--xp-color);
-  padding: 10px 16px;
-  border-radius: var(--radius);
-  font-weight: 600;
-  text-align: center;
-}
-
 router-outlet + * {
   animation: aparecer 0.25s ease;
 }
