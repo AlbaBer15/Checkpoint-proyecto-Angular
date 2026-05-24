@@ -19,8 +19,9 @@
 6. [Arquitectura del proyecto](#6-arquitectura-del-proyecto)
 7. [Requisitos previos](#7-requisitos-previos)
 8. [Instalación y ejecución](#8-instalación-y-ejecución)
-9. [Desarrolladoras](#9-desarrolladoras)
-10. [Licencia](#10-licencia)
+9. [Documentación](#9-documentación)
+10. [Desarrolladoras](#10-desarrolladoras)
+11. [Licencia](#11-licencia)
 
 ---
 
@@ -133,7 +134,16 @@ Arranca en `http://localhost:4200`.
 
 ---
 
-## 9. Desarrolladoras
+## 9. Documentación
+
+Los manuales del proyecto se encuentran en la carpeta [`manuales/`](manuales/):
+
+- [`manualUsuario.pdf`](manuales/manualUsuario.pdf) — Guía de uso de la aplicación: perfiles, misiones, logros y funcionalidades.
+- [`manualAdmin.pdf`](manuales/manualAdmin.pdf) — Instrucciones detalladas para instalar y desplegar el proyecto en local y en producción.
+
+---
+
+## 10. Desarrolladoras
 
 Proyecto desarrollado por **Alba Bernal** y **Sonia Kendil** como Trabajo Final de Grado del ciclo de 2º DESARROLLO DE APLICACIONES MULTIPLATAFORMA(DAM) en IES Cañaveral, curso 2025/2026.
 
@@ -142,6 +152,6 @@ Proyecto desarrollado por **Alba Bernal** y **Sonia Kendil** como Trabajo Final 
 
 ---
 
-## 10. Licencia
+## 11. Licencia
 
 Proyecto de uso educativo desarrollado como Trabajo Final de Grado.
